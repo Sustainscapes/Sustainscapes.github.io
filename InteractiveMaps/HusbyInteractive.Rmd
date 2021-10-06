@@ -44,6 +44,7 @@ BufferCircle <- Husby_experimental %>%
   st_transform(crs = "+proj=longlat +datum=WGS84 +no_defs") %>% 
   bind_rows(Squares) %>% 
   arrange(ID)
+Husby_outline <- Husby %>% st_union() %>% st_as_sf() %>% st_cast("POLYGON")
 ```
 
 ```{r}
@@ -66,8 +67,9 @@ for (provider in esri) {
 l <- l %>% 
   addPolygons(data = as_Spatial(Husby), group = "Groups", color = ~pal(Group), fillColor = ~pal(Group), opacity = 0.8, popup = Husby$Group, fillOpacity = 0.8) %>%
   addPolylines(data = as_Spatial(BufferCircle), group = "Monitoring",opacity = 1, popup = BufferCircle$ID, fillOpacity = 0.2) %>%
+  addPolylines(data = as_Spatial(Husby_outline), group = "Outline",opacity = 1, color = "red") %>% 
   addLayersControl(baseGroups = names(esri),
-                   overlayGroups = c("Groups", "Monitoring"),
+                   overlayGroups = c("Groups", "Monitoring", "Outline"),
                    options = layersControlOptions(collapsed = TRUE)) %>%
   addMeasure(position = "topleft",
              primaryLengthUnit = "meters",

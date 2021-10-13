@@ -9,6 +9,8 @@ navbar:
       menu:
       - text: "Map Husby"
         href: InteractiveMaps/HusbyInteractive.html
+      - text: "Map Trojborg"
+        href: InteractiveMaps/TrojborgInteractive.html
 output_dir: "."
 output:
   html_document:

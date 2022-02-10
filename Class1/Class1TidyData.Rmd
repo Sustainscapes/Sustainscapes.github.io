@@ -1,12 +1,11 @@
 ---
-title: "Clase 1 Investigación reproducible"
+title: "Class 1 Reproducible research"
 author: "Derek Corcoran"
 date: "`r format(Sys.time(), '%d/%m, %Y')`"
 output:
   ioslides_presentation:
     widescreen: true
     incremental: true
-    logo: LogoRverso.jpeg
 ---
 
 ```{r setup, include=FALSE}
@@ -17,28 +16,32 @@ library(kableExtra)
 options("kableExtra.html.bsTable" = T)
 ```
 
-# Bienvenida
+# Welcome
 
-## Curso Análisis y manipulación de datos en R {.build}
+## For next, you need: {.small .build}
 
-Primeros pasos
 
-* ¿Quien no ha usado nunca R? [Swirl](https://www.youtube.com/watch?v=w6L7Ye18yPE&feature=youtu.be)
-* Evaluación sencilla (Informes reproducibles + presentación reproducible)
-* Evaluación por pares (Quien evalua a los evaluadores)
-* Mucho trabajo personal guiado
-* Pagina donde esta [todo el curso](https://derek-corcoran-barrios.github.io/Libro/_book/index.html)
+* Create a [github](https://github.com/) account
+* Install the knitr, rmarkdown and kableExtra packages
 
-# Como se organizan los datos en R
+## Reproducible research in R {.build}
 
-## Estructura de datos {.build}
+First steps
+
+* Who has never used R? [Swirl](https://www.youtube.com/watch?v=w6L7Ye18yPE&feature=youtu.be)
+* Lots of guided personal work
+* Page where [the entire course](https://sustainscapes.github.io/Libro/_book/index.html) is 
+
+# How data is organized in r
+
+## Data structures {.build}
 
 <div style="float: left; width: 40%;">
 
-- Vector: Un conjunto lineal de datos (secuencia génica, serie de tiempo)
-- Matrix: Una tabla con solo números
-- Data Frame: Una tabla donde cada columna tiene un tipo de datos (estándar dorado)
-- List: Aqui podemos meter lo que queramos
+- Vector: A linear set of data (gene sequence, time series)
+- Matrix: A table with only numbers
+- Data Frame: A table where each column has a data type (gold standard)
+- List: Here we can put whatever we want
 
 </div>
 
@@ -54,11 +57,11 @@ knitr::include_graphics("Data.png")
 
 <div style="float: left; width: 40%;">
 
-* Secuencia lineal de datos
-* Pueden ser de muchos tipos (numéricos, de carácteres, lógicos, etc.)
-* Ejemplo data(uspop)
-* para crear uno c(1,4,6,7,8)
-* para subsetear un vector se pone el índice entre []
+* Linear sequence of data
+* They can be of many types (numeric, character, logical, etc.)
+* Example data(uspop)
+* to create one c(1,4,6,7,8)
+* to subset a vector put the index between []
 * uspop[4], uspop[2:10], uspop[c(3,5,8)]
 
 </div>
@@ -75,11 +78,11 @@ knitr::include_graphics("Vector.jpg")
 
 <div style="float: left; width: 40%;">
 
-* Una tabla, cada columna un tipo de datos (Numérico, lógico, etc)
-* Cada columna un vector
-* Ejemplo data(iris)
-* Para subsetear data.frame[filas,columnas]
-* Ejemplos iris[,3], iris["Petal.Length"], iris[2:5,c(1,5)], iris$Petal.Length
+* A table, each column a data type (Numeric, logical, etc)
+* Each column a vector
+* Example data(iris)
+* To subset data.frame[rows,columns]
+* Examples iris[,3], iris["Petal.Length"], iris[2:5,c(1,5)], iris$Petal.Length
 
 
 </div>
@@ -92,7 +95,7 @@ knitr::include_graphics("DataFrame.jpg")
 
 </div>
 
-# Principios de Tidydata
+# Tidydata principles
 
 ## Tidy Data  {.build}
 
@@ -100,9 +103,8 @@ knitr::include_graphics("DataFrame.jpg")
 knitr::include_graphics("tidy.png")
 ```
 
-
-* Cada columna una variable
-* Cada fila una observación
+* Each column a variable
+* Each row one observation
 
 ## untidy data
 
@@ -121,8 +123,8 @@ include_graphics("untidy.jpg")
 
 <div style="float: left; width: 40%;">
 
-* Tablas de contingencia
-* Ejemplo data(HairEyeColor)
+* Contingency tables
+* Example data(HairEyeColor)
 
 </div>
 
@@ -135,7 +137,7 @@ knitr::kable(HairEyeColor[,,1]) %>% kable_styling(bootstrap_options = c("striped
 
 </div>
 
-### Forma tidy
+### Tidy option
 
 ```{r, echo=FALSE}
 library(epitools)
@@ -144,25 +146,25 @@ H <- as.data.frame(HairEyeColor)
 kable(H) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = F) %>% scroll_box()
 ```
 
-# Trabajemos tidy
+# Lets work with tidy data
 
 ## dplyr {.build}
 
-* Paquete con pocas funciones [muy poderosas](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf) para ordenar datos 
-* Parte del [tidyverse](https://www.tidyverse.org/)
+* A package with a few [very powerfull functions](https://raw.githubusercontent.com/rstudio/cheatsheets/main/data-transformation.pdf) to wrangle data 
+* Part of [tidyverse](https://www.tidyverse.org/)
 
-- *group_by* (agrupa datos)
-- *summarize* (resume datos agrupados)
-- *filter* (Encuentra filas con ciertas condiciones)
-- *select* junto a *starts_with*, *ends_with* o *contains*
-- *mutate* (Genera variables nuevas)
+- *group_by* (group data)
+- *summarize* 
+- *filter* (Find rows with certain conditions)
+- *select* together with *starts_with*, *ends_with* or *contains*
+- *mutate* (Generates new variables)
 - *%>%* pipeline
-- *arrange* ordenar
+- *arrange* sorts
 
-## summarize y group_by {.build .small}
+## summarize and group_by {.build .small}
 
-- *group_by* reune observaciones según una variable
-- *summarize* resume una variable
+- *group_by* groups observations according to a variable
+- *summarize* 
 
 ```{r, eval=FALSE, echo = TRUE}
 library(tidyverse)
@@ -178,7 +180,7 @@ Summary.Petal <- summarize(iris, Mean.Petal.Length = mean(Petal.Length), SD.Peta
 kable(Summary.Petal) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = F)
 ```
 
-## summarize y group_by (continuado) {.small .build}
+## summarize and group_by (continued) {.small .build}
 
 ```{r, eval = FALSE}
 Summary.Petal <- group_by(iris, Species)
@@ -194,14 +196,14 @@ Summary.Petal <- summarize(Summary.Petal, Mean.Petal.Length = mean(Petal.Length)
 kable(Summary.Petal) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = F)
 ```
 
-## summarize y group_by (continuado) {.small .build}
+## summarize and group_by (continued) {.small .build}
    
-* Pueden agrupar por más de una variable a la vez
+* Can group more than one variable at a time
 
 ```{r, eval = FALSE}
 data("mtcars")
 Mtcars2 <- group_by(mtcars, am, cyl)
-Consumo <- summarize(Mtcars2, Consumo_promedio = mean(mpg), desv = sd(mpg))
+Consumo <- summarize(Mtcars2, Average_MPG = mean(mpg), desv = sd(mpg))
 ```
 
 
@@ -209,15 +211,15 @@ Consumo <- summarize(Mtcars2, Consumo_promedio = mean(mpg), desv = sd(mpg))
 
 data("mtcars")
 Mtcars2 <- group_by(mtcars, am, cyl)
-Consumo <- summarize(Mtcars2, Consumo_promedio = mean(mpg), desv = sd(mpg))
-kable(Consumo) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = F)
+MPG <- summarize(Mtcars2, Average_MPG = mean(mpg), desv = sd(mpg))
+kable(MPG) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = F)
 ```
 
-# Dudas?
+# Doubts?
 
 ## mutate {.small}
 
-* Crea variables nuevas
+* Creates new variables
 
 ```{r, eval = FALSE}
 DF <- mutate(iris, Petal.Sepal.Ratio = Petal.Length/Sepal.Length)
@@ -231,16 +233,16 @@ kable(DF[seq(from = 15, to = 150, length.out = 10),], row.names = FALSE) %>% kab
 
 ## Pipeline (%>%) {.small .build}
 
-- Para realizar varias operaciones de forma secuencial 
-- sin recurrir a parentesis anidados 
-- sobrescribir multiples bases de datos
+- To perform multiple operations sequentially
+- without resorting to nested parentheses
+- overwrite multiple databases
 
 ```{r, eval=FALSE}
 x <- c(1,4,6,8)
 y <- round(mean(sqrt(log(x))),2)
 ```
 
-- Que hice ahí?
+- What did we do there?
 
 ```{r, eval=FALSE}
 x <- c(1,4,6,8)
@@ -254,7 +256,7 @@ x %>% log() %>% sqrt() %>% mean() %>% round(2)
 
 ## Pipeline (%>%) {.small .build}
 
-* Muchos objetos intermedios
+* A lot of intermediate objects
 
 ```{r, eval=FALSE}
 DF <- mutate(iris, Petal.Sepal.Ratio = Petal.Length/Sepal.Length)
@@ -272,7 +274,7 @@ kable(Summary.Byspecies) %>% kable_styling(bootstrap_options = c("striped", "hov
 
 ## Pipeline (%>%) {.small .build}
 
-* Con pipe
+* With pipe
 
 ```{r, eval=FALSE}
 Summary.Byspecies <- summarize(group_by(mutate(iris, Petal.Sepal.Ratio = Petal.Length/Sepal.Length), Species), MEAN = mean(Petal.Sepal.Ratio), SD = sd(Petal.Sepal.Ratio))
@@ -286,7 +288,7 @@ kable(Summary.Byspecies) %>% kable_styling(bootstrap_options = c("striped", "hov
 ```
 
 
-## Pipeline (%>%) otro ejemplo
+## Pipeline (%>%) another example
 
 ```{r, eval=FALSE}
 library(tidyverse)
@@ -299,18 +301,19 @@ library(knitr)
 MEAN <- iris %>% group_by(Species) %>% summarize_all(.funs = list(Mean = mean, SD =sd))
 kable(MEAN) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = F)
 ```
-# Mas dudas?
+
+# More doubts?
 
 ## Filter {.build}
 
-- Selecciona según una o más variables
+- Select according to one or more variables
 
 ```{r, echo=FALSE}
-DF <- data.frame(simbolo = c(">", "<", "==", ">=", "<="), significado = c("Mayor que", "Menor que", "Igual a", "mayor o igual a", "menor o igual a"), simbolo_cont = c("!=","%in%", "is.na", "!is.na", "| &"), significado_cont = c("distinto a", "dentro del grupo", "es NA", "no es NA", "o, y"))
+DF <- data.frame(Symbol = c(">", "<", "==", ">=", "<="), Meaning = c("Greater than", "Less than", "Equal to", "Greater than or equal to", "Less than or equal to"), simbolo_cont = c("!=","%in%", "is.na", "!is.na", "| &"), significado_cont = c("other than", "within the group", "is NA", "is not NA", "or, and"))
 kable(DF) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = F)
 ```
 
-## Ejemplos de filter agregando a lo anterior {.small}
+## Examples of filter added to what we did {.small}
 
 ```{r, eval = FALSE}
 data("iris")
@@ -324,7 +327,7 @@ DF <- iris %>% filter(Species != "versicolor") %>% group_by(Species) %>% summari
 kable(DF) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive"), full_width = F)
 ```
 
-## Ejemplos de filter {.small}
+## Examples of filter {.small}
 
 ```{r, eval = FALSE}
 DF <- iris %>% filter(Petal.Length >= 4 & Sepal.Length >= 5) %>% group_by(Species) %>% summarise(N = n())
@@ -336,7 +339,7 @@ kable(DF) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed
 ```
 
 
-## Más de una función {.small}
+## More than one functiin {.small}
 
 ```{r, eval = FALSE}
 data("iris")
@@ -354,7 +357,7 @@ kable(DF) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed
 
 <div style="float: left; width: 40%;">
 
-* Selecciona columnas dentro de un data.frame, se pueden restar
+* Selects columns within a data.frame, or take them out
 
 ```{r, eval=FALSE}
 iris %>% group_by(Species) %>% select(Petal.Length, Petal.Width) %>% summarize_all(mean)
@@ -386,30 +389,21 @@ kable(DF) %>% kable_styling(bootstrap_options = c("striped", "hover", "condensed
 
 </div>
 
-# Ejercicios
+# Excercices
 
-## Ejercicios {.build .small}
+## Excercices {.build .small}
 
 ```{r}
-Casos_Activos <- read_csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto19/CasosActivosPorComuna_std.csv")
+Active_Cases <- read_csv("https://raw.githubusercontent.com/MinCiencia/Datos-COVID19/master/output/producto19/CasosActivosPorComuna_std.csv")
 ```
 
 
-Usando la base de datos del repositorio del ministerio de ciencias, genera un dataframe que responda lo siguiente:
+Using the repository database of the ministry of science of chile, generate a dataframe that answers the following:
 
-* ¿Que proporción de las comunas ha tenido en algun momento mas de 50 casos por cada 100.000 habitantes?
-* Genera un dataframe, donde aparezca para cada comuna que haya tenido sobre 50 casos por cada 100.000 habitantes, cuantos días ha tenido sobre ese valor.
-* Genera una tabla de cuales comunas han tenido sobre 50 casos por cada 100.000 habitantes y de esas comunas crea una variable que sea la prevalencia máxima de dicha comuna.
+* What proportion of the communes has had at some point more than 50 cases per 100,000 inhabitants?
+* Generates a dataframe, where it appears for each commune that has had over 50 cases per 100,000 inhabitants, how many days it has had over that value.
+* Generates a table of which communes have had over 50 cases per 100,000 inhabitants and from those communes creates a variable that is the maximum prevalence of said commune.
 
-## **Bonus** (Esto requiere investigar no basta con lo que aprendimos)
+## **Bonus** (This requires research not enough what we learned)
 
-* Ve cuales son las 10 comunas que han tenido la mayor mediana de prevalencia, para cada una de estas 10 comunas, genera una tabla con la mediana, prevalencia máxima y fecha en que se alcanzó la prevalencia máxima
-
-* Nos vemos a las 12:45
-
-## Para la otra clase, es necesario: {.small .build}
-
-
-* Crearse cuenta de [github](https://github.com/)
-* Instalar los paquetes knitr, rmarkdown y kableExtra
-
+* See which are the 10 communes that have had the highest median prevalence, for each of these 10 communes, generate a table with the median, maximum prevalence and date on which the maximum prevalence was reached 

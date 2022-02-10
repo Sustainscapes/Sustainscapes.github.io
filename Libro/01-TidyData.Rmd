@@ -12,7 +12,7 @@ opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
 
 This chapter will explain what a *tidy* [@wickham2014tidy] database is and learn how to use functions from the *dplyr* [@R-dplyr] package to manipulate data.
 
-This class of the course can also be followed at this [link](https://https://sustainscapes.github.io/Class1/Class1TidyData.html#1). 
+This class of the course can also be followed at this [link](https://sustainscapes.github.io/Class1/Class1TidyData.html). 
 
 
 ## Tidy data

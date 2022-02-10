@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 1 Tidy Data and data manipulation | Reproducible research in R</title>
+  <meta name="description" content="A companion book on reproducibility in R" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 1 Tidy Data and data manipulation | Reproducible research in R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:image" content="/Cover.png" />
+  <meta property="og:description" content="A companion book on reproducibility in R" />
+  <meta name="github-repo" content="/derek-corcoran-barrios/derek-corcoran-barrios.github.io/tree/master/Libro" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 1 Tidy Data and data manipulation | Reproducible research in R" />
+  
+  <meta name="twitter:description" content="A companion book on reproducibility in R" />
+  <meta name="twitter:image" content="/Cover.png" />
+
+<meta name="author" content="Derek Corcoran" />
+
+
+<meta name="date" content="2022-02-10" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Reproducible research in R </a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Requirements</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#before-starting"><i class="fa fa-check"></i><b>0.1</b> Before starting</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#workshop-description"><i class="fa fa-check"></i><b>0.2</b> Workshop description</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#course-objectives"><i class="fa fa-check"></i><b>0.3</b> Course Objectives</a></li>
+<li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#contents"><i class="fa fa-check"></i><b>0.4</b> Contents</a></li>
+<li class="chapter" data-level="0.5" data-path="index.html"><a href="index.html#libros-de-consulta"><i class="fa fa-check"></i><b>0.5</b> Libros de consulta</a></li>
+<li class="chapter" data-level="0.6" data-path="index.html"><a href="index.html#reference-books"><i class="fa fa-check"></i><b>0.6</b> Reference books</a></li>
+<li class="chapter" data-level="0.7" data-path="index.html"><a href="index.html#references"><i class="fa fa-check"></i><b>0.7</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="tidydata.html"><a href="tidydata.html"><i class="fa fa-check"></i><b>1</b> Tidy Data and data manipulation</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="tidydata.html"><a href="tidydata.html#packages-needed-for-this-chapter"><i class="fa fa-check"></i><b>1.1</b> Packages needed for this chapter</a></li>
+<li class="chapter" data-level="1.2" data-path="tidydata.html"><a href="tidydata.html#tidy-data"><i class="fa fa-check"></i><b>1.2</b> Tidy data</a></li>
+<li class="chapter" data-level="1.3" data-path="tidydata.html"><a href="tidydata.html#dplyr"><i class="fa fa-check"></i><b>1.3</b> dplyr</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="tidydata.html"><a href="tidydata.html#pipeline"><i class="fa fa-check"></i><b>1.3.1</b> Pipeline (%&gt;%)</a></li>
+<li class="chapter" data-level="1.3.2" data-path="tidydata.html"><a href="tidydata.html#summarize"><i class="fa fa-check"></i><b>1.3.2</b> summarize</a></li>
+<li class="chapter" data-level="1.3.3" data-path="tidydata.html"><a href="tidydata.html#group_by"><i class="fa fa-check"></i><b>1.3.3</b> group_by</a></li>
+<li class="chapter" data-level="1.3.4" data-path="tidydata.html"><a href="tidydata.html#mutate"><i class="fa fa-check"></i><b>1.3.4</b> mutate</a></li>
+<li class="chapter" data-level="1.3.5" data-path="tidydata.html"><a href="tidydata.html#filter"><i class="fa fa-check"></i><b>1.3.5</b> filter</a></li>
+<li class="chapter" data-level="1.3.6" data-path="tidydata.html"><a href="tidydata.html#select"><i class="fa fa-check"></i><b>1.3.6</b> select</a></li>
+<li class="chapter" data-level="1.3.7" data-path="tidydata.html"><a href="tidydata.html#exercises"><i class="fa fa-check"></i><b>1.3.7</b> Exercises</a></li>
+</ul></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Publicado con bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Reproducible research in R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="tidydata" class="section level1" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Tidy Data and data manipulation</h1>
+<div id="packages-needed-for-this-chapter" class="section level2" number="1.1">
+<h2><span class="header-section-number">1.1</span> Packages needed for this chapter</h2>
+<p>For this chapter you need to have the <em>tidyverse</em> package installed.</p>
+<pre><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.1 ──</code></pre>
+<pre><code>## ✓ ggplot2 3.3.5     ✓ purrr   0.3.4
+## ✓ tibble  3.1.6     ✓ dplyr   1.0.7
+## ✓ tidyr   1.1.4     ✓ stringr 1.4.0
+## ✓ readr   2.1.2     ✓ forcats 0.5.1</code></pre>
+<pre><code>## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()</code></pre>
+<p>This chapter will explain what a <em>tidy</em> <span class="citation">(<a href="#ref-wickham2014tidy" role="doc-biblioref">Wickham and others 2014</a>)</span> database is and learn how to use functions from the <em>dplyr</em> <span class="citation">(<a href="#ref-R-dplyr" role="doc-biblioref">Wickham et al. 2020</a>)</span> package to manipulate data.</p>
+<p>This class of the course can also be followed at this <a href="https://https://sustainscapes.github.io/Class1/Class1TidyData.html#1">link</a>.</p>
+</div>
+<div id="tidy-data" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Tidy data</h2>
+<p>A tidy database is a database in which (modified from <span class="citation">(<a href="#ref-leek2015elements" role="doc-biblioref">Leek 2015</a>)</span>):</p>
+<ul>
+<li>Each variable to be measured must be in a column.</li>
+<li>Each observation other than that variable must be in a different row.</li>
+</ul>
+<p>In general, the way we would represent a <em>tidy</em> database in <code>R</code> is by using a <em>data frame</em>.</p>
+</div>
+<div id="dplyr" class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> dplyr</h2>
+<p>The <em>dplyr</em> package is defined by its authors as a grammar for data manipulation. Thus their functions are known as verbs. A helpful summary of many of these features is found at this <a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">link</a>.</p>
+<p>This package has a large number of verbs and it would be difficult to see all of them in one class, in this chapter we will focus on its most used functions, which are:</p>
+<ul>
+<li><em>%&gt;%</em> (pipelines)</li>
+<li><em>group_by</em> (group data)</li>
+<li><em>summarize</em> (summarize grouped data)</li>
+<li><em>mutate</em> (generate new variables)</li>
+<li><em>filter</em> (find rows with certain conditions)</li>
+<li><em>select</em> next to <em>starts_with</em>, <em>ends_with</em> or <em>contains</em></li>
+</ul>
+<p>in the next section you can learn about the pipeline (%&gt;%), <em>group_by</em> and <em>summarize</em></p>
+<div id="pipeline" class="section level3" number="1.3.1">
+<h3><span class="header-section-number">1.3.1</span> Pipeline (%&gt;%)</h3>
+<p>The pipeline is an operator symbol <code>%&gt;%</code> that is used to perform various operations sequentially without resorting to nested parentheses or overwriting multiple databases.</p>
+<p>To see how this works as a vector, suppose you have a variable that you want to first get its logarithm, then its square root, and finally its average to two significant figures. To do this, the following must be followed:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="tidydata.html#cb4-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>)</span>
+<span id="cb4-2"><a href="tidydata.html#cb4-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">mean</span>(<span class="fu">sqrt</span>(<span class="fu">log</span>(x))), <span class="dv">2</span>)</span></code></pre></div>
+<p>If pipelined, the code would be much neater. In that case, it would start with the object to be processed and then each of the functions with their arguments if necessary:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="tidydata.html#cb5-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>)</span>
+<span id="cb5-2"><a href="tidydata.html#cb5-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> x <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="tidydata.html#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">log</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-4"><a href="tidydata.html#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sqrt</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="tidydata.html#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="tidydata.html#cb5-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">round</span>(<span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [1] 0.99</code></pre>
+<p>Piped code is much easier to interpret at first glance since it reads from left to right and not from the inside out.</p>
+</div>
+<div id="summarize" class="section level3" number="1.3.2">
+<h3><span class="header-section-number">1.3.2</span> summarize</h3>
+<p>The <code>summarize</code> function takes the data from a data frame and summarizes it. To use this function, the first argument we would take would be a data frame, followed by the name we want to give to a summary variable, followed by the = sign and then the formula to apply to one or more columns. As an example we will use the <code>iris</code> database <span class="citation">(<a href="#ref-anderson1935irises" role="doc-biblioref">Anderson 1935</a>)</span> that comes in <code>R</code> and of which we can see part of its data in the table <a href="tidydata.html#tab:iris">1.1</a></p>
+<table>
+<caption><span id="tab:iris">Table 1.1: </span>a table with 10 rows from the iris database.</caption>
+<thead>
+<tr class="header">
+<th align="right">Sepal.Length</th>
+<th align="right">Sepal.Width</th>
+<th align="right">Petal.Length</th>
+<th align="right">Petal.Width</th>
+<th align="left">Species</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">5.8</td>
+<td align="right">4.0</td>
+<td align="right">1.2</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">4.7</td>
+<td align="right">3.2</td>
+<td align="right">1.6</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="odd">
+<td align="right">5.1</td>
+<td align="right">3.8</td>
+<td align="right">1.9</td>
+<td align="right">0.4</td>
+<td align="left">setosa</td>
+</tr>
+<tr class="even">
+<td align="right">5.2</td>
+<td align="right">2.7</td>
+<td align="right">3.9</td>
+<td align="right">1.4</td>
+<td align="left">versicolor</td>
+</tr>
+<tr class="odd">
+<td align="right">6.4</td>
+<td align="right">2.9</td>
+<td align="right">4.3</td>
+<td align="right">1.3</td>
+<td align="left">versicolor</td>
+</tr>
+<tr class="even">
+<td align="right">5.5</td>
+<td align="right">2.5</td>
+<td align="right">4.0</td>
+<td align="right">1.3</td>
+<td align="left">versicolor</td>
+</tr>
+<tr class="odd">
+<td align="right">6.5</td>
+<td align="right">3.0</td>
+<td align="right">5.8</td>
+<td align="right">2.2</td>
+<td align="left">virginica</td>
+</tr>
+<tr class="even">
+<td align="right">6.0</td>
+<td align="right">2.2</td>
+<td align="right">5.0</td>
+<td align="right">1.5</td>
+<td align="left">virginica</td>
+</tr>
+<tr class="odd">
+<td align="right">6.1</td>
+<td align="right">2.6</td>
+<td align="right">5.6</td>
+<td align="right">1.4</td>
+<td align="left">virginica</td>
+</tr>
+<tr class="even">
+<td align="right">5.9</td>
+<td align="right">3.0</td>
+<td align="right">5.1</td>
+<td align="right">1.8</td>
+<td align="left">virginica</td>
+</tr>
+</tbody>
+</table>
+<p>If we wanted to summarize that table and generate a couple of variables that were the mean and standard deviation of the length of the petal, we would do it with the following code:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="tidydata.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb7-2"><a href="tidydata.html#cb7-2" aria-hidden="true" tabindex="-1"></a>Summary.Petal <span class="ot">&lt;-</span> <span class="fu">summarize</span>(iris, <span class="at">Mean.Petal.Length =</span> <span class="fu">mean</span>(Petal.Length),</span>
+<span id="cb7-3"><a href="tidydata.html#cb7-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">SD.Petal.Length =</span> <span class="fu">sd</span>(Petal.Length))</span></code></pre></div>
+<p>The result can be seen in the table <a href="tidydata.html#tab:SummaryPetaltab">1.2</a>, in which the averages and standard deviations of the lengths of the petals are obtained. It is important to note that when using summarize, all other variables will disappear from the table.</p>
+<table>
+<caption><span id="tab:SummaryPetaltab">Table 1.2: </span>Summary of the mean and standard deviation of the petal length of the flowers of the genus Iris.</caption>
+<thead>
+<tr class="header">
+<th align="right">Mean.Petal.Length</th>
+<th align="right">SD.Petal.Length</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">3.758</td>
+<td align="right">1.765298</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="group_by" class="section level3" number="1.3.3">
+<h3><span class="header-section-number">1.3.3</span> group_by</h3>
+<p>The <code>group_by</code> function itself does not cause any visible changes to the databases. However, when used in conjunction with <code>summarize</code> it allows you to summarize a grouped variable (usually) based on one or more categorical variables.</p>
+<p>It can be seen that for the example with the case of plants of the genus <em>Iris</em>, the summary obtained in the case of the table <a href="tidydata.html#tab:SummaryPetaltab">1.2</a> is not so useful considering that we have three species present. If you want to see the average length of the petal by species, you must use the <code>group_by</code> function as follows:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="tidydata.html#cb8-1" aria-hidden="true" tabindex="-1"></a>BySpecies <span class="ot">&lt;-</span> <span class="fu">group_by</span>(iris, Species)</span>
+<span id="cb8-2"><a href="tidydata.html#cb8-2" aria-hidden="true" tabindex="-1"></a>Summary.Byspecies <span class="ot">&lt;-</span> <span class="fu">summarize</span>(BySpecies, <span class="at">Mean.Petal.Length =</span> <span class="fu">mean</span>(Petal.Length),</span>
+<span id="cb8-3"><a href="tidydata.html#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">SD.Petal.Length =</span> <span class="fu">sd</span>(Petal.Length))</span></code></pre></div>
+<p>This results in the table <a href="tidydata.html#tab:SummaryBySpecies">1.3</a>, from which you can see that <em>Iris setosa</em> has much shorter petals than the other two species of the same genus.</p>
+<table>
+<caption><span id="tab:SummaryBySpecies">Table 1.3: </span>Summary of the mean and standard deviation of the petal length of the flowers of the genus Iris.</caption>
+<thead>
+<tr class="header">
+<th align="left">Species</th>
+<th align="right">Mean.Petal.Length</th>
+<th align="right">SD.Petal.Length</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">setosa</td>
+<td align="right">1.462</td>
+<td align="right">0.1736640</td>
+</tr>
+<tr class="even">
+<td align="left">versicolor</td>
+<td align="right">4.260</td>
+<td align="right">0.4699110</td>
+</tr>
+<tr class="odd">
+<td align="left">virginica</td>
+<td align="right">5.552</td>
+<td align="right">0.5518947</td>
+</tr>
+</tbody>
+</table>
+<div id="group_by-on-more-than-one-variable" class="section level4" number="1.3.3.1">
+<h4><span class="header-section-number">1.3.3.1</span> group_by on more than one variable</h4>
+<p>You can use the <code>group_by</code> function on more than one variable, and this would result in a nested summary. As an example we will use the <code>mtcars</code> database present in R <span class="citation">(<a href="#ref-henderson1981building" role="doc-biblioref">Henderson and Velleman 1981</a>)</span>. This database features a variable called <em>mpg</em> (miles per gallon) and a measure of fuel efficiency. The information will be summarized based on the variable <em>am</em> (which refers to the type of transmission, where 0 is automatic and 1 is manual) and the number of engine cylinders. For that, the following code will be used:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="tidydata.html#cb9-1" aria-hidden="true" tabindex="-1"></a>Grouped <span class="ot">&lt;-</span> <span class="fu">group_by</span>(mtcars, cyl, am)</span>
+<span id="cb9-2"><a href="tidydata.html#cb9-2" aria-hidden="true" tabindex="-1"></a>Efficiency <span class="ot">&lt;-</span> <span class="fu">summarize</span>(Grouped, <span class="at">Efficiency =</span> <span class="fu">mean</span>(mpg))</span></code></pre></div>
+<pre><code>## `summarise()` has grouped output by &#39;cyl&#39;. You can override using the `.groups`
+## argument.</code></pre>
+<p>As can be seen in the table <a href="tidydata.html#tab:Efficiencytab">1.4</a>, in all cases cars with manual transmissions have better fuel efficiency. You could try changing the order of the variables with which to group and observe the different results that can be obtained.</p>
+<table>
+<caption><span id="tab:Efficiencytab">Table 1.4: </span>Average miles per gallon in automatic (am = 0) and manual (am = 1) vehicles, with the different types of cylinders</caption>
+<thead>
+<tr class="header">
+<th align="right">cyl</th>
+<th align="right">am</th>
+<th align="right">Efficiency</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4</td>
+<td align="right">0</td>
+<td align="right">22.90000</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">28.07500</td>
+</tr>
+<tr class="odd">
+<td align="right">6</td>
+<td align="right">0</td>
+<td align="right">19.12500</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">1</td>
+<td align="right">20.56667</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="right">0</td>
+<td align="right">15.05000</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="right">1</td>
+<td align="right">15.40000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="mutate" class="section level3" number="1.3.4">
+<h3><span class="header-section-number">1.3.4</span> mutate</h3>
+<p>This function aims to create new variables based on other variables. It is very easy to use, as an argument the name of the new variable that you want to create is used and an operation is performed with variables that are already there. For example, if we continue working with the <em>Iris</em> database, by creating a new variable that is the ratio between the length of the petal and the length of the sepal, the following results:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="tidydata.html#cb11-1" aria-hidden="true" tabindex="-1"></a>DF <span class="ot">&lt;-</span> <span class="fu">mutate</span>(iris, <span class="at">Petal.Sepal.Ratio =</span> Petal.Length<span class="sc">/</span>Sepal.Length)</span></code></pre></div>
+<p>The result of this operation is the table <a href="tidydata.html#tab:Mutate">1.5</a>. The variable that has just been created will always appear at the end of the data frame.</p>
+<table>
+<caption><span id="tab:Mutate">Table 1.5: </span>Table with ten of the observations from the new database with the new variable created with mutate</caption>
+<thead>
+<tr class="header">
+<th align="right">Sepal.Length</th>
+<th align="right">Sepal.Width</th>
+<th align="right">Petal.Length</th>
+<th align="right">Petal.Width</th>
+<th align="left">Species</th>
+<th align="right">Petal.Sepal.Ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">5.8</td>
+<td align="right">4.0</td>
+<td align="right">1.2</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+<td align="right">0.21</td>
+</tr>
+<tr class="even">
+<td align="right">4.7</td>
+<td align="right">3.2</td>
+<td align="right">1.6</td>
+<td align="right">0.2</td>
+<td align="left">setosa</td>
+<td align="right">0.34</td>
+</tr>
+<tr class="odd">
+<td align="right">5.1</td>
+<td align="right">3.8</td>
+<td align="right">1.9</td>
+<td align="right">0.4</td>
+<td align="left">setosa</td>
+<td align="right">0.37</td>
+</tr>
+<tr class="even">
+<td align="right">5.2</td>
+<td align="right">2.7</td>
+<td align="right">3.9</td>
+<td align="right">1.4</td>
+<td align="left">versicolor</td>
+<td align="right">0.75</td>
+</tr>
+<tr class="odd">
+<td align="right">6.4</td>
+<td align="right">2.9</td>
+<td align="right">4.3</td>
+<td align="right">1.3</td>
+<td align="left">versicolor</td>
+<td align="right">0.67</td>
+</tr>
+<tr class="even">
+<td align="right">5.5</td>
+<td align="right">2.5</td>
+<td align="right">4.0</td>
+<td align="right">1.3</td>
+<td align="left">versicolor</td>
+<td align="right">0.73</td>
+</tr>
+<tr class="odd">
+<td align="right">6.5</td>
+<td align="right">3.0</td>
+<td align="right">5.8</td>
+<td align="right">2.2</td>
+<td align="left">virginica</td>
+<td align="right">0.89</td>
+</tr>
+<tr class="even">
+<td align="right">6.0</td>
+<td align="right">2.2</td>
+<td align="right">5.0</td>
+<td align="right">1.5</td>
+<td align="left">virginica</td>
+<td align="right">0.83</td>
+</tr>
+<tr class="odd">
+<td align="right">6.1</td>
+<td align="right">2.6</td>
+<td align="right">5.6</td>
+<td align="right">1.4</td>
+<td align="left">virginica</td>
+<td align="right">0.92</td>
+</tr>
+<tr class="even">
+<td align="right">5.9</td>
+<td align="right">3.0</td>
+<td align="right">5.1</td>
+<td align="right">1.8</td>
+<td align="left">virginica</td>
+<td align="right">0.86</td>
+</tr>
+</tbody>
+</table>
+<div id="the-pipeline-in-data-frames" class="section level4" number="1.3.4.1">
+<h4><span class="header-section-number">1.3.4.1</span> The pipeline in data frames</h4>
+<p>For example, we want to summarize the newly created variable of the ratio between the sepal and the petal. To do this, if starting from the original database, it would take several lines of code and the creation of multiple intermediate databases.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="tidydata.html#cb12-1" aria-hidden="true" tabindex="-1"></a>DF <span class="ot">&lt;-</span> <span class="fu">mutate</span>(iris, <span class="at">Petal.Sepal.Ratio =</span> Petal.Length<span class="sc">/</span>Sepal.Length)</span>
+<span id="cb12-2"><a href="tidydata.html#cb12-2" aria-hidden="true" tabindex="-1"></a>BySpecies <span class="ot">&lt;-</span> <span class="fu">group_by</span>(DF, Species)</span>
+<span id="cb12-3"><a href="tidydata.html#cb12-3" aria-hidden="true" tabindex="-1"></a>Summary.Byspecies <span class="ot">&lt;-</span> <span class="fu">summarize</span>(BySpecies, <span class="at">MEAN =</span> <span class="fu">mean</span>(Petal.Sepal.Ratio),</span>
+<span id="cb12-4"><a href="tidydata.html#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">SD =</span> <span class="fu">sd</span>(Petal.Sepal.Ratio))</span></code></pre></div>
+<p>Another option is to use nested parentheses, which results in the following code:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="tidydata.html#cb13-1" aria-hidden="true" tabindex="-1"></a>Summary.Byspecies <span class="ot">&lt;-</span> <span class="fu">summarize</span>(<span class="fu">group_by</span>(<span class="fu">mutate</span>(iris, <span class="at">Petal.Sepal.Ratio =</span> Petal.Length<span class="sc">/</span>Sepal.Length), Species), <span class="at">MEAN =</span> <span class="fu">mean</span>(Petal.Sepal.Ratio), <span class="at">SD =</span> <span class="fu">sd</span>(Petal.Sepal. Ratio))</span></code></pre></div>
+<p>This is further simplified by using the pipeline, which allows you to start at a <em>Data Frame</em> and then use the pipeline. This allows to obtain the same result as in the previous operations with the following code:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="tidydata.html#cb14-1" aria-hidden="true" tabindex="-1"></a>Summary.Byspecies <span class="ot">&lt;-</span> iris <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="tidydata.html#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">Petal.Sepal.Ratio =</span> Petal.Length<span class="sc">/</span>Sepal.Length) <span class="sc">%&gt;%</span></span>
+<span id="cb14-3"><a href="tidydata.html#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(Species) <span class="sc">%&gt;%</span></span>
+<span id="cb14-4"><a href="tidydata.html#cb14-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">MEAN =</span> <span class="fu">mean</span>(Petal.Sepal.Ratio), <span class="at">SD =</span> <span class="fu">sd</span>(Petal.Sepal.Ratio))</span></code></pre></div>
+<p>These three codes are correct (table <a href="tidydata.html#tab:Pipe">1.6</a>), but definitely the use of the pipeline gives the most concise and easy to interpret code without intermediate steps.</p>
+<table>
+<caption><span id="tab:Pipe">Table 1.6: </span>Average petal-sepal ratio for the three Iris species</caption>
+<thead>
+<tr class="header">
+<th align="left">Species</th>
+<th align="right">MEAN</th>
+<th align="right">SD</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">setosa</td>
+<td align="right">0.2927557</td>
+<td align="right">0.0347958</td>
+</tr>
+<tr class="even">
+<td align="left">versicolor</td>
+<td align="right">0.7177285</td>
+<td align="right">0.0536255</td>
+</tr>
+<tr class="odd">
+<td align="left">virginica</td>
+<td align="right">0.8437495</td>
+<td align="right">0.0438064</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="filter" class="section level3" number="1.3.5">
+<h3><span class="header-section-number">1.3.5</span> filter</h3>
+<p>This function allows you to select rows that meet certain conditions, such as having a value greater than a threshold or belonging to a certain class. The most typical symbols to use in this case are those seen in the table <a href="tidydata.html#tab:Logics">1.7</a>.</p>
+<table>
+<caption><span id="tab:Logics">Table 1.7: </span>R logical symbols and their meaning</caption>
+<thead>
+<tr class="header">
+<th align="left">symbol</th>
+<th align="left">meaning</th>
+<th align="left">cont_symbol</th>
+<th align="left">cont_meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">&gt;</td>
+<td align="left">Greater than</td>
+<td align="left">!=</td>
+<td align="left">other than</td>
+</tr>
+<tr class="even">
+<td align="left">&lt;</td>
+<td align="left">Less than</td>
+<td align="left">%in%</td>
+<td align="left">within group</td>
+</tr>
+<tr class="odd">
+<td align="left">==</td>
+<td align="left">Equal to</td>
+<td align="left">is.na</td>
+<td align="left">is NA</td>
+</tr>
+<tr class="even">
+<td align="left">&gt;=</td>
+<td align="left">greater than or equal to</td>
+<td align="left">!is.na</td>
+<td align="left">is not NA</td>
+</tr>
+<tr class="odd">
+<td align="left">&lt;=</td>
+<td align="left">less than or equal to</td>
+<td align="left">| &amp;</td>
+<td align="left">or, and</td>
+</tr>
+</tbody>
+</table>
+<p>For example, if you want to study the floral characteristics of plants of the genus <em>Iris</em>, but do not take into account the species <em>Iris versicolor</em>, you should use the following code:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="tidydata.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;iris&quot;</span>)</span>
+<span id="cb15-2"><a href="tidydata.html#cb15-2" aria-hidden="true" tabindex="-1"></a>DF <span class="ot">&lt;-</span> iris <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="tidydata.html#cb15-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Species <span class="sc">!=</span> <span class="st">&quot;versicolor&quot;</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-4"><a href="tidydata.html#cb15-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(Species) <span class="sc">%&gt;%</span></span>
+<span id="cb15-5"><a href="tidydata.html#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise_all</span>(mean)</span></code></pre></div>
+<p>This results in the table <a href="#tab:MenosVersicolor"><strong>??</strong></a>. In this case, the <code>summarize_all</code> function of <code>summarize</code> is introduced, which applies the function given as an argument to all variables in the database.</p>
+<table>
+<caption><span id="tab:MinusVersicolor">Table 1.8: </span>Summary of the mean of all floral characteristics of the species Iris setosa and Iris virginica</caption>
+<thead>
+<tr class="header">
+<th align="left">Species</th>
+<th align="right">Sepal.Length</th>
+<th align="right">Sepal.Width</th>
+<th align="right">Petal.Length</th>
+<th align="right">Petal.Width</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">setosa</td>
+<td align="right">5.006</td>
+<td align="right">3.428</td>
+<td align="right">1.462</td>
+<td align="right">0.246</td>
+</tr>
+<tr class="even">
+<td align="left">virginica</td>
+<td align="right">6.588</td>
+<td align="right">2.974</td>
+<td align="right">5.552</td>
+<td align="right">2.026</td>
+</tr>
+</tbody>
+</table>
+<p>On the other hand, if you want to study how many plants of each species have a petal length greater than 4 and a sepal length greater than 5, you should use the following code:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="tidydata.html#cb16-1" aria-hidden="true" tabindex="-1"></a>DF <span class="ot">&lt;-</span> iris <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="tidydata.html#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(Petal.Length <span class="sc">&gt;=</span> <span class="dv">4</span> <span class="sc">&amp;</span> Sepal.Length <span class="sc">&gt;=</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb16-3"><a href="tidydata.html#cb16-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(Species) <span class="sc">%&gt;%</span></span>
+<span id="cb16-4"><a href="tidydata.html#cb16-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>())</span></code></pre></div>
+<p>In the table table <a href="tidydata.html#tab:Number">1.9</a> it can be seen that with this filter all <em>Iris setosa</em> plants disappear from the database and that all except one <em>Iris virginica</em> plant have both characteristics.</p>
+<table>
+<caption><span id="tab:Number">Table 1.9: </span>Number of plants of each species with a petal length greater than 4 and a sepal length greater than 5 centimeters</caption>
+<thead>
+<tr class="header">
+<th align="left">Species</th>
+<th align="right">N</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">versicolor</td>
+<td align="right">39</td>
+</tr>
+<tr class="even">
+<td align="left">virginica</td>
+<td align="right">49</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="select" class="section level3" number="1.3.6">
+<h3><span class="header-section-number">1.3.6</span> select</h3>
+<p>This function allows you to select the variables to use since in many cases we will find databases with too many variables and therefore, we will want to reduce them to only work on a table with the necessary variables.</p>
+<p>With select there are several ways to work, on the one hand you can write the variables that will be used, or subtract those that will not. In that sense these four codes give exactly the same result. This can be seen in the table <a href="tidydata.html#tab:Selected">1.10</a></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="tidydata.html#cb17-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="tidydata.html#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(Species) <span class="sc">%&gt;%</span></span>
+<span id="cb17-3"><a href="tidydata.html#cb17-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(Petal.Length, Petal.Width) <span class="sc">%&gt;%</span></span>
+<span id="cb17-4"><a href="tidydata.html#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize_all</span>(mean)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="tidydata.html#cb18-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="tidydata.html#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(Species) <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="tidydata.html#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span>Sepal.Length, <span class="sc">-</span>Sepal.Width) <span class="sc">%&gt;%</span></span>
+<span id="cb18-4"><a href="tidydata.html#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize_all</span>(mean)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="tidydata.html#cb19-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<span id="cb19-2"><a href="tidydata.html#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(Species) <span class="sc">%&gt;%</span></span>
+<span id="cb19-3"><a href="tidydata.html#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="fu">contains</span>(<span class="st">&quot;Petal&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb19-4"><a href="tidydata.html#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize_all</span>(mean)</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="tidydata.html#cb20-1" aria-hidden="true" tabindex="-1"></a>iris <span class="sc">%&gt;%</span></span>
+<span id="cb20-2"><a href="tidydata.html#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(Species) <span class="sc">%&gt;%</span></span>
+<span id="cb20-3"><a href="tidydata.html#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="sc">-</span><span class="fu">contains</span>(<span class="st">&quot;Sepal&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb20-4"><a href="tidydata.html#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize_all</span>(mean)</span></code></pre></div>
+<table>
+<caption><span id="tab:Selected">Table 1.10: </span>Average petal length and petal width for species of the genus Iris</caption>
+<thead>
+<tr class="header">
+<th align="left">Species</th>
+<th align="right">Petal.Length</th>
+<th align="right">Petal.Width</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">setosa</td>
+<td align="right">1.462</td>
+<td align="right">0.246</td>
+</tr>
+<tr class="even">
+<td align="left">versicolor</td>
+<td align="right">4.260</td>
+<td align="right">1.326</td>
+</tr>
+<tr class="odd">
+<td align="left">virginica</td>
+<td align="right">5.552</td>
+<td align="right">2.026</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="exercises" class="section level3" number="1.3.7">
+<h3><span class="header-section-number">1.3.7</span> Exercises</h3>
+<div id="exercise-1" class="section level4" number="1.3.7.1">
+<h4><span class="header-section-number">1.3.7.1</span> Exercise 1</h4>
+<p>Using the <code>storms</code> database from the <em>dplyr</em> package, compute the average speed and average diameter (hu_diameter) of storms that have been declared hurricanes for each year.</p>
+</div>
+<div id="exercise-2" class="section level4" number="1.3.7.2">
+<h4><span class="header-section-number">1.3.7.2</span> Exercise 2</h4>
+<p>The ggplot2 package’s <code>mpg</code> database has fuel economy data in city miles per gallon (<em>cty</em>) for various vehicles. Obtain the data of vehicles from the year 2004 onwards that are compact and transform the efficiency Km/liter (1 mile = 1,609 km; 1 gallon = 3.78541 liters)</p>
+
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div class="csl-entry">
+Anderson, Edgar. 1935. <span>“The Irises of the Gaspe Peninsula.”</span> <em>Bulletin of the American Iris Society</em> 59: 2–5.
+</div>
+<div class="csl-entry">
+Henderson, Harold V, and Paul F Velleman. 1981. <span>“Building Multiple Regression Models Interactively.”</span> <em>Biometrics</em>, 391–411.
+</div>
+<div class="csl-entry">
+Leek, Jeff. 2015. <span>“The Elements of Data Analytic Style.”</span> <em>J. Leek.—Amazon Digital Services, Inc</em>.
+</div>
+<div class="csl-entry">
+Wickham, Hadley, Romain François, Lionel Henry, and Kirill Müller. 2020. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://CRAN.R-project.org/package=dplyr">https://CRAN.R-project.org/package=dplyr</a>.
+</div>
+<div class="csl-entry">
+Wickham, Hadley, and others. 2014. <span>“Tidy Data.”</span> <em>Journal of Statistical Software</em> 59 (10): 1–23.
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-anderson1935irises" class="csl-entry">
+Anderson, Edgar. 1935. <span>“The Irises of the Gaspe Peninsula.”</span> <em>Bulletin of the American Iris Society</em> 59: 2–5.
+</div>
+<div id="ref-henderson1981building" class="csl-entry">
+Henderson, Harold V, and Paul F Velleman. 1981. <span>“Building Multiple Regression Models Interactively.”</span> <em>Biometrics</em>, 391–411.
+</div>
+<div id="ref-leek2015elements" class="csl-entry">
+Leek, Jeff. 2015. <span>“The Elements of Data Analytic Style.”</span> <em>J. Leek.—Amazon Digital Services, Inc</em>.
+</div>
+<div id="ref-R-dplyr" class="csl-entry">
+Wickham, Hadley, Romain François, Lionel Henry, and Kirill Müller. 2020. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://CRAN.R-project.org/package=dplyr">https://CRAN.R-project.org/package=dplyr</a>.
+</div>
+<div id="ref-wickham2014tidy" class="csl-entry">
+Wickham, Hadley, and others. 2014. <span>“Tidy Data.”</span> <em>Journal of Statistical Software</em> 59 (10): 1–23.
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Libro.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

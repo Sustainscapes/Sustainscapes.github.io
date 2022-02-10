@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 8 Soluciones a problemas | Manipulación de datos e investigación reproducible en R</title>
+  <meta name="description" content="Este libro es una compañia al curso, análisis y manipulación de datos en R" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 8 Soluciones a problemas | Manipulación de datos e investigación reproducible en R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:image" content="Cover.png" />
+  <meta property="og:description" content="Este libro es una compañia al curso, análisis y manipulación de datos en R" />
+  <meta name="github-repo" content="/derek-corcoran-barrios/derek-corcoran-barrios.github.io/tree/master/Libro" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 8 Soluciones a problemas | Manipulación de datos e investigación reproducible en R" />
+  
+  <meta name="twitter:description" content="Este libro es una compañia al curso, análisis y manipulación de datos en R" />
+  <meta name="twitter:image" content="Cover.png" />
+
+<meta name="author" content="Derek Corcoran" />
+
+
+<meta name="date" content="2020-08-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="presentacion.html"/>
+<link rel="next" href="referencias.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Manipupación de datos en R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Requerimientos</a><ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#antes-de-comenzar"><i class="fa fa-check"></i><b>0.1</b> Antes de comenzar</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#descripción-del-curso"><i class="fa fa-check"></i><b>0.2</b> Descripción del curso</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#objetivos-del-curso"><i class="fa fa-check"></i><b>0.3</b> Objetivos del curso</a></li>
+<li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#contenidos"><i class="fa fa-check"></i><b>0.4</b> Contenidos</a></li>
+<li class="chapter" data-level="0.5" data-path="index.html"><a href="index.html#metodología"><i class="fa fa-check"></i><b>0.5</b> Metodología</a></li>
+<li class="chapter" data-level="0.6" data-path="index.html"><a href="index.html#evaluación"><i class="fa fa-check"></i><b>0.6</b> Evaluación</a></li>
+<li class="chapter" data-level="0.7" data-path="index.html"><a href="index.html#libros-de-consulta"><i class="fa fa-check"></i><b>0.7</b> Libros de consulta</a></li>
+<li class="chapter" data-level="0.8" data-path="index.html"><a href="index.html#bibliografía"><i class="fa fa-check"></i><b>0.8</b> Bibliografía</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="tidydata.html"><a href="tidydata.html"><i class="fa fa-check"></i><b>1</b> Tidy Data y manipulación de datos</a><ul>
+<li class="chapter" data-level="1.1" data-path="tidydata.html"><a href="tidydata.html#paquetes-necesarios-para-este-capítulo"><i class="fa fa-check"></i><b>1.1</b> Paquetes necesarios para este capítulo</a></li>
+<li class="chapter" data-level="1.2" data-path="tidydata.html"><a href="tidydata.html#tidy-data"><i class="fa fa-check"></i><b>1.2</b> Tidy data</a></li>
+<li class="chapter" data-level="1.3" data-path="tidydata.html"><a href="tidydata.html#dplyr"><i class="fa fa-check"></i><b>1.3</b> dplyr</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="tidydata.html"><a href="tidydata.html#pipeline"><i class="fa fa-check"></i><b>1.3.1</b> Pipeline (%&gt;%)</a></li>
+<li class="chapter" data-level="1.3.2" data-path="tidydata.html"><a href="tidydata.html#summarize"><i class="fa fa-check"></i><b>1.3.2</b> summarize</a></li>
+<li class="chapter" data-level="1.3.3" data-path="tidydata.html"><a href="tidydata.html#group_by"><i class="fa fa-check"></i><b>1.3.3</b> group_by</a></li>
+<li class="chapter" data-level="1.3.4" data-path="tidydata.html"><a href="tidydata.html#mutate"><i class="fa fa-check"></i><b>1.3.4</b> mutate</a></li>
+<li class="chapter" data-level="1.3.5" data-path="tidydata.html"><a href="tidydata.html#filter"><i class="fa fa-check"></i><b>1.3.5</b> filter</a></li>
+<li class="chapter" data-level="1.3.6" data-path="tidydata.html"><a href="tidydata.html#select"><i class="fa fa-check"></i><b>1.3.6</b> select</a></li>
+<li class="chapter" data-level="1.3.7" data-path="tidydata.html"><a href="tidydata.html#joins"><i class="fa fa-check"></i><b>1.3.7</b> Joins</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="tidydata.html"><a href="tidydata.html#left-join"><i class="fa fa-check"></i><b>1.4</b> left join</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="tidydata.html"><a href="tidydata.html#ejercicios"><i class="fa fa-check"></i><b>1.4.1</b> Ejercicios</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="reproducible.html"><a href="reproducible.html"><i class="fa fa-check"></i><b>2</b> Investigación reproducible</a><ul>
+<li class="chapter" data-level="2.1" data-path="reproducible.html"><a href="reproducible.html#paquetes-necesarios-para-este-capítulo-1"><i class="fa fa-check"></i><b>2.1</b> Paquetes necesarios para este capítulo</a></li>
+<li class="chapter" data-level="2.2" data-path="reproducible.html"><a href="reproducible.html#investigación-reproducible"><i class="fa fa-check"></i><b>2.2</b> Investigación reproducible</a></li>
+<li class="chapter" data-level="2.3" data-path="reproducible.html"><a href="reproducible.html#guardando-nuestro-proyecto-en-github"><i class="fa fa-check"></i><b>2.3</b> Guardando nuestro proyecto en github</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="reproducible.html"><a href="reproducible.html#que-es-github"><i class="fa fa-check"></i><b>2.3.1</b> Que es github?</a></li>
+<li class="chapter" data-level="2.3.2" data-path="reproducible.html"><a href="reproducible.html#creando-un-proyecto-de-github-en-rstudio"><i class="fa fa-check"></i><b>2.3.2</b> creando un proyecto de github en RStudio</a></li>
+<li class="chapter" data-level="2.3.3" data-path="reproducible.html"><a href="reproducible.html#los-tres-principales-pasos-de-un-repositorio"><i class="fa fa-check"></i><b>2.3.3</b> Los tres principales pasos de un repositorio</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="reproducible.html"><a href="reproducible.html#reproducibilidad-en-r"><i class="fa fa-check"></i><b>2.4</b> Reproducibilidad en R</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="reproducible.html"><a href="reproducible.html#creando-un-rmarkdown"><i class="fa fa-check"></i><b>2.4.1</b> Creando un Rmarkdown</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="reproducible.html"><a href="reproducible.html#subtitulo-1"><i class="fa fa-check"></i>subtitulo 1</a><ul>
+<li class="chapter" data-level="" data-path="reproducible.html"><a href="reproducible.html#subtítulo-2"><i class="fa fa-check"></i>subtítulo 2</a></li>
+<li class="chapter" data-level="2.4.2" data-path="reproducible.html"><a href="reproducible.html#ejercicios-1"><i class="fa fa-check"></i><b>2.4.2</b> Ejercicios</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="tidyverso.html"><a href="tidyverso.html"><i class="fa fa-check"></i><b>3</b> El Tidyverso y tidyr</a><ul>
+<li class="chapter" data-level="3.1" data-path="tidyverso.html"><a href="tidyverso.html#paquetes-necesarios-para-este-capítulo-2"><i class="fa fa-check"></i><b>3.1</b> Paquetes necesarios para este capítulo</a></li>
+<li class="chapter" data-level="3.2" data-path="tidyverso.html"><a href="tidyverso.html#el-tidyverso"><i class="fa fa-check"></i><b>3.2</b> El tidyverso</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="tidyverso.html"><a href="tidyverso.html#readr"><i class="fa fa-check"></i><b>3.2.1</b> readr</a></li>
+<li class="chapter" data-level="3.2.2" data-path="tidyverso.html"><a href="tidyverso.html#dplyr-1"><i class="fa fa-check"></i><b>3.2.2</b> dplyr</a></li>
+<li class="chapter" data-level="3.2.3" data-path="tidyverso.html"><a href="tidyverso.html#tidyr"><i class="fa fa-check"></i><b>3.2.3</b> tidyr</a></li>
+<li class="chapter" data-level="3.2.4" data-path="tidyverso.html"><a href="tidyverso.html#ggplot2"><i class="fa fa-check"></i><b>3.2.4</b> ggplot2</a></li>
+<li class="chapter" data-level="3.2.5" data-path="tidyverso.html"><a href="tidyverso.html#purrr"><i class="fa fa-check"></i><b>3.2.5</b> purrr</a></li>
+<li class="chapter" data-level="3.2.6" data-path="tidyverso.html"><a href="tidyverso.html#forcats"><i class="fa fa-check"></i><b>3.2.6</b> forcats</a></li>
+<li class="chapter" data-level="3.2.7" data-path="tidyverso.html"><a href="tidyverso.html#stringr"><i class="fa fa-check"></i><b>3.2.7</b> stringr</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="tidyverso.html"><a href="tidyverso.html#tidyr-1"><i class="fa fa-check"></i><b>3.3</b> tidyr</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="tidyverso.html"><a href="tidyverso.html#gather"><i class="fa fa-check"></i><b>3.3.1</b> gather</a></li>
+<li class="chapter" data-level="3.3.2" data-path="tidyverso.html"><a href="tidyverso.html#spread"><i class="fa fa-check"></i><b>3.3.2</b> spread</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="tidyverso.html"><a href="tidyverso.html#ejercicios-2"><i class="fa fa-check"></i><b>3.4</b> Ejercicios</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="tidyverso.html"><a href="tidyverso.html#ejercicio-1-2"><i class="fa fa-check"></i><b>3.4.1</b> Ejercicio 1</a></li>
+<li class="chapter" data-level="3.4.2" data-path="tidyverso.html"><a href="tidyverso.html#ejercicio-2-1"><i class="fa fa-check"></i><b>3.4.2</b> Ejercicio 2</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="visualizacion.html"><a href="visualizacion.html"><i class="fa fa-check"></i><b>4</b> Visualización de datos</a><ul>
+<li class="chapter" data-level="4.1" data-path="visualizacion.html"><a href="visualizacion.html#paquetes-necesarios-para-este-capítulo-3"><i class="fa fa-check"></i><b>4.1</b> Paquetes necesarios para este capítulo</a></li>
+<li class="chapter" data-level="4.2" data-path="visualizacion.html"><a href="visualizacion.html#el-esqueleto"><i class="fa fa-check"></i><b>4.2</b> El esqueleto</a></li>
+<li class="chapter" data-level="4.3" data-path="visualizacion.html"><a href="visualizacion.html#por-que-usamos-aes-y"><i class="fa fa-check"></i><b>4.3</b> Por que usamos aes() y +</a></li>
+<li class="chapter" data-level="4.4" data-path="visualizacion.html"><a href="visualizacion.html#geom_algo"><i class="fa fa-check"></i><b>4.4</b> geom_algo</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="visualizacion.html"><a href="visualizacion.html#una-variable-categórica-una-continua"><i class="fa fa-check"></i><b>4.4.1</b> Una variable categórica una continua</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="visualizacion.html"><a href="visualizacion.html#combinando-geoms"><i class="fa fa-check"></i><b>4.5</b> Combinando geoms</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="visualizacion.html"><a href="visualizacion.html#el-orden-importa"><i class="fa fa-check"></i><b>4.5.1</b> El orden importa</a></li>
+<li class="chapter" data-level="4.5.2" data-path="visualizacion.html"><a href="visualizacion.html#dos-variables-continuas"><i class="fa fa-check"></i><b>4.5.2</b> Dos variables continuas</a></li>
+<li class="chapter" data-level="4.5.3" data-path="visualizacion.html"><a href="visualizacion.html#combinando-varios-gráficos-con-facet_wrap"><i class="fa fa-check"></i><b>4.5.3</b> Combinando varios gráficos con facet_wrap</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="modelos.html"><a href="modelos.html"><i class="fa fa-check"></i><b>5</b> Modelos en R</a><ul>
+<li class="chapter" data-level="5.1" data-path="modelos.html"><a href="modelos.html#paquetes-necesarios-para-este-capítulo-4"><i class="fa fa-check"></i><b>5.1</b> Paquetes necesarios para este capítulo</a></li>
+<li class="chapter" data-level="5.2" data-path="modelos.html"><a href="modelos.html#modelos-estadísticos"><i class="fa fa-check"></i><b>5.2</b> Modelos estadísticos</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="modelos.html"><a href="modelos.html#ejemplo"><i class="fa fa-check"></i><b>5.2.1</b> Ejemplo</a></li>
+<li class="chapter" data-level="5.2.2" data-path="modelos.html"><a href="modelos.html#representando-un-modelo-en-r"><i class="fa fa-check"></i><b>5.2.2</b> Representando un modelo en R</a></li>
+<li class="chapter" data-level="5.2.3" data-path="modelos.html"><a href="modelos.html#volvamos-al-ejemplo-de-las-plantas"><i class="fa fa-check"></i><b>5.2.3</b> Volvamos al ejemplo de las plantas</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="loops.html"><a href="loops.html"><i class="fa fa-check"></i><b>6</b> Loops (purrr) y bibliografía (rticles)</a><ul>
+<li class="chapter" data-level="6.1" data-path="loops.html"><a href="loops.html#paquetes-necesarios-para-este-capítulo-5"><i class="fa fa-check"></i><b>6.1</b> Paquetes necesarios para este capítulo</a></li>
+<li class="chapter" data-level="6.2" data-path="loops.html"><a href="loops.html#generando-una-receta"><i class="fa fa-check"></i><b>6.2</b> Generando una receta</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="loops.html"><a href="loops.html#dioxido-de-nitrógeno-en-madrid"><i class="fa fa-check"></i><b>6.2.1</b> Dioxido de nitrógeno en Madrid</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="loops.html"><a href="loops.html#empezando-el-loop"><i class="fa fa-check"></i><b>6.3</b> Empezando el loop</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="loops.html"><a href="loops.html#volvamos-a-nuestra-receta"><i class="fa fa-check"></i><b>6.3.1</b> Volvamos a nuestra receta</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="presentacion.html"><a href="presentacion.html"><i class="fa fa-check"></i><b>7</b> Presentaciones en R</a><ul>
+<li class="chapter" data-level="7.1" data-path="presentacion.html"><a href="presentacion.html#paquetes-necesarios-para-este-capítulo-6"><i class="fa fa-check"></i><b>7.1</b> Paquetes necesarios para este capítulo</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="soluciones.html"><a href="soluciones.html"><i class="fa fa-check"></i><b>8</b> Soluciones a problemas</a><ul>
+<li class="chapter" data-level="8.1" data-path="soluciones.html"><a href="soluciones.html#capítulo-1"><i class="fa fa-check"></i><b>8.1</b> Capítulo 1</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="soluciones.html"><a href="soluciones.html#ejercicio-1-3"><i class="fa fa-check"></i><b>8.1.1</b> Ejercicio 1</a></li>
+<li class="chapter" data-level="8.1.2" data-path="soluciones.html"><a href="soluciones.html#ejercicio-2-2"><i class="fa fa-check"></i><b>8.1.2</b> Ejercicio 2</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="soluciones.html"><a href="soluciones.html#capítulo-2"><i class="fa fa-check"></i><b>8.2</b> Capítulo 2</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="soluciones.html"><a href="soluciones.html#ejercicio-1-4"><i class="fa fa-check"></i><b>8.2.1</b> Ejercicio 1</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="soluciones.html"><a href="soluciones.html#capítulo-3"><i class="fa fa-check"></i><b>8.3</b> Capítulo 3</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="soluciones.html"><a href="soluciones.html#ejercicio-1-5"><i class="fa fa-check"></i><b>8.3.1</b> Ejercicio 1</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i><b>9</b> Referencias</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Publicado con bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Manipulación de datos e investigación reproducible en R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="soluciones" class="section level1">
+<h1><span class="header-section-number">Capítulo 8</span> Soluciones a problemas</h1>
+<p>Todos los problemas en programación tienen más de una forma de llegar a ellos, es por esto que las soluciones acá mostradas deben tomarse solo como una referencia, y revisar si el resultado final de tu código (aunque sea distinto de este), sea igual al que presentamos.</p>
+<div id="capítulo-1" class="section level2">
+<h2><span class="header-section-number">8.1</span> Capítulo 1</h2>
+<div id="ejercicio-1-3" class="section level3">
+<h3><span class="header-section-number">8.1.1</span> Ejercicio 1</h3>
+<p>Algunas posibles soluciones:</p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" data-line-number="1">storms <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(status <span class="op">==</span><span class="st"> &quot;hurricane&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(year, wind, </a>
+<a class="sourceLine" id="cb88-2" data-line-number="2">    hu_diameter) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(year) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize_all</span>(mean)</a></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" data-line-number="1">storms <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(status <span class="op">==</span><span class="st"> &quot;hurricane&quot;</span> <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw">is.na</span>(hu_diameter)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb89-2" data-line-number="2"><span class="st">    </span><span class="kw">select</span>(year, wind, hu_diameter) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(year) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize_all</span>(mean)</a></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" data-line-number="1">storms <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(status <span class="op">==</span><span class="st"> &quot;hurricane&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(year, wind, </a>
+<a class="sourceLine" id="cb90-2" data-line-number="2">    hu_diameter) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(year) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize_all</span>(<span class="kw">funs</span>(mean), </a>
+<a class="sourceLine" id="cb90-3" data-line-number="3">    <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+</div>
+<div id="ejercicio-2-2" class="section level3">
+<h3><span class="header-section-number">8.1.2</span> Ejercicio 2</h3>
+<p>Una de las soluciones posibles:</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" data-line-number="1">Solution &lt;-<span class="st"> </span>mpg <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(year <span class="op">&gt;</span><span class="st"> </span><span class="dv">2004</span> <span class="op">&amp;</span><span class="st"> </span>class <span class="op">==</span><span class="st"> &quot;compact&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb91-2" data-line-number="2"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">kpl =</span> (cty <span class="op">*</span><span class="st"> </span><span class="fl">1.609</span>)<span class="op">/</span><span class="fl">3.78541</span>)</a></code></pre></div>
+</div>
+</div>
+<div id="capítulo-2" class="section level2">
+<h2><span class="header-section-number">8.2</span> Capítulo 2</h2>
+<div id="ejercicio-1-4" class="section level3">
+<h3><span class="header-section-number">8.2.1</span> Ejercicio 1</h3>
+<p>Una posible solución a este problema sería:</p>
+<p><code>`r mean((iris %&gt;% filter(Species == &quot;virginica&quot;))$Petal.Length)`</code></p>
+</div>
+</div>
+<div id="capítulo-3" class="section level2">
+<h2><span class="header-section-number">8.3</span> Capítulo 3</h2>
+<div id="ejercicio-1-5" class="section level3">
+<h3><span class="header-section-number">8.3.1</span> Ejercicio 1</h3>
+<div id="a" class="section level4">
+<h4><span class="header-section-number">8.3.1.1</span> a</h4>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" data-line-number="1">Sola &lt;-<span class="st"> </span>Huemul <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(lon, lat, basisOfRecord) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb92-2" data-line-number="2"><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(lat) <span class="op">&amp;</span><span class="st"> </span><span class="op">!</span><span class="kw">is.na</span>(lon))</a></code></pre></div>
+<table>
+<thead>
+<tr>
+<th style="text-align:right;">
+lon
+</th>
+<th style="text-align:right;">
+lat
+</th>
+<th style="text-align:left;">
+basisOfRecord
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+-72.89979
+</td>
+<td style="text-align:right;">
+-50.85621
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.88027
+</td>
+<td style="text-align:right;">
+-49.33296
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-73.00350
+</td>
+<td style="text-align:right;">
+-46.69153
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.61874
+</td>
+<td style="text-align:right;">
+-46.76851
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.97728
+</td>
+<td style="text-align:right;">
+-51.07892
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.87139
+</td>
+<td style="text-align:right;">
+-45.94562
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.86151
+</td>
+<td style="text-align:right;">
+-46.17067
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.88937
+</td>
+<td style="text-align:right;">
+-46.04310
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.87022
+</td>
+<td style="text-align:right;">
+-51.12036
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.00898
+</td>
+<td style="text-align:right;">
+-46.01153
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-73.14041
+</td>
+<td style="text-align:right;">
+-50.84305
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.85057
+</td>
+<td style="text-align:right;">
+-45.99832
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.07593
+</td>
+<td style="text-align:right;">
+-46.05139
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.91163
+</td>
+<td style="text-align:right;">
+-45.84344
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.91210
+</td>
+<td style="text-align:right;">
+-46.12133
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-73.99358
+</td>
+<td style="text-align:right;">
+-48.54769
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.81252
+</td>
+<td style="text-align:right;">
+-46.04818
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.54534
+</td>
+<td style="text-align:right;">
+-46.65755
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.97587
+</td>
+<td style="text-align:right;">
+-51.18353
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-73.03667
+</td>
+<td style="text-align:right;">
+-51.04976
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.33888
+</td>
+<td style="text-align:right;">
+-47.07042
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.93940
+</td>
+<td style="text-align:right;">
+-49.37483
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.75092
+</td>
+<td style="text-align:right;">
+-46.08747
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.17776
+</td>
+<td style="text-align:right;">
+-46.88179
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.91720
+</td>
+<td style="text-align:right;">
+-49.30175
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.87917
+</td>
+<td style="text-align:right;">
+-49.37064
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.97712
+</td>
+<td style="text-align:right;">
+-51.01511
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.87026
+</td>
+<td style="text-align:right;">
+-46.08686
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.02424
+</td>
+<td style="text-align:right;">
+-45.92156
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.13481
+</td>
+<td style="text-align:right;">
+-46.11689
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.89062
+</td>
+<td style="text-align:right;">
+-46.03708
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.43751
+</td>
+<td style="text-align:right;">
+-47.20485
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.45489
+</td>
+<td style="text-align:right;">
+-47.00600
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-73.01456
+</td>
+<td style="text-align:right;">
+-51.03635
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-73.03190
+</td>
+<td style="text-align:right;">
+-51.17531
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.72944
+</td>
+<td style="text-align:right;">
+-46.25602
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.31538
+</td>
+<td style="text-align:right;">
+-41.30110
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.31538
+</td>
+<td style="text-align:right;">
+-41.30110
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.71667
+</td>
+<td style="text-align:right;">
+-44.86667
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.71667
+</td>
+<td style="text-align:right;">
+-44.86667
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.30989
+</td>
+<td style="text-align:right;">
+-40.81978
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.31538
+</td>
+<td style="text-align:right;">
+-41.30110
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-73.02467
+</td>
+<td style="text-align:right;">
+-50.46476
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.33186
+</td>
+<td style="text-align:right;">
+-41.26523
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-73.01764
+</td>
+<td style="text-align:right;">
+-50.46747
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.00000
+</td>
+<td style="text-align:right;">
+-30.00000
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.00000
+</td>
+<td style="text-align:right;">
+-30.00000
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.70000
+</td>
+<td style="text-align:right;">
+-45.26667
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.70000
+</td>
+<td style="text-align:right;">
+-45.26667
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.70000
+</td>
+<td style="text-align:right;">
+-45.26667
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-72.08000
+</td>
+<td style="text-align:right;">
+-47.25000
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.36714
+</td>
+<td style="text-align:right;">
+-41.13574
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.71094
+</td>
+<td style="text-align:right;">
+-42.75692
+</td>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-70.91129
+</td>
+<td style="text-align:right;">
+-53.15483
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-73.84761
+</td>
+<td style="text-align:right;">
+-42.54746
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.00000
+</td>
+<td style="text-align:right;">
+-30.00000
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.00000
+</td>
+<td style="text-align:right;">
+-30.00000
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-71.64718
+</td>
+<td style="text-align:right;">
+-40.22605
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+-67.88534
+</td>
+<td style="text-align:right;">
+-43.99376
+</td>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="b" class="section level4">
+<h4><span class="header-section-number">8.3.1.2</span> b</h4>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb93-1" data-line-number="1">Solb &lt;-<span class="st"> </span>Huemul <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(basisOfRecord) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="dt">N =</span> <span class="kw">n</span>())</a></code></pre></div>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">
+basisOfRecord
+</th>
+<th style="text-align:right;">
+N
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+HUMAN_OBSERVATION
+</td>
+<td style="text-align:right;">
+132
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+PRESERVED_SPECIMEN
+</td>
+<td style="text-align:right;">
+70
+</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="presentacion.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="referencias.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Libro.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

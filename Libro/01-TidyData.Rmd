@@ -1,0 +1,289 @@
+# Tidy Data and data manipulation {#tidydata}
+
+## Packages needed for this chapter
+
+For this chapter you need to have the *tidyverse* package installed.
+
+```{r, echo=FALSE}
+library(knitr)
+library(tidyverse)
+opts_chunk$set(tidy.opts=list(width.cutoff=60),tidy=TRUE)
+```
+
+This chapter will explain what a *tidy* [@wickham2014tidy] database is and learn how to use functions from the *dplyr* [@R-dplyr] package to manipulate data.
+
+This class of the course can also be followed at this [link](https://https://sustainscapes.github.io/Class1/Class1TidyData.html#1). 
+
+
+## Tidy data
+
+A tidy database is a database in which (modified from [@leek2015elements]):
+
+* Each variable to be measured must be in a column.
+* Each observation other than that variable must be in a different row.
+
+In general, the way we would represent a *tidy* database in `R` is by using a *data frame*.
+
+## dplyr
+
+The *dplyr* package is defined by its authors as a grammar for data manipulation. Thus their functions are known as verbs. A helpful summary of many of these features is found at this [link](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf).
+
+This package has a large number of verbs and it would be difficult to see all of them in one class, in this chapter we will focus on its most used functions, which are:
+
+- *%>%* (pipelines)
+- *group_by* (group data)
+- *summarize* (summarize grouped data)
+- *mutate* (generate new variables)
+- *filter* (find rows with certain conditions)
+- *select* next to *starts_with*, *ends_with* or *contains*
+
+in the next section you can learn about the pipeline (%>%), *group_by* and *summarize*
+
+### Pipeline (%>%)
+
+The pipeline is an operator symbol `%>%` that is used to perform various operations sequentially without resorting to nested parentheses or overwriting multiple databases.
+
+To see how this works as a vector, suppose you have a variable that you want to first get its logarithm, then its square root, and finally its average to two significant figures. To do this, the following must be followed:
+
+```{r, eval=FALSE}
+x <- c(1,4,6,8)
+y <- round(mean(sqrt(log(x))),2)
+```
+
+If pipelined, the code would be much neater. In that case, it would start with the object to be processed and then each of the functions with their arguments if necessary:
+
+```{r, eval=FALSE}
+x <- c(1,4,6,8)
+y <- x %>% log() %>% sqrt() %>% mean() %>% round(2)
+```
+
+```{r, echo=FALSE}
+x <- c(1,4,6,8)
+x %>% log() %>% sqrt() %>% mean() %>% round(2)
+```
+
+Piped code is much easier to interpret at first glance since it reads from left to right and not from the inside out.
+
+### summarize
+
+The `summarize` function takes the data from a data frame and summarizes it. To use this function, the first argument we would take would be a data frame, followed by the name we want to give to a summary variable, followed by the = sign and then the formula to apply to one or more columns. As an example we will use the `iris` database [@anderson1935irises] that comes in `R` and of which we can see part of its data in the table \@ref(tab:iris)
+
+```{r iris, echo = FALSE}
+knitr::kable(
+  iris[seq(from = 15, to = 150, length.out = 10),], booktabs = TRUE,
+  caption = 'a table with 10 rows from the iris database.', row.names = FALSE
+)
+```
+
+If we wanted to summarize that table and generate a couple of variables that were the mean and standard deviation of the length of the petal, we would do it with the following code:
+
+```{r, eval=FALSE}
+library(tidyverse)
+Summary.Petal <- summarize(iris, Mean.Petal.Length = mean(Petal.Length), SD.Petal.Length = sd(Petal.Length))
+```
+
+The result can be seen in the table \@ref(tab:SummaryPetaltab), in which the averages and standard deviations of the lengths of the petals are obtained. It is important to note that when using summarize, all other variables will disappear from the table.
+
+```{r, echo = FALSE}
+library(dplyr)
+Summary.Petal <- summarize(iris, Mean.Petal.Length = mean(Petal.Length), SD.Petal.Length = sd(Petal.Length))
+```
+
+
+```{r SummaryPetaltab, echo = FALSE}
+knitr::kable(Summary.Petal, booktabs = TRUE,
+  caption = 'Summary of the mean and standard deviation of the petal length of the flowers of the genus Iris.', row.names = FALSE)
+```
+
+### group_by
+
+The `group_by` function itself does not cause any visible changes to the databases. However, when used in conjunction with `summarize` it allows you to summarize a grouped variable (usually) based on one or more categorical variables.
+
+It can be seen that for the example with the case of plants of the genus *Iris*, the summary obtained in the case of the table \@ref(tab:SummaryPetaltab) is not so useful considering that we have three species present. If you want to see the average length of the petal by species, you must use the `group_by` function as follows:
+
+```{r, eval=FALSE}
+BySpecies <- group_by(iris, Species)
+Summary.Byspecies <- summarize(BySpecies, Mean.Petal.Length = mean(Petal.Length), SD.Petal.Length = sd(Petal.Length))
+```
+
+This results in the table \@ref(tab:SummaryBySpecies), from which you can see that *Iris setosa* has much shorter petals than the other two species of the same genus.
+
+```{r, echo = FALSE}
+library(dplyr)
+BySpecies <- group_by(iris, Species)
+Summary.Byspecies <- summarize(BySpecies, Mean.Petal.Length = mean(Petal.Length), SD.Petal.Length = sd(Petal.Length))
+```
+
+```{r SummaryBySpecies, echo = FALSE}
+knitr::kable(Summary.Byspecies, booktabs = TRUE,
+  caption = 'Summary of the mean and standard deviation of the petal length of the flowers of the genus Iris.', row.names = FALSE)
+```
+
+#### group_by on more than one variable
+
+You can use the `group_by` function on more than one variable, and this would result in a nested summary. As an example we will use the `mtcars` database present in R [@henderson1981building]. This database features a variable called *mpg* (miles per gallon) and a measure of fuel efficiency. The information will be summarized based on the variable *am* (which refers to the type of transmission, where 0 is automatic and 1 is manual) and the number of engine cylinders. For that, the following code will be used:
+
+```{r, eval=FALSE}
+Grouped <- group_by(mtcars, cyl, am)
+Efficiency <- summarize(Grouped, Efficiency = mean(mpg))
+```
+
+```{r, echo=FALSE}
+Grouped <- group_by(mtcars, cyl, am)
+Efficiency <- summarize(Grouped, Efficiency = mean(mpg))
+```
+
+As can be seen in the table \@ref(tab:Efficiencytab), in all cases cars with manual transmissions have better fuel efficiency. You could try changing the order of the variables with which to group and observe the different results that can be obtained.
+
+```{r Efficiencytab, echo = FALSE}
+knitr::kable(Efficiency, booktabs = TRUE,
+  caption = 'Average miles per gallon in automatic (am = 0) and manual (am = 1) vehicles, with the different types of cylinders', row.names = FALSE)
+```
+
+### mutate
+
+This function aims to create new variables based on other variables. It is very easy to use, as an argument the name of the new variable that you want to create is used and an operation is performed with variables that are already there. For example, if we continue working with the *Iris* database, by creating a new variable that is the ratio between the length of the petal and the length of the sepal, the following results:
+
+```{r, eval = FALSE}
+DF <- mutate(iris, Petal.Sepal.Ratio = Petal.Length/Sepal.Length)
+```
+
+The result of this operation is the table \@ref(tab:Mutate). The variable that has just been created will always appear at the end of the data frame.
+
+```{r, echo=FALSE}
+DF <- mutate(iris, Petal.Sepal.Ratio = round((Petal.Length/Sepal.Length),2))
+```
+
+```{r Mutate, echo = FALSE}
+knitr::kable(DF[seq(from = 15, to = 150, length.out = 10),], booktabs = TRUE,
+  caption = 'Table with ten of the observations from the new database with the new variable created with mutate', row.names = FALSE)
+```
+
+
+
+#### The pipeline in data frames
+
+For example, we want to summarize the newly created variable of the ratio between the sepal and the petal. To do this, if starting from the original database, it would take several lines of code and the creation of multiple intermediate databases.
+
+```{r, eval = FALSE}
+DF <- mutate(iris, Petal.Sepal.Ratio = Petal.Length/Sepal.Length)
+BySpecies <- group_by(DF, Species)
+Summary.Byspecies <- summarize(BySpecies, MEAN = mean(Petal.Sepal.Ratio), SD = sd(Petal.Sepal.Ratio))
+```
+
+Another option is to use nested parentheses, which results in the following code:
+
+```{r, eval = FALSE}
+Summary.Byspecies <- summarize(group_by(mutate(iris, Petal.Sepal.Ratio = Petal.Length/Sepal.Length), Species), MEAN = mean(Petal.Sepal.Ratio), SD = sd(Petal.Sepal. Ratio))
+```
+
+This is further simplified by using the pipeline, which allows you to start at a *Data Frame* and then use the pipeline. This allows to obtain the same result as in the previous operations with the following code:
+
+```{r, eval = FALSE}
+Summary.Byspecies <- iris %>% mutate(Petal.Sepal.Ratio = Petal.Length/Sepal.Length) %>% group_by(Species) %>% summarize(MEAN = mean(Petal.Sepal.Ratio), SD = sd(Petal.Sepal.Ratio))
+```
+
+```{r, echo = FALSE}
+Summary.Byspecies <- iris %>% mutate(Petal.Sepal.Ratio = Petal.Length/Sepal.Length) %>% group_by(Species) %>% summarize(MEAN = mean(Petal.Sepal.Ratio), SD = sd(Petal.Sepal.Ratio))
+```
+
+
+These three codes are correct (table \@ref(tab:Pipe)), but definitely the use of the pipeline gives the most concise and easy to interpret code without intermediate steps.
+
+```{r Pipe, echo = FALSE}
+knitr::kable(Summary.Byspecies, booktabs = TRUE,
+  caption = 'Average petal-sepal ratio for the three Iris species', row.names = FALSE)
+```
+
+### filter
+
+This function allows you to select rows that meet certain conditions, such as having a value greater than a threshold or belonging to a certain class. The most typical symbols to use in this case are those seen in the table \@ref(tab:Logics).
+
+```{r, echo=FALSE}
+DF <- data.frame(symbol = c(">", "<", "==", ">=", "<="), meaning = c("Greater than", "Less than", " Equal to", "greater than or equal to", "less than or equal to"), cont_symbol = c("!=","%in%", "is.na", "!is.na", "| & "), cont_meaning = c("other than", "within group", "is NA", "is not NA", "or, and"))
+```
+
+```{r Logics, echo = FALSE}
+knitr::kable(DF, booktabs = TRUE,
+  caption = 'R logical symbols and their meaning', row.names = FALSE)
+```
+
+For example, if you want to study the floral characteristics of plants of the genus *Iris*, but do not take into account the species *Iris versicolor*, you should use the following code:
+
+```{r, eval = FALSE}
+data("iris")
+DF <- iris %>% filter(Species != "versicolor") %>% group_by(Species) %>% summarise_all(mean)
+```
+
+This results in the table \@ref(tab:MenosVersicolor). In this case, the `summarize_all` function of `summarize` is introduced, which applies the function given as an argument to all variables in the database.
+
+```{r, echo = FALSE}
+library(dplyr)
+data("iris")
+DF <- iris %>% filter(Species != "versicolor") %>% group_by(Species) %>% summarise_all(mean)
+```
+
+```{r MinusVersicolor, echo = FALSE}
+knitr::kable(DF, booktabs = TRUE,
+  caption = 'Summary of the mean of all floral characteristics of the species Iris setosa and Iris virginica', row.names = FALSE)
+```
+
+On the other hand, if you want to study how many plants of each species have a petal length greater than 4 and a sepal length greater than 5, you should use the following code:
+
+```{r, eval = FALSE}
+DF <- iris %>% filter(Petal.Length >= 4 & Sepal.Length >= 5) %>% group_by(Species) %>% summarise(N = n())
+```
+
+In the table table \@ref(tab:Number) it can be seen that with this filter all *Iris setosa* plants disappear from the database and that all except one *Iris virginica* plant have both characteristics.
+
+```{r, echo = FALSE}
+DF <- iris %>% filter(Petal.Length >= 4 & Sepal.Length >= 5) %>% group_by(Species) %>% summarise(N = n())
+```
+
+```{r Number, echo = FALSE}
+knitr::kable(DF, booktabs = TRUE,
+  caption = 'Number of plants of each species with a petal length greater than 4 and a sepal length greater than 5 centimeters', row.names = FALSE)
+```
+
+
+### select
+
+This function allows you to select the variables to use since in many cases we will find databases with too many variables and therefore, we will want to reduce them to only work on a table with the necessary variables.
+
+With select there are several ways to work, on the one hand you can write the variables that will be used, or subtract those that will not. In that sense these four codes give exactly the same result. This can be seen in the table \@ref(tab:Selected)
+
+```{r Select1, eval=FALSE}
+iris %>% group_by(Species) %>% select(Petal.Length, Petal.Width) %>% summarize_all(mean)
+```
+
+```{r Select2, eval=FALSE}
+iris %>% group_by(Species) %>% select(-Sepal.Length, -Sepal.Width) %>% summarize_all(mean)
+```
+
+```{r select3, eval=FALSE}
+iris %>% group_by(Species) %>% select(contains("Petal")) %>% summarize_all(mean)
+```
+
+```{r select4, eval=FALSE}
+iris %>% group_by(Species) %>% select(-contains("Sepal")) %>% summarize_all(mean)
+```
+
+```{r select5, echo = FALSE}
+DF <- iris %>% group_by(Species) %>% dplyr::select(-contains("Sepal")) %>% summarize_all(mean)
+```
+
+```{r Selected, echo = FALSE}
+knitr::kable(DF, booktabs = TRUE,
+  caption = 'Average petal length and petal width for species of the genus Iris', row.names = FALSE)
+```
+
+
+### Exercises
+
+#### Exercise 1
+
+Using the `storms` database from the *dplyr* package, compute the average speed and average diameter (hu_diameter) of storms that have been declared hurricanes for each year.
+
+#### Exercise 2
+
+The ggplot2 package's `mpg` database has fuel economy data in city miles per gallon (*cty*) for various vehicles. Obtain the data of vehicles from the year 2004 onwards that are compact and transform the efficiency Km/liter (1 mile = 1,609 km; 1 gallon = 3.78541 liters)

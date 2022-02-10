@@ -1,0 +1,4869 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capítulo 6 Loops (purrr) y bibliografía (rticles) | Manipulación de datos e investigación reproducible en R</title>
+  <meta name="description" content="Este libro es una compañia al curso, análisis y manipulación de datos en R" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capítulo 6 Loops (purrr) y bibliografía (rticles) | Manipulación de datos e investigación reproducible en R" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:image" content="Cover.png" />
+  <meta property="og:description" content="Este libro es una compañia al curso, análisis y manipulación de datos en R" />
+  <meta name="github-repo" content="/derek-corcoran-barrios/derek-corcoran-barrios.github.io/tree/master/Libro" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capítulo 6 Loops (purrr) y bibliografía (rticles) | Manipulación de datos e investigación reproducible en R" />
+  
+  <meta name="twitter:description" content="Este libro es una compañia al curso, análisis y manipulación de datos en R" />
+  <meta name="twitter:image" content="Cover.png" />
+
+<meta name="author" content="Derek Corcoran" />
+
+
+<meta name="date" content="2020-08-17" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="modelos.html"/>
+<link rel="next" href="presentacion.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Manipupación de datos en R</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Requerimientos</a><ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#antes-de-comenzar"><i class="fa fa-check"></i><b>0.1</b> Antes de comenzar</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#descripción-del-curso"><i class="fa fa-check"></i><b>0.2</b> Descripción del curso</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#objetivos-del-curso"><i class="fa fa-check"></i><b>0.3</b> Objetivos del curso</a></li>
+<li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#contenidos"><i class="fa fa-check"></i><b>0.4</b> Contenidos</a></li>
+<li class="chapter" data-level="0.5" data-path="index.html"><a href="index.html#metodología"><i class="fa fa-check"></i><b>0.5</b> Metodología</a></li>
+<li class="chapter" data-level="0.6" data-path="index.html"><a href="index.html#evaluación"><i class="fa fa-check"></i><b>0.6</b> Evaluación</a></li>
+<li class="chapter" data-level="0.7" data-path="index.html"><a href="index.html#libros-de-consulta"><i class="fa fa-check"></i><b>0.7</b> Libros de consulta</a></li>
+<li class="chapter" data-level="0.8" data-path="index.html"><a href="index.html#bibliografía"><i class="fa fa-check"></i><b>0.8</b> Bibliografía</a></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="tidydata.html"><a href="tidydata.html"><i class="fa fa-check"></i><b>1</b> Tidy Data y manipulación de datos</a><ul>
+<li class="chapter" data-level="1.1" data-path="tidydata.html"><a href="tidydata.html#paquetes-necesarios-para-este-capítulo"><i class="fa fa-check"></i><b>1.1</b> Paquetes necesarios para este capítulo</a></li>
+<li class="chapter" data-level="1.2" data-path="tidydata.html"><a href="tidydata.html#tidy-data"><i class="fa fa-check"></i><b>1.2</b> Tidy data</a></li>
+<li class="chapter" data-level="1.3" data-path="tidydata.html"><a href="tidydata.html#dplyr"><i class="fa fa-check"></i><b>1.3</b> dplyr</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="tidydata.html"><a href="tidydata.html#pipeline"><i class="fa fa-check"></i><b>1.3.1</b> Pipeline (%&gt;%)</a></li>
+<li class="chapter" data-level="1.3.2" data-path="tidydata.html"><a href="tidydata.html#summarize"><i class="fa fa-check"></i><b>1.3.2</b> summarize</a></li>
+<li class="chapter" data-level="1.3.3" data-path="tidydata.html"><a href="tidydata.html#group_by"><i class="fa fa-check"></i><b>1.3.3</b> group_by</a></li>
+<li class="chapter" data-level="1.3.4" data-path="tidydata.html"><a href="tidydata.html#mutate"><i class="fa fa-check"></i><b>1.3.4</b> mutate</a></li>
+<li class="chapter" data-level="1.3.5" data-path="tidydata.html"><a href="tidydata.html#filter"><i class="fa fa-check"></i><b>1.3.5</b> filter</a></li>
+<li class="chapter" data-level="1.3.6" data-path="tidydata.html"><a href="tidydata.html#select"><i class="fa fa-check"></i><b>1.3.6</b> select</a></li>
+<li class="chapter" data-level="1.3.7" data-path="tidydata.html"><a href="tidydata.html#joins"><i class="fa fa-check"></i><b>1.3.7</b> Joins</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="tidydata.html"><a href="tidydata.html#left-join"><i class="fa fa-check"></i><b>1.4</b> left join</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="tidydata.html"><a href="tidydata.html#ejercicios"><i class="fa fa-check"></i><b>1.4.1</b> Ejercicios</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="reproducible.html"><a href="reproducible.html"><i class="fa fa-check"></i><b>2</b> Investigación reproducible</a><ul>
+<li class="chapter" data-level="2.1" data-path="reproducible.html"><a href="reproducible.html#paquetes-necesarios-para-este-capítulo-1"><i class="fa fa-check"></i><b>2.1</b> Paquetes necesarios para este capítulo</a></li>
+<li class="chapter" data-level="2.2" data-path="reproducible.html"><a href="reproducible.html#investigación-reproducible"><i class="fa fa-check"></i><b>2.2</b> Investigación reproducible</a></li>
+<li class="chapter" data-level="2.3" data-path="reproducible.html"><a href="reproducible.html#guardando-nuestro-proyecto-en-github"><i class="fa fa-check"></i><b>2.3</b> Guardando nuestro proyecto en github</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="reproducible.html"><a href="reproducible.html#que-es-github"><i class="fa fa-check"></i><b>2.3.1</b> Que es github?</a></li>
+<li class="chapter" data-level="2.3.2" data-path="reproducible.html"><a href="reproducible.html#creando-un-proyecto-de-github-en-rstudio"><i class="fa fa-check"></i><b>2.3.2</b> creando un proyecto de github en RStudio</a></li>
+<li class="chapter" data-level="2.3.3" data-path="reproducible.html"><a href="reproducible.html#los-tres-principales-pasos-de-un-repositorio"><i class="fa fa-check"></i><b>2.3.3</b> Los tres principales pasos de un repositorio</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="reproducible.html"><a href="reproducible.html#reproducibilidad-en-r"><i class="fa fa-check"></i><b>2.4</b> Reproducibilidad en R</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="reproducible.html"><a href="reproducible.html#creando-un-rmarkdown"><i class="fa fa-check"></i><b>2.4.1</b> Creando un Rmarkdown</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="reproducible.html"><a href="reproducible.html#subtitulo-1"><i class="fa fa-check"></i>subtitulo 1</a><ul>
+<li class="chapter" data-level="" data-path="reproducible.html"><a href="reproducible.html#subtítulo-2"><i class="fa fa-check"></i>subtítulo 2</a></li>
+<li class="chapter" data-level="2.4.2" data-path="reproducible.html"><a href="reproducible.html#ejercicios-1"><i class="fa fa-check"></i><b>2.4.2</b> Ejercicios</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="tidyverso.html"><a href="tidyverso.html"><i class="fa fa-check"></i><b>3</b> El Tidyverso y tidyr</a><ul>
+<li class="chapter" data-level="3.1" data-path="tidyverso.html"><a href="tidyverso.html#paquetes-necesarios-para-este-capítulo-2"><i class="fa fa-check"></i><b>3.1</b> Paquetes necesarios para este capítulo</a></li>
+<li class="chapter" data-level="3.2" data-path="tidyverso.html"><a href="tidyverso.html#el-tidyverso"><i class="fa fa-check"></i><b>3.2</b> El tidyverso</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="tidyverso.html"><a href="tidyverso.html#readr"><i class="fa fa-check"></i><b>3.2.1</b> readr</a></li>
+<li class="chapter" data-level="3.2.2" data-path="tidyverso.html"><a href="tidyverso.html#dplyr-1"><i class="fa fa-check"></i><b>3.2.2</b> dplyr</a></li>
+<li class="chapter" data-level="3.2.3" data-path="tidyverso.html"><a href="tidyverso.html#tidyr"><i class="fa fa-check"></i><b>3.2.3</b> tidyr</a></li>
+<li class="chapter" data-level="3.2.4" data-path="tidyverso.html"><a href="tidyverso.html#ggplot2"><i class="fa fa-check"></i><b>3.2.4</b> ggplot2</a></li>
+<li class="chapter" data-level="3.2.5" data-path="tidyverso.html"><a href="tidyverso.html#purrr"><i class="fa fa-check"></i><b>3.2.5</b> purrr</a></li>
+<li class="chapter" data-level="3.2.6" data-path="tidyverso.html"><a href="tidyverso.html#forcats"><i class="fa fa-check"></i><b>3.2.6</b> forcats</a></li>
+<li class="chapter" data-level="3.2.7" data-path="tidyverso.html"><a href="tidyverso.html#stringr"><i class="fa fa-check"></i><b>3.2.7</b> stringr</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="tidyverso.html"><a href="tidyverso.html#tidyr-1"><i class="fa fa-check"></i><b>3.3</b> tidyr</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="tidyverso.html"><a href="tidyverso.html#gather"><i class="fa fa-check"></i><b>3.3.1</b> gather</a></li>
+<li class="chapter" data-level="3.3.2" data-path="tidyverso.html"><a href="tidyverso.html#spread"><i class="fa fa-check"></i><b>3.3.2</b> spread</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="tidyverso.html"><a href="tidyverso.html#ejercicios-2"><i class="fa fa-check"></i><b>3.4</b> Ejercicios</a><ul>
+<li class="chapter" data-level="3.4.1" data-path="tidyverso.html"><a href="tidyverso.html#ejercicio-1-2"><i class="fa fa-check"></i><b>3.4.1</b> Ejercicio 1</a></li>
+<li class="chapter" data-level="3.4.2" data-path="tidyverso.html"><a href="tidyverso.html#ejercicio-2-1"><i class="fa fa-check"></i><b>3.4.2</b> Ejercicio 2</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="visualizacion.html"><a href="visualizacion.html"><i class="fa fa-check"></i><b>4</b> Visualización de datos</a><ul>
+<li class="chapter" data-level="4.1" data-path="visualizacion.html"><a href="visualizacion.html#paquetes-necesarios-para-este-capítulo-3"><i class="fa fa-check"></i><b>4.1</b> Paquetes necesarios para este capítulo</a></li>
+<li class="chapter" data-level="4.2" data-path="visualizacion.html"><a href="visualizacion.html#el-esqueleto"><i class="fa fa-check"></i><b>4.2</b> El esqueleto</a></li>
+<li class="chapter" data-level="4.3" data-path="visualizacion.html"><a href="visualizacion.html#por-que-usamos-aes-y"><i class="fa fa-check"></i><b>4.3</b> Por que usamos aes() y +</a></li>
+<li class="chapter" data-level="4.4" data-path="visualizacion.html"><a href="visualizacion.html#geom_algo"><i class="fa fa-check"></i><b>4.4</b> geom_algo</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="visualizacion.html"><a href="visualizacion.html#una-variable-categórica-una-continua"><i class="fa fa-check"></i><b>4.4.1</b> Una variable categórica una continua</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="visualizacion.html"><a href="visualizacion.html#combinando-geoms"><i class="fa fa-check"></i><b>4.5</b> Combinando geoms</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="visualizacion.html"><a href="visualizacion.html#el-orden-importa"><i class="fa fa-check"></i><b>4.5.1</b> El orden importa</a></li>
+<li class="chapter" data-level="4.5.2" data-path="visualizacion.html"><a href="visualizacion.html#dos-variables-continuas"><i class="fa fa-check"></i><b>4.5.2</b> Dos variables continuas</a></li>
+<li class="chapter" data-level="4.5.3" data-path="visualizacion.html"><a href="visualizacion.html#combinando-varios-gráficos-con-facet_wrap"><i class="fa fa-check"></i><b>4.5.3</b> Combinando varios gráficos con facet_wrap</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="modelos.html"><a href="modelos.html"><i class="fa fa-check"></i><b>5</b> Modelos en R</a><ul>
+<li class="chapter" data-level="5.1" data-path="modelos.html"><a href="modelos.html#paquetes-necesarios-para-este-capítulo-4"><i class="fa fa-check"></i><b>5.1</b> Paquetes necesarios para este capítulo</a></li>
+<li class="chapter" data-level="5.2" data-path="modelos.html"><a href="modelos.html#modelos-estadísticos"><i class="fa fa-check"></i><b>5.2</b> Modelos estadísticos</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="modelos.html"><a href="modelos.html#ejemplo"><i class="fa fa-check"></i><b>5.2.1</b> Ejemplo</a></li>
+<li class="chapter" data-level="5.2.2" data-path="modelos.html"><a href="modelos.html#representando-un-modelo-en-r"><i class="fa fa-check"></i><b>5.2.2</b> Representando un modelo en R</a></li>
+<li class="chapter" data-level="5.2.3" data-path="modelos.html"><a href="modelos.html#volvamos-al-ejemplo-de-las-plantas"><i class="fa fa-check"></i><b>5.2.3</b> Volvamos al ejemplo de las plantas</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="loops.html"><a href="loops.html"><i class="fa fa-check"></i><b>6</b> Loops (purrr) y bibliografía (rticles)</a><ul>
+<li class="chapter" data-level="6.1" data-path="loops.html"><a href="loops.html#paquetes-necesarios-para-este-capítulo-5"><i class="fa fa-check"></i><b>6.1</b> Paquetes necesarios para este capítulo</a></li>
+<li class="chapter" data-level="6.2" data-path="loops.html"><a href="loops.html#generando-una-receta"><i class="fa fa-check"></i><b>6.2</b> Generando una receta</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="loops.html"><a href="loops.html#dioxido-de-nitrógeno-en-madrid"><i class="fa fa-check"></i><b>6.2.1</b> Dioxido de nitrógeno en Madrid</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="loops.html"><a href="loops.html#empezando-el-loop"><i class="fa fa-check"></i><b>6.3</b> Empezando el loop</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="loops.html"><a href="loops.html#volvamos-a-nuestra-receta"><i class="fa fa-check"></i><b>6.3.1</b> Volvamos a nuestra receta</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="presentacion.html"><a href="presentacion.html"><i class="fa fa-check"></i><b>7</b> Presentaciones en R</a><ul>
+<li class="chapter" data-level="7.1" data-path="presentacion.html"><a href="presentacion.html#paquetes-necesarios-para-este-capítulo-6"><i class="fa fa-check"></i><b>7.1</b> Paquetes necesarios para este capítulo</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="soluciones.html"><a href="soluciones.html"><i class="fa fa-check"></i><b>8</b> Soluciones a problemas</a><ul>
+<li class="chapter" data-level="8.1" data-path="soluciones.html"><a href="soluciones.html#capítulo-1"><i class="fa fa-check"></i><b>8.1</b> Capítulo 1</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="soluciones.html"><a href="soluciones.html#ejercicio-1-3"><i class="fa fa-check"></i><b>8.1.1</b> Ejercicio 1</a></li>
+<li class="chapter" data-level="8.1.2" data-path="soluciones.html"><a href="soluciones.html#ejercicio-2-2"><i class="fa fa-check"></i><b>8.1.2</b> Ejercicio 2</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="soluciones.html"><a href="soluciones.html#capítulo-2"><i class="fa fa-check"></i><b>8.2</b> Capítulo 2</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="soluciones.html"><a href="soluciones.html#ejercicio-1-4"><i class="fa fa-check"></i><b>8.2.1</b> Ejercicio 1</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="soluciones.html"><a href="soluciones.html#capítulo-3"><i class="fa fa-check"></i><b>8.3</b> Capítulo 3</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="soluciones.html"><a href="soluciones.html#ejercicio-1-5"><i class="fa fa-check"></i><b>8.3.1</b> Ejercicio 1</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i><b>9</b> Referencias</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Publicado con bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Manipulación de datos e investigación reproducible en R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="loops" class="section level1">
+<h1><span class="header-section-number">Capítulo 6</span> Loops (purrr) y bibliografía (rticles)</h1>
+<div id="paquetes-necesarios-para-este-capítulo-5" class="section level2">
+<h2><span class="header-section-number">6.1</span> Paquetes necesarios para este capítulo</h2>
+<p>Para este capítulo necesitas tener instalado el paquete <em>tidyverse</em>.</p>
+<p>Probablemente uno de los puntos que marca la diferencia entre ser un usuario de un lenguaje de programación y un alguién que realmente programa. Es el momento en que una persona aprende a hacer loops. Los loops son una acción repetitiva en la cual una misma acción es realizada por el computador ahorrandonos mucho tiempo de escribir código y muchas veces tiempo de computación tambien.</p>
+<p>Existen varias formas de como realizar loops en R, los <em>for</em> loops, la familia de los <em>apply</em> y más recientemente el uso del paquete <em>purrr</em> <span class="citation">(Henry and Wickham <a href="#ref-HenryPurrr">2018</a>)</span> presente en el <em>tidyverse</em>. En este capítulo nos enfocaremos principalmente en el uso de este paquete, pero también explicaremos levemente el caso de los for loops.</p>
+<p>Dado que este libro es un apoyo para el curso BIO4022, esta clase puede también ser seguida en este <a href="https://derek-corcoran-barrios.github.io/Clase6/Clase6Loopsybibliografia">link</a>. El video de la clase se encontrará disponible en este <a href="https://youtu.be/Oz_egH-sXZg">link</a>.</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Oz_egH-sXZg" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+</iframe>
+</div>
+<div id="generando-una-receta" class="section level2">
+<h2><span class="header-section-number">6.2</span> Generando una receta</h2>
+<p>Como hacer un loop, es una repetición de un código multiples veces, generalmente lo que más nos combiene es generar la receta tomando en cuenta el primer elemento y luego repetirlo en un loop.</p>
+<div id="dioxido-de-nitrógeno-en-madrid" class="section level3">
+<h3><span class="header-section-number">6.2.1</span> Dioxido de nitrógeno en Madrid</h3>
+<p>Supongamos que queremos estudiar la concentración de dióxido de Nitrógeno en madrid en distintas estaciones, la base de datos puede ser encontrada en el siguiente <a href="https://www.kaggle.com/decide-soluciones/air-quality-madrid">link</a>. Dentro de esta base de datos tenemos una carpeta con la calidad de aire de estaciones en Madrid, con un archivo para cada año. Supongamos que se quiere hacer lo siguiente, limitandose a las estaciones de Cuatro Caminos, El Pardo, Escuelas Aguirre, Moratalaz y Tres Olivos, calcular los promedios de <span class="math inline">\(NO_2\)</span> para cada mes y cada año en estas estaciones.</p>
+<div id="generando-la-receta" class="section level4">
+<h4><span class="header-section-number">6.2.1.1</span> Generando la receta</h4>
+<p>Esto lo podemos hacer con un loop, pero antes generemos <em>la receta</em> tomando en cuenta solo el 2017.</p>
+<p>Para esto hacemos lo siguiente:</p>
+<ul>
+<li>Tomemos la base de datos de calidad de aire de Madrid</li>
+<li>Leeamos el año 2017</li>
+<li>Limitemonos a las estaciones de Cuatro Caminos, El Pardo, Escuelas Aguirre, Moratalaz y Tres Olivos</li>
+<li>Agreguemos una columna con el año y una con el mes</li>
+<li>Calculemos los promedios de <span class="math inline">\(NO_2\)</span> para cada mes</li>
+<li>Eliminemos las columnas innecesarias para estudiar el efecto del <span class="math inline">\(NO_2\)</span> en Madrid</li>
+</ul>
+<p>Vamos paso a paso</p>
+<div id="leyendo-la-base-de-datos" class="section level5">
+<h5><span class="header-section-number">6.2.1.1.1</span> leyendo la base de datos</h5>
+<p>El primer paso es leer la base de datos, para esto usamos el <em>tidyverse</em> y cargamos además <em>lubridate</em> por si tenemos que trabajar con las fechas. En la tabla <a href="loops.html#tab:Madrid2017a">6.1</a> vemos los resultados del código a continuación.</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
+<a class="sourceLine" id="cb59-2" data-line-number="2"><span class="kw">library</span>(lubridate)</a>
+<a class="sourceLine" id="cb59-3" data-line-number="3">Madrid2017 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;csvs_per_year/madrid_2017.csv&quot;</span>)</a></code></pre></div>
+<pre><code>## Warning: 59228 parsing failures.
+##   row col           expected             actual                            file
+## 87457 NOx 1/0/T/F/TRUE/FALSE 37.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87458 CH4 1/0/T/F/TRUE/FALSE 1.2200000286102295 &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87458 NOx 1/0/T/F/TRUE/FALSE 60.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87459 NOx 1/0/T/F/TRUE/FALSE 19.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87460 NOx 1/0/T/F/TRUE/FALSE 43.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## ..... ... .................. .................. ...............................
+## See problems(...) for more details.</code></pre>
+<table>
+<caption>
+<span id="tab:Madrid2017a">Tabla 6.1: </span>Los primeros 20 datos de calidad de aire del 2017 en Madrid para todas las estaciones.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+date
+</th>
+<th style="text-align:right;">
+BEN
+</th>
+<th style="text-align:left;">
+CH4
+</th>
+<th style="text-align:right;">
+CO
+</th>
+<th style="text-align:right;">
+EBE
+</th>
+<th style="text-align:right;">
+NMHC
+</th>
+<th style="text-align:right;">
+NO
+</th>
+<th style="text-align:right;">
+NO_2
+</th>
+<th style="text-align:left;">
+NOx
+</th>
+<th style="text-align:right;">
+O_3
+</th>
+<th style="text-align:right;">
+PM10
+</th>
+<th style="text-align:right;">
+PM25
+</th>
+<th style="text-align:right;">
+SO_2
+</th>
+<th style="text-align:right;">
+TCH
+</th>
+<th style="text-align:right;">
+TOL
+</th>
+<th style="text-align:right;">
+station
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+38
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+5
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079004
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+0.6
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+71
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1.40
+</td>
+<td style="text-align:right;">
+2.9
+</td>
+<td style="text-align:right;">
+28079008
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0.9
+</td>
+<td style="text-align:right;">
+28079011
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+91
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079016
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+69
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079017
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+70
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+28079018
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+0.17
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+79
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.86
+</td>
+<td style="text-align:right;">
+1.8
+</td>
+<td style="text-align:right;">
+28079024
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+87
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079027
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+70
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079035
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079036
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+0.7
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+3.5
+</td>
+<td style="text-align:right;">
+28079038
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+75
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079039
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+24
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079040
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+23
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079047
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+30
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079048
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+74
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079049
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079050
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079054
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0.6
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1.16
+</td>
+<td style="text-align:right;">
+1.5
+</td>
+<td style="text-align:right;">
+28079055
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+47
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+59
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079056
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="limitemonos-a-las-estaciones-seleccionadas" class="section level5">
+<h5><span class="header-section-number">6.2.1.1.2</span> Limitemonos a las estaciones seleccionadas</h5>
+<p>Revisando el archivo <em>stations.csv</em>, podemos ver que el código de estaciones que estudiaremos son 28079036, 28079008,28079058, 28079060 y 28079038, por lo que lo ponemos en un filter. El resultado de esto lo podemos ver en la tabla <a href="loops.html#tab:Madrid2017b">6.2</a></p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1">Madrid2017 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;csvs_per_year/madrid_2017.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(station <span class="op">%in%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb61-2" data-line-number="2"><span class="st">    </span><span class="kw">c</span>(<span class="dv">28079036</span>, <span class="dv">28079008</span>, <span class="dv">28079058</span>, <span class="dv">28079060</span>, <span class="dv">28079038</span>))</a></code></pre></div>
+<pre><code>## Warning: 59228 parsing failures.
+##   row col           expected             actual                            file
+## 87457 NOx 1/0/T/F/TRUE/FALSE 37.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87458 CH4 1/0/T/F/TRUE/FALSE 1.2200000286102295 &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87458 NOx 1/0/T/F/TRUE/FALSE 60.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87459 NOx 1/0/T/F/TRUE/FALSE 19.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87460 NOx 1/0/T/F/TRUE/FALSE 43.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## ..... ... .................. .................. ...............................
+## See problems(...) for more details.</code></pre>
+<table>
+<caption>
+<span id="tab:Madrid2017b">Tabla 6.2: </span>Los primeros 20 datos de calidad de aire del 2017 en Madrid después de filtrar según estación.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+date
+</th>
+<th style="text-align:right;">
+BEN
+</th>
+<th style="text-align:left;">
+CH4
+</th>
+<th style="text-align:right;">
+CO
+</th>
+<th style="text-align:right;">
+EBE
+</th>
+<th style="text-align:right;">
+NMHC
+</th>
+<th style="text-align:right;">
+NO
+</th>
+<th style="text-align:right;">
+NO_2
+</th>
+<th style="text-align:left;">
+NOx
+</th>
+<th style="text-align:right;">
+O_3
+</th>
+<th style="text-align:right;">
+PM10
+</th>
+<th style="text-align:right;">
+PM25
+</th>
+<th style="text-align:right;">
+SO_2
+</th>
+<th style="text-align:right;">
+TCH
+</th>
+<th style="text-align:right;">
+TOL
+</th>
+<th style="text-align:right;">
+station
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+0.6
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+71
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1.40
+</td>
+<td style="text-align:right;">
+2.9
+</td>
+<td style="text-align:right;">
+28079008
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079036
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+0.7
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+3.5
+</td>
+<td style="text-align:right;">
+28079038
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+66
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079058
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+79
+</td>
+<td style="text-align:right;">
+86
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079060
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 02:00:00
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+0.07
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+72
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1.40
+</td>
+<td style="text-align:right;">
+2.3
+</td>
+<td style="text-align:right;">
+28079008
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 02:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079036
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 02:00:00
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1.3
+</td>
+<td style="text-align:right;">
+28079038
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 02:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+68
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079058
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 02:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+90
+</td>
+<td style="text-align:right;">
+62
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079060
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 03:00:00
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+73
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1.40
+</td>
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+28079008
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 03:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079036
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 03:00:00
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1.8
+</td>
+<td style="text-align:right;">
+28079038
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 03:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+68
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079058
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 03:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+86
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079060
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 04:00:00
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+75
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1.41
+</td>
+<td style="text-align:right;">
+1.4
+</td>
+<td style="text-align:right;">
+28079008
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 04:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079036
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 04:00:00
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1.7
+</td>
+<td style="text-align:right;">
+28079038
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 04:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079058
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 04:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+75
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079060
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="agreguemos-aparte-el-mes-el-año-y-el-nombre-de-la-estación" class="section level5">
+<h5><span class="header-section-number">6.2.1.1.3</span> Agreguemos aparte el mes, el año y el nombre de la estación</h5>
+<p>Usando <code>mutate</code> y las funciones <code>month</code>y <code>year</code> de lubridate podemos agregar el més y el año para cada observación, además usando <code>left_joint</code>, podemos agreagar el nombre de las estaciones usando la base de datos <em>stations.csv</em>. El resultado de esto lo podemos ver en la tabla <a href="loops.html#tab:Madrid2017c">6.3</a></p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb63-1" data-line-number="1">stations &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;stations.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">station =</span> id)</a>
+<a class="sourceLine" id="cb63-2" data-line-number="2">Madrid2017 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;csvs_per_year/madrid_2017.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(station <span class="op">%in%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb63-3" data-line-number="3"><span class="st">    </span><span class="kw">c</span>(<span class="dv">28079036</span>, <span class="dv">28079008</span>, <span class="dv">28079058</span>, <span class="dv">28079060</span>, <span class="dv">28079038</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb63-4" data-line-number="4"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">month =</span> <span class="kw">month</span>(date), <span class="dt">year =</span> <span class="kw">year</span>(date)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(stations)</a></code></pre></div>
+<pre><code>## Warning: 59228 parsing failures.
+##   row col           expected             actual                            file
+## 87457 NOx 1/0/T/F/TRUE/FALSE 37.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87458 CH4 1/0/T/F/TRUE/FALSE 1.2200000286102295 &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87458 NOx 1/0/T/F/TRUE/FALSE 60.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87459 NOx 1/0/T/F/TRUE/FALSE 19.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87460 NOx 1/0/T/F/TRUE/FALSE 43.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## ..... ... .................. .................. ...............................
+## See problems(...) for more details.</code></pre>
+<table>
+<caption>
+<span id="tab:Madrid2017c">Tabla 6.3: </span>Los primeros 20 datos de calidad de aire del 2017 en Madrid después de filtrar según estación, con mes, año y nombre.
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+date
+</th>
+<th style="text-align:right;">
+BEN
+</th>
+<th style="text-align:left;">
+CH4
+</th>
+<th style="text-align:right;">
+CO
+</th>
+<th style="text-align:right;">
+EBE
+</th>
+<th style="text-align:right;">
+NMHC
+</th>
+<th style="text-align:right;">
+NO
+</th>
+<th style="text-align:right;">
+NO_2
+</th>
+<th style="text-align:left;">
+NOx
+</th>
+<th style="text-align:right;">
+O_3
+</th>
+<th style="text-align:right;">
+PM10
+</th>
+<th style="text-align:right;">
+PM25
+</th>
+<th style="text-align:right;">
+SO_2
+</th>
+<th style="text-align:right;">
+TCH
+</th>
+<th style="text-align:right;">
+TOL
+</th>
+<th style="text-align:right;">
+station
+</th>
+<th style="text-align:right;">
+month
+</th>
+<th style="text-align:right;">
+year
+</th>
+<th style="text-align:left;">
+name
+</th>
+<th style="text-align:left;">
+address
+</th>
+<th style="text-align:right;">
+lon
+</th>
+<th style="text-align:right;">
+lat
+</th>
+<th style="text-align:right;">
+elevation
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+0.6
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+39
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+71
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1.40
+</td>
+<td style="text-align:right;">
+2.9
+</td>
+<td style="text-align:right;">
+28079008
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Escuelas Aguirre
+</td>
+<td style="text-align:left;">
+Entre C/ Alcalá y C/ O’ Donell
+</td>
+<td style="text-align:right;">
+-3.682319
+</td>
+<td style="text-align:right;">
+40.42156
+</td>
+<td style="text-align:right;">
+670
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079036
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Moratalaz
+</td>
+<td style="text-align:left;">
+Avd. Moratalaz esq. Camino de los Vinateros
+</td>
+<td style="text-align:right;">
+-3.645306
+</td>
+<td style="text-align:right;">
+40.40795
+</td>
+<td style="text-align:right;">
+685
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+0.7
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1.0
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+21
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+3.5
+</td>
+<td style="text-align:right;">
+28079038
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Cuatro Caminos
+</td>
+<td style="text-align:left;">
+Avda. Pablo Iglesias esq. C/ Marqués de Lema
+</td>
+<td style="text-align:right;">
+-3.707128
+</td>
+<td style="text-align:right;">
+40.44554
+</td>
+<td style="text-align:right;">
+698
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+66
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079058
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+El Pardo
+</td>
+<td style="text-align:left;">
+Avda. La Guardia
+</td>
+<td style="text-align:right;">
+-3.774611
+</td>
+<td style="text-align:right;">
+40.51806
+</td>
+<td style="text-align:right;">
+615
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 01:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+26
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+79
+</td>
+<td style="text-align:right;">
+86
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079060
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Tres Olivos
+</td>
+<td style="text-align:left;">
+Plaza Tres Olivos
+</td>
+<td style="text-align:right;">
+-3.689761
+</td>
+<td style="text-align:right;">
+40.50059
+</td>
+<td style="text-align:right;">
+715
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 02:00:00
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+0.07
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+27
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+72
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1.40
+</td>
+<td style="text-align:right;">
+2.3
+</td>
+<td style="text-align:right;">
+28079008
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Escuelas Aguirre
+</td>
+<td style="text-align:left;">
+Entre C/ Alcalá y C/ O’ Donell
+</td>
+<td style="text-align:right;">
+-3.682319
+</td>
+<td style="text-align:right;">
+40.42156
+</td>
+<td style="text-align:right;">
+670
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 02:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+17
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079036
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Moratalaz
+</td>
+<td style="text-align:left;">
+Avd. Moratalaz esq. Camino de los Vinateros
+</td>
+<td style="text-align:right;">
+-3.645306
+</td>
+<td style="text-align:right;">
+40.40795
+</td>
+<td style="text-align:right;">
+685
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 02:00:00
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+13
+</td>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1.3
+</td>
+<td style="text-align:right;">
+28079038
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Cuatro Caminos
+</td>
+<td style="text-align:left;">
+Avda. Pablo Iglesias esq. C/ Marqués de Lema
+</td>
+<td style="text-align:right;">
+-3.707128
+</td>
+<td style="text-align:right;">
+40.44554
+</td>
+<td style="text-align:right;">
+698
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 02:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+68
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079058
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+El Pardo
+</td>
+<td style="text-align:left;">
+Avda. La Guardia
+</td>
+<td style="text-align:right;">
+-3.774611
+</td>
+<td style="text-align:right;">
+40.51806
+</td>
+<td style="text-align:right;">
+615
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 02:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+9
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+90
+</td>
+<td style="text-align:right;">
+62
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079060
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Tres Olivos
+</td>
+<td style="text-align:left;">
+Plaza Tres Olivos
+</td>
+<td style="text-align:right;">
+-3.689761
+</td>
+<td style="text-align:right;">
+40.50059
+</td>
+<td style="text-align:right;">
+715
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 03:00:00
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+25
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+73
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+7
+</td>
+<td style="text-align:right;">
+1.40
+</td>
+<td style="text-align:right;">
+2.0
+</td>
+<td style="text-align:right;">
+28079008
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Escuelas Aguirre
+</td>
+<td style="text-align:left;">
+Entre C/ Alcalá y C/ O’ Donell
+</td>
+<td style="text-align:right;">
+-3.682319
+</td>
+<td style="text-align:right;">
+40.42156
+</td>
+<td style="text-align:right;">
+670
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 03:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+18
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079036
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Moratalaz
+</td>
+<td style="text-align:left;">
+Avd. Moratalaz esq. Camino de los Vinateros
+</td>
+<td style="text-align:right;">
+-3.645306
+</td>
+<td style="text-align:right;">
+40.40795
+</td>
+<td style="text-align:right;">
+685
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 03:00:00
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0.4
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+20
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1.8
+</td>
+<td style="text-align:right;">
+28079038
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Cuatro Caminos
+</td>
+<td style="text-align:left;">
+Avda. Pablo Iglesias esq. C/ Marqués de Lema
+</td>
+<td style="text-align:right;">
+-3.707128
+</td>
+<td style="text-align:right;">
+40.44554
+</td>
+<td style="text-align:right;">
+698
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 03:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+68
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079058
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+El Pardo
+</td>
+<td style="text-align:left;">
+Avda. La Guardia
+</td>
+<td style="text-align:right;">
+-3.774611
+</td>
+<td style="text-align:right;">
+40.51806
+</td>
+<td style="text-align:right;">
+615
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 03:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+86
+</td>
+<td style="text-align:right;">
+19
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079060
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Tres Olivos
+</td>
+<td style="text-align:left;">
+Plaza Tres Olivos
+</td>
+<td style="text-align:right;">
+-3.689761
+</td>
+<td style="text-align:right;">
+40.50059
+</td>
+<td style="text-align:right;">
+715
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 04:00:00
+</td>
+<td style="text-align:right;">
+0.3
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:right;">
+0.08
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+22
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+75
+</td>
+<td style="text-align:right;">
+15
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+1.41
+</td>
+<td style="text-align:right;">
+1.4
+</td>
+<td style="text-align:right;">
+28079008
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Escuelas Aguirre
+</td>
+<td style="text-align:left;">
+Entre C/ Alcalá y C/ O’ Donell
+</td>
+<td style="text-align:right;">
+-3.682319
+</td>
+<td style="text-align:right;">
+40.42156
+</td>
+<td style="text-align:right;">
+670
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 04:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+0.1
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+14
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079036
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Moratalaz
+</td>
+<td style="text-align:left;">
+Avd. Moratalaz esq. Camino de los Vinateros
+</td>
+<td style="text-align:right;">
+-3.645306
+</td>
+<td style="text-align:right;">
+40.40795
+</td>
+<td style="text-align:right;">
+685
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 04:00:00
+</td>
+<td style="text-align:right;">
+0.2
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+0.5
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+12
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1.7
+</td>
+<td style="text-align:right;">
+28079038
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Cuatro Caminos
+</td>
+<td style="text-align:left;">
+Avda. Pablo Iglesias esq. C/ Marqués de Lema
+</td>
+<td style="text-align:right;">
+-3.707128
+</td>
+<td style="text-align:right;">
+40.44554
+</td>
+<td style="text-align:right;">
+698
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 04:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+60
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079058
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+El Pardo
+</td>
+<td style="text-align:left;">
+Avda. La Guardia
+</td>
+<td style="text-align:right;">
+-3.774611
+</td>
+<td style="text-align:right;">
+40.51806
+</td>
+<td style="text-align:right;">
+615
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+2017-06-01 04:00:00
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+11
+</td>
+<td style="text-align:left;">
+NA
+</td>
+<td style="text-align:right;">
+75
+</td>
+<td style="text-align:right;">
+8
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+28079060
+</td>
+<td style="text-align:right;">
+6
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:left;">
+Tres Olivos
+</td>
+<td style="text-align:left;">
+Plaza Tres Olivos
+</td>
+<td style="text-align:right;">
+-3.689761
+</td>
+<td style="text-align:right;">
+40.50059
+</td>
+<td style="text-align:right;">
+715
+</td>
+</tr>
+</tbody>
+</table>
+<p>Finalmente, agrupamos sacamos el promedio por mes y sacamos las columnas sobrantes al mismo tiempo, como vemos en la tabla <a href="loops.html#tab:Madrid2017d">6.4</a></p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb65-1" data-line-number="1"><span class="kw">library</span>(lubridate)</a>
+<a class="sourceLine" id="cb65-2" data-line-number="2">stations &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;stations.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">station =</span> id)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   id = col_double(),
+##   name = col_character(),
+##   address = col_character(),
+##   lon = col_double(),
+##   lat = col_double(),
+##   elevation = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb67-1" data-line-number="1">Madrid2017 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;csvs_per_year/madrid_2017.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(station <span class="op">%in%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb67-2" data-line-number="2"><span class="st">    </span><span class="kw">c</span>(<span class="dv">28079036</span>, <span class="dv">28079008</span>, <span class="dv">28079058</span>, <span class="dv">28079060</span>, <span class="dv">28079038</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb67-3" data-line-number="3"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">month =</span> <span class="kw">month</span>(date), <span class="dt">year =</span> <span class="kw">year</span>(date)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(stations) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb67-4" data-line-number="4"><span class="st">    </span><span class="kw">group_by</span>(month, name, year) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">NO_2 =</span> <span class="kw">mean</span>(NO_<span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb67-5" data-line-number="5">    <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   date = col_datetime(format = &quot;&quot;),
+##   BEN = col_double(),
+##   CH4 = col_logical(),
+##   CO = col_double(),
+##   EBE = col_double(),
+##   NMHC = col_double(),
+##   NO = col_double(),
+##   NO_2 = col_double(),
+##   NOx = col_logical(),
+##   O_3 = col_double(),
+##   PM10 = col_double(),
+##   PM25 = col_double(),
+##   SO_2 = col_double(),
+##   TCH = col_double(),
+##   TOL = col_double(),
+##   station = col_double()
+## )</code></pre>
+<pre><code>## Warning: 59228 parsing failures.
+##   row col           expected             actual                            file
+## 87457 NOx 1/0/T/F/TRUE/FALSE 37.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87458 CH4 1/0/T/F/TRUE/FALSE 1.2200000286102295 &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87458 NOx 1/0/T/F/TRUE/FALSE 60.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87459 NOx 1/0/T/F/TRUE/FALSE 19.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87460 NOx 1/0/T/F/TRUE/FALSE 43.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## ..... ... .................. .................. ...............................
+## See problems(...) for more details.</code></pre>
+<pre><code>## Joining, by = &quot;station&quot;</code></pre>
+<pre><code>## `summarise()` regrouping output by &#39;month&#39;, &#39;name&#39; (override with `.groups` argument)</code></pre>
+<table>
+<caption>
+<span id="tab:Madrid2017d">Tabla 6.4: </span>Los primeros 20 datos de calidad de aire del 2017 en Madrid después de filtrar según estación, con mes, año y nombre.
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+month
+</th>
+<th style="text-align:left;">
+name
+</th>
+<th style="text-align:right;">
+year
+</th>
+<th style="text-align:right;">
+NO_2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Cuatro Caminos
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+59.88124
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Cuatro Caminos
+</td>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:right;">
+5.00000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+El Pardo
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+27.89892
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+El Pardo
+</td>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:right;">
+1.00000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Escuelas Aguirre
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+69.43666
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Escuelas Aguirre
+</td>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:right;">
+20.00000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Moratalaz
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+54.17004
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Moratalaz
+</td>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:right;">
+10.00000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Tres Olivos
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+55.28706
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Tres Olivos
+</td>
+<td style="text-align:right;">
+2018
+</td>
+<td style="text-align:right;">
+5.00000
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Cuatro Caminos
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+46.01045
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+El Pardo
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+17.18955
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Escuelas Aguirre
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+59.89686
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Moratalaz
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+44.19581
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Tres Olivos
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+39.38209
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Cuatro Caminos
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+43.71833
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+El Pardo
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+15.07962
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Escuelas Aguirre
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+61.74798
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Moratalaz
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+43.01353
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Tres Olivos
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+36.68329
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="últimos-detalles" class="section level5">
+<h5><span class="header-section-number">6.2.1.1.4</span> Últimos detalles</h5>
+<p>Vemos que hay algunos valores del 2018, esto parece raro, ya que leimos los archivos del 2017. Al revisar mas con <code>summarize</code>, vemos que en realidad son tan solo unas pocas observaciones las que generan esta anomalía debido a algunas medidas del 1 de enero del 2018.</p>
+<p>Para eliminarlas agregamos el siguiente código.</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" data-line-number="1"><span class="kw">library</span>(lubridate)</a>
+<a class="sourceLine" id="cb72-2" data-line-number="2">stations &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;stations.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">station =</span> id)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   id = col_double(),
+##   name = col_character(),
+##   address = col_character(),
+##   lon = col_double(),
+##   lat = col_double(),
+##   elevation = col_double()
+## )</code></pre>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" data-line-number="1">Madrid2017 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;csvs_per_year/madrid_2017.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(station <span class="op">%in%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb74-2" data-line-number="2"><span class="st">    </span><span class="kw">c</span>(<span class="dv">28079036</span>, <span class="dv">28079008</span>, <span class="dv">28079058</span>, <span class="dv">28079060</span>, <span class="dv">28079038</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb74-3" data-line-number="3"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">month =</span> <span class="kw">month</span>(date), <span class="dt">year =</span> <span class="kw">year</span>(date)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(stations) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb74-4" data-line-number="4"><span class="st">    </span><span class="kw">group_by</span>(month, name, year) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">NO_2 =</span> <span class="kw">mean</span>(NO_<span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb74-5" data-line-number="5">    <span class="dt">na.rm =</span> <span class="ot">TRUE</span>), <span class="dt">n =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(n <span class="op">&gt;</span><span class="st"> </span><span class="dv">500</span>)</a></code></pre></div>
+<pre><code>## Parsed with column specification:
+## cols(
+##   date = col_datetime(format = &quot;&quot;),
+##   BEN = col_double(),
+##   CH4 = col_logical(),
+##   CO = col_double(),
+##   EBE = col_double(),
+##   NMHC = col_double(),
+##   NO = col_double(),
+##   NO_2 = col_double(),
+##   NOx = col_logical(),
+##   O_3 = col_double(),
+##   PM10 = col_double(),
+##   PM25 = col_double(),
+##   SO_2 = col_double(),
+##   TCH = col_double(),
+##   TOL = col_double(),
+##   station = col_double()
+## )</code></pre>
+<pre><code>## Warning: 59228 parsing failures.
+##   row col           expected             actual                            file
+## 87457 NOx 1/0/T/F/TRUE/FALSE 37.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87458 CH4 1/0/T/F/TRUE/FALSE 1.2200000286102295 &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87458 NOx 1/0/T/F/TRUE/FALSE 60.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87459 NOx 1/0/T/F/TRUE/FALSE 19.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87460 NOx 1/0/T/F/TRUE/FALSE 43.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## ..... ... .................. .................. ...............................
+## See problems(...) for more details.</code></pre>
+<pre><code>## Joining, by = &quot;station&quot;</code></pre>
+<pre><code>## `summarise()` regrouping output by &#39;month&#39;, &#39;name&#39; (override with `.groups` argument)</code></pre>
+<p>Esto nos dá al fin la receta final que usaremos en el loop.</p>
+</div>
+</div>
+</div>
+</div>
+<div id="empezando-el-loop" class="section level2">
+<h2><span class="header-section-number">6.3</span> Empezando el loop</h2>
+<p>En este capíulo usaremos principalmente la función <code>map</code> del paquete <em>purrr</em> para generar loops, en esta función los dos argumentos generales que necesitamos es un vector o lista (<em>argumento .x</em>) de los elementos que pasarán por una función, y una funcion (<em>argumento .f</em>) que se aplicará a toda esta lista. Es importante establecer que el resultado de map siempre será una lista.</p>
+<div id="volvamos-a-nuestra-receta" class="section level3">
+<h3><span class="header-section-number">6.3.1</span> Volvamos a nuestra receta</h3>
+<p>Veamos el código que usamos para el año 2017</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb79-1" data-line-number="1"><span class="kw">library</span>(lubridate)</a>
+<a class="sourceLine" id="cb79-2" data-line-number="2">stations &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;stations.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">rename</span>(<span class="dt">station =</span> id)</a>
+<a class="sourceLine" id="cb79-3" data-line-number="3">Madrid2017 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;csvs_per_year/madrid_2017.csv&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(station <span class="op">%in%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb79-4" data-line-number="4"><span class="st">    </span><span class="kw">c</span>(<span class="dv">28079036</span>, <span class="dv">28079008</span>, <span class="dv">28079058</span>, <span class="dv">28079060</span>, <span class="dv">28079038</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb79-5" data-line-number="5"><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">month =</span> <span class="kw">month</span>(date), <span class="dt">year =</span> <span class="kw">year</span>(date)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">left_join</span>(stations) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb79-6" data-line-number="6"><span class="st">    </span><span class="kw">group_by</span>(month, name, year) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarise</span>(<span class="dt">NO_2 =</span> <span class="kw">mean</span>(NO_<span class="dv">2</span>, </a>
+<a class="sourceLine" id="cb79-7" data-line-number="7">    <span class="dt">na.rm =</span> <span class="ot">TRUE</span>), <span class="dt">n =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(n <span class="op">&gt;</span><span class="st"> </span><span class="dv">500</span>)</a></code></pre></div>
+<p>La primera parte del código es la lectura del archivo</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" data-line-number="1">Madrid2017 &lt;-<span class="st"> </span><span class="kw">read_csv</span>(<span class="st">&quot;csvs_per_year/madrid_2017.csv&quot;</span>)</a></code></pre></div>
+<p>Para hacer esto por todos los archivos de la base de datos requeriríamos de una lista o vector con los nombres de cada uno de los archivos. ¡Si solo hubiera una función en R que nos permitiera leer los archivos de una carpeta! La función <code>list.files</code> hace eso.</p>
+<p>Entonces el código que vemos abajo genera un vector con todos los nombres de los archivos que queremos incorporar:</p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb81-1" data-line-number="1">Archivos &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="st">&quot;csvs_per_year&quot;</span>, <span class="dt">full.names =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb81-2" data-line-number="2">Archivos</a></code></pre></div>
+<pre><code>##  [1] &quot;csvs_per_year/madrid_2001.csv&quot; &quot;csvs_per_year/madrid_2002.csv&quot;
+##  [3] &quot;csvs_per_year/madrid_2003.csv&quot; &quot;csvs_per_year/madrid_2004.csv&quot;
+##  [5] &quot;csvs_per_year/madrid_2005.csv&quot; &quot;csvs_per_year/madrid_2006.csv&quot;
+##  [7] &quot;csvs_per_year/madrid_2007.csv&quot; &quot;csvs_per_year/madrid_2008.csv&quot;
+##  [9] &quot;csvs_per_year/madrid_2009.csv&quot; &quot;csvs_per_year/madrid_2010.csv&quot;
+## [11] &quot;csvs_per_year/madrid_2011.csv&quot; &quot;csvs_per_year/madrid_2012.csv&quot;
+## [13] &quot;csvs_per_year/madrid_2013.csv&quot; &quot;csvs_per_year/madrid_2014.csv&quot;
+## [15] &quot;csvs_per_year/madrid_2015.csv&quot; &quot;csvs_per_year/madrid_2016.csv&quot;
+## [17] &quot;csvs_per_year/madrid_2017.csv&quot; &quot;csvs_per_year/madrid_2018.csv&quot;</code></pre>
+<p>Entonces poner dentro de map, un vector con el nombre de los archivos (<em>Archivos</em>), y una función para leer los archivos (<em>read_csv</em>). Esto es el siguiente código</p>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb83-1" data-line-number="1">Madrid &lt;-<span class="st"> </span><span class="kw">map</span>(Archivos, read_csv)</a></code></pre></div>
+<p>Genera una lista donde cada elemento es un data frame de un año de mediciones.</p>
+<p>Cuando se agregan otras funciones mas complejas en un loop usando map. Como por ejemplo <code>filter</code>, ponemos un simbolo <code>~</code> dentro de map, y un <code>.x</code> dentro de filter para representar a cada dataframe que usaremos.</p>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" data-line-number="1">Madrid &lt;-<span class="st"> </span><span class="kw">map</span>(Archivos, read_csv) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">filter</span>(.x, station <span class="op">%in%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb84-2" data-line-number="2"><span class="st">    </span><span class="kw">c</span>(<span class="dv">28079036</span>, <span class="dv">28079008</span>, <span class="dv">28079058</span>, <span class="dv">28079060</span>, <span class="dv">28079038</span>)))</a></code></pre></div>
+<p>De esta forma podemos seguir la receta creada anteriormente sin ningún problema.</p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" data-line-number="1">Madrid &lt;-<span class="st"> </span><span class="kw">map</span>(Archivos, read_csv) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">filter</span>(.x, station <span class="op">%in%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb85-2" data-line-number="2"><span class="st">    </span><span class="kw">c</span>(<span class="dv">28079036</span>, <span class="dv">28079008</span>, <span class="dv">28079058</span>, <span class="dv">28079060</span>, <span class="dv">28079038</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb85-3" data-line-number="3"><span class="st">    </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">mutate</span>(.x, <span class="dt">month =</span> <span class="kw">month</span>(date), <span class="dt">year =</span> <span class="kw">year</span>(date))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb85-4" data-line-number="4"><span class="st">    </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">left_join</span>(.x, stations)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">group_by</span>(.x, month, </a>
+<a class="sourceLine" id="cb85-5" data-line-number="5">    name, year)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">summarise</span>(.x, <span class="dt">NO_2 =</span> <span class="kw">mean</span>(NO_<span class="dv">2</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>), </a>
+<a class="sourceLine" id="cb85-6" data-line-number="6">    <span class="dt">n =</span> <span class="kw">n</span>())) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">filter</span>(.x, n <span class="op">&gt;</span><span class="st"> </span><span class="dv">500</span>))</a></code></pre></div>
+<p>Pero en este momento tenemos una lista con 17 data frames, en vez de un gran data frame con todos los datos. Para esto debenos unir esta lista usando la función <code>reduce</code>, lo cual nos genera el siguiente código y la tabla <a href="loops.html#tab:Madrid2017e">6.5</a></p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" data-line-number="1"><span class="kw">library</span>(lubridate)</a>
+<a class="sourceLine" id="cb86-2" data-line-number="2">Madrid &lt;-<span class="st"> </span><span class="kw">map</span>(Archivos, read_csv) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">filter</span>(.x, station <span class="op">%in%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb86-3" data-line-number="3"><span class="st">    </span><span class="kw">c</span>(<span class="dv">28079036</span>, <span class="dv">28079008</span>, <span class="dv">28079058</span>, <span class="dv">28079060</span>, <span class="dv">28079038</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb86-4" data-line-number="4"><span class="st">    </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">mutate</span>(.x, <span class="dt">month =</span> <span class="kw">month</span>(date), <span class="dt">year =</span> <span class="kw">year</span>(date))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb86-5" data-line-number="5"><span class="st">    </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">left_join</span>(.x, stations)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">group_by</span>(.x, month, </a>
+<a class="sourceLine" id="cb86-6" data-line-number="6">    name, year)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">summarise</span>(.x, <span class="dt">NO_2 =</span> <span class="kw">mean</span>(NO_<span class="dv">2</span>, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>), </a>
+<a class="sourceLine" id="cb86-7" data-line-number="7">    <span class="dt">n =</span> <span class="kw">n</span>())) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">map</span>(<span class="op">~</span><span class="kw">filter</span>(.x, n <span class="op">&gt;</span><span class="st"> </span><span class="dv">500</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">reduce</span>(bind_rows)</a></code></pre></div>
+<pre><code>## Warning: 59228 parsing failures.
+##   row col           expected             actual                            file
+## 87457 NOx 1/0/T/F/TRUE/FALSE 37.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87458 CH4 1/0/T/F/TRUE/FALSE 1.2200000286102295 &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87458 NOx 1/0/T/F/TRUE/FALSE 60.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87459 NOx 1/0/T/F/TRUE/FALSE 19.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## 87460 NOx 1/0/T/F/TRUE/FALSE 43.0               &#39;csvs_per_year/madrid_2017.csv&#39;
+## ..... ... .................. .................. ...............................
+## See problems(...) for more details.</code></pre>
+<table>
+<caption>
+<span id="tab:Madrid2017e">Tabla 6.5: </span>Los primeros 20 datos de calidad de aire del todos los años en Madrid después de filtrar según estación, con mes, año y nombre.
+</caption>
+<thead>
+<tr>
+<th style="text-align:right;">
+month
+</th>
+<th style="text-align:left;">
+name
+</th>
+<th style="text-align:right;">
+year
+</th>
+<th style="text-align:right;">
+NO_2
+</th>
+<th style="text-align:right;">
+n
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Cuatro Caminos
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+59.88124
+</td>
+<td style="text-align:right;">
+743
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+El Pardo
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+27.89892
+</td>
+<td style="text-align:right;">
+743
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Escuelas Aguirre
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+69.43666
+</td>
+<td style="text-align:right;">
+743
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Moratalaz
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+54.17004
+</td>
+<td style="text-align:right;">
+743
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:left;">
+Tres Olivos
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+55.28706
+</td>
+<td style="text-align:right;">
+743
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Cuatro Caminos
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+46.01045
+</td>
+<td style="text-align:right;">
+672
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+El Pardo
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+17.18955
+</td>
+<td style="text-align:right;">
+672
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Escuelas Aguirre
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+59.89686
+</td>
+<td style="text-align:right;">
+672
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Moratalaz
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+44.19581
+</td>
+<td style="text-align:right;">
+672
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:left;">
+Tres Olivos
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+39.38209
+</td>
+<td style="text-align:right;">
+672
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Cuatro Caminos
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+43.71833
+</td>
+<td style="text-align:right;">
+744
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+El Pardo
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+15.07962
+</td>
+<td style="text-align:right;">
+744
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Escuelas Aguirre
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+61.74798
+</td>
+<td style="text-align:right;">
+744
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Moratalaz
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+43.01353
+</td>
+<td style="text-align:right;">
+744
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:left;">
+Tres Olivos
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+36.68329
+</td>
+<td style="text-align:right;">
+744
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Cuatro Caminos
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+34.35139
+</td>
+<td style="text-align:right;">
+720
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+El Pardo
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+11.48122
+</td>
+<td style="text-align:right;">
+720
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Escuelas Aguirre
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+51.56485
+</td>
+<td style="text-align:right;">
+720
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Moratalaz
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+30.07232
+</td>
+<td style="text-align:right;">
+720
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+4
+</td>
+<td style="text-align:left;">
+Tres Olivos
+</td>
+<td style="text-align:right;">
+2017
+</td>
+<td style="text-align:right;">
+25.51253
+</td>
+<td style="text-align:right;">
+720
+</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<h3> Referencias</h3>
+<div id="refs" class="references">
+<div id="ref-HenryPurrr">
+<p>Henry, Lionel, and Hadley Wickham. 2018. <em>Purrr: Functional Programming Tools</em>. <a href="https://CRAN.R-project.org/package=purrr">https://CRAN.R-project.org/package=purrr</a>.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="modelos.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="presentacion.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Libro.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

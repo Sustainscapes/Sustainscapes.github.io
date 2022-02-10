@@ -4,6 +4,12 @@ navbar:
   left:
     - text: "Home"
       href: index.html
+    - text: "Workshops"
+      icon: fa-gear
+      menu:
+      - text: Courses
+      - text: Reproducible research in R 
+        href: Libro/_book/index.html
     - text: "Maps"
       icon: fa-gear
       menu:

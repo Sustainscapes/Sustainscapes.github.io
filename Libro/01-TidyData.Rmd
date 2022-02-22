@@ -223,7 +223,7 @@ data("iris")
 DF <- iris %>% filter(Species != "versicolor") %>% group_by(Species) %>% summarise_all(mean)
 ```
 
-```{r MinusVersicolor, echo = FALSE}
+```{r MenosVersicolor, echo = FALSE}
 knitr::kable(DF, booktabs = TRUE,
   caption = 'Summary of the mean of all floral characteristics of the species Iris setosa and Iris virginica', row.names = FALSE)
 ```

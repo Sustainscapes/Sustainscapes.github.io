@@ -65,3 +65,4 @@ inline-code
 training
 exercise-1-1
 tables-in-rmarkdown
+references-1

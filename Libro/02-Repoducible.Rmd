@@ -4,9 +4,9 @@
 
 For this chapter you need to have the *rmarkdown*, *knitr*, *reprex* and *kableExtra* packages installed.
 
-This chapter will explain what reproducible research is, how to apply it using github plus the *rmarkdown* [@Allaire2018] and *knitr* [@xie2015] packages. Also, you will learn how to use tables using *knitr* [@xie2015] and *kableExtra* [@Hao2021]. Finally you will learn how use reprex in order to generate reproducible questions in stackoverflow.
+This chapter will explain what reproducible research is, how to apply it using github plus the *rmarkdown* [@Allaire2018] and *knitr* [@xie2015] packages. Also, you will learn how to use tables using *knitr* [@xie2015] and *kableExtra* [@Hao2021]. In order to use GitHub you need a GitPat, in order to get that, an easy option to generate it through the *usethis* package [@WickhamUsethis]. Finally you will learn how use reprex in order to generate reproducible questions in stackoverflow. 
 
-This class of the course can also be followed at this [link](https://sustainscapes.github.io/Class2/Clase2InvestigacionReproducible). 
+This class of the course can also be followed at this [link](https://sustainscapes.github.io/Class2/Class2ReproducibleResearch). 
 
 
 ## Reproducible Research
@@ -215,3 +215,5 @@ kable(DF, caption = 'Average per species of all iris database variables.', row.n
 knitr::kable((iris %>% group_by(Species) %>% summarize_all(mean)), booktabs = TRUE,
   caption = 'Average per species of all iris database variables.', row.names = FALSE)
 ```
+
+# References

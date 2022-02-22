@@ -1,45 +1,48 @@
 <!DOCTYPE html>
-<html >
-
+<html lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>BIO 4022. Análisis y manipulación de datos en R</title>
-  <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook.">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 References | Reproducible research in R</title>
+  <meta name="description" content="A companion book on reproducibility in R" />
+  <meta name="generator" content="bookdown 0.24 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="BIO 4022. Análisis y manipulación de datos en R" />
+  <meta property="og:title" content="Chapter 3 References | Reproducible research in R" />
   <meta property="og:type" content="book" />
   
-  
-  <meta property="og:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
-  
+  <meta property="og:image" content="/Cover.png" />
+  <meta property="og:description" content="A companion book on reproducibility in R" />
+  <meta name="github-repo" content="/derek-corcoran-barrios/derek-corcoran-barrios.github.io/tree/master/Libro" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="BIO 4022. Análisis y manipulación de datos en R" />
+  <meta name="twitter:title" content="Chapter 3 References | Reproducible research in R" />
   
-  <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
+  <meta name="twitter:description" content="A companion book on reproducibility in R" />
+  <meta name="twitter:image" content="/Cover.png" />
+
+<meta name="author" content="Derek Corcoran" />
+
+
+<meta name="date" content="2022-02-22" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
-
-<meta name="author" content="Derek Corcoran">
-
-
-<meta name="date" content="2018-07-17">
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
-  
-<link rel="prev" href="references.html">
+<link rel="prev" href="reproducible.html"/>
 
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
 
 
 
@@ -47,31 +50,33 @@
 
 
 
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; position: absolute; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
-code.sourceCode { white-space: pre; position: relative; }
-div.sourceCode { margin: 1em 0; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
 }
 @media print {
-code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; }
-pre.numberSource a.sourceLine:empty
-  { position: absolute; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
-    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all;
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +85,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -115,6 +120,29 @@ code span.vs { color: #4070a0; } /* VerbatimString */
 code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
 <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 
@@ -128,22 +156,57 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <nav role="navigation">
 
 <ul class="summary">
-<li><a href="./">A Minimal Book Example</a></li>
+<li><a href="./">Reproducible research in R </a></li>
 
 <li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Requerimientos</a><ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#si-nunca-has-usado-r-antes"><i class="fa fa-check"></i><b>1.1</b> Si nunca has usado R antes</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#objetivo-del-curso"><i class="fa fa-check"></i><b>1.2</b> Objetivo del curso</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Requirements</a>
+<ul>
+<li class="chapter" data-level="0.1" data-path="index.html"><a href="index.html#before-starting"><i class="fa fa-check"></i><b>0.1</b> Before starting</a></li>
+<li class="chapter" data-level="0.2" data-path="index.html"><a href="index.html#workshop-description"><i class="fa fa-check"></i><b>0.2</b> Workshop description</a></li>
+<li class="chapter" data-level="0.3" data-path="index.html"><a href="index.html#course-objectives"><i class="fa fa-check"></i><b>0.3</b> Course Objectives</a></li>
+<li class="chapter" data-level="0.4" data-path="index.html"><a href="index.html#contents"><i class="fa fa-check"></i><b>0.4</b> Contents</a></li>
+<li class="chapter" data-level="0.5" data-path="index.html"><a href="index.html#libros-de-consulta"><i class="fa fa-check"></i><b>0.5</b> Libros de consulta</a></li>
+<li class="chapter" data-level="0.6" data-path="index.html"><a href="index.html#reference-books"><i class="fa fa-check"></i><b>0.6</b> Reference books</a></li>
+<li class="chapter" data-level="0.7" data-path="index.html"><a href="index.html#references"><i class="fa fa-check"></i><b>0.7</b> References</a></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="tidydata.html"><a href="tidydata.html"><i class="fa fa-check"></i><b>2</b> Tidy Data y manipulación de datos</a></li>
-<li class="chapter" data-level="3" data-path="reproducible.html"><a href="reproducible.html"><i class="fa fa-check"></i><b>3</b> Investigación reproducible</a></li>
-<li class="chapter" data-level="4" data-path="tidyverso.html"><a href="tidyverso.html"><i class="fa fa-check"></i><b>4</b> El Tidyverso</a></li>
-<li class="chapter" data-level="5" data-path="visualizacion.html"><a href="visualizacion.html"><i class="fa fa-check"></i><b>5</b> Visualización de datos</a></li>
-<li class="chapter" data-level="6" data-path="modelos-en-r.html"><a href="modelos-en-r.html"><i class="fa fa-check"></i><b>6</b> Modelos en R</a></li>
-<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
-<li class="chapter" data-level="" data-path="references-1.html"><a href="references-1.html"><i class="fa fa-check"></i>References</a></li>
+<li class="chapter" data-level="1" data-path="tidydata.html"><a href="tidydata.html"><i class="fa fa-check"></i><b>1</b> Tidy Data and data manipulation</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="tidydata.html"><a href="tidydata.html#packages-needed-for-this-chapter"><i class="fa fa-check"></i><b>1.1</b> Packages needed for this chapter</a></li>
+<li class="chapter" data-level="1.2" data-path="tidydata.html"><a href="tidydata.html#tidy-data"><i class="fa fa-check"></i><b>1.2</b> Tidy data</a></li>
+<li class="chapter" data-level="1.3" data-path="tidydata.html"><a href="tidydata.html#dplyr"><i class="fa fa-check"></i><b>1.3</b> dplyr</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="tidydata.html"><a href="tidydata.html#pipeline"><i class="fa fa-check"></i><b>1.3.1</b> Pipeline (%&gt;%)</a></li>
+<li class="chapter" data-level="1.3.2" data-path="tidydata.html"><a href="tidydata.html#summarize"><i class="fa fa-check"></i><b>1.3.2</b> summarize</a></li>
+<li class="chapter" data-level="1.3.3" data-path="tidydata.html"><a href="tidydata.html#group_by"><i class="fa fa-check"></i><b>1.3.3</b> group_by</a></li>
+<li class="chapter" data-level="1.3.4" data-path="tidydata.html"><a href="tidydata.html#mutate"><i class="fa fa-check"></i><b>1.3.4</b> mutate</a></li>
+<li class="chapter" data-level="1.3.5" data-path="tidydata.html"><a href="tidydata.html#filter"><i class="fa fa-check"></i><b>1.3.5</b> filter</a></li>
+<li class="chapter" data-level="1.3.6" data-path="tidydata.html"><a href="tidydata.html#select"><i class="fa fa-check"></i><b>1.3.6</b> select</a></li>
+<li class="chapter" data-level="1.3.7" data-path="tidydata.html"><a href="tidydata.html#exercises"><i class="fa fa-check"></i><b>1.3.7</b> Exercises</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="reproducible.html"><a href="reproducible.html"><i class="fa fa-check"></i><b>2</b> Reproducible research</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="reproducible.html"><a href="reproducible.html#packages-needed-for-this-chapter-1"><i class="fa fa-check"></i><b>2.1</b> Packages needed for this chapter</a></li>
+<li class="chapter" data-level="2.2" data-path="reproducible.html"><a href="reproducible.html#reproducible-research"><i class="fa fa-check"></i><b>2.2</b> Reproducible Research</a></li>
+<li class="chapter" data-level="2.3" data-path="reproducible.html"><a href="reproducible.html#saving-our-project-on-github"><i class="fa fa-check"></i><b>2.3</b> Saving our project on github</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="reproducible.html"><a href="reproducible.html#what-is-github"><i class="fa fa-check"></i><b>2.3.1</b> What is github?</a></li>
+<li class="chapter" data-level="2.3.2" data-path="reproducible.html"><a href="reproducible.html#creating-a-github-project-in-rstudio"><i class="fa fa-check"></i><b>2.3.2</b> creating a github project in RStudio</a></li>
+<li class="chapter" data-level="2.3.3" data-path="reproducible.html"><a href="reproducible.html#the-three-main-steps-of-a-repository"><i class="fa fa-check"></i><b>2.3.3</b> The three main steps of a repository</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="reproducible.html"><a href="reproducible.html#reproducibility-in-r"><i class="fa fa-check"></i><b>2.4</b> Reproducibility in R</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="reproducible.html"><a href="reproducible.html#creating-an-rmarkdown"><i class="fa fa-check"></i><b>2.4.1</b> Creating an Rmarkdown</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="reproducible.html"><a href="reproducible.html#subtitle-1"><i class="fa fa-check"></i>subtitle 1</a>
+<ul>
+<li class="chapter" data-level="" data-path="reproducible.html"><a href="reproducible.html#subtitle-2"><i class="fa fa-check"></i>subtitle 2</a></li>
+<li class="chapter" data-level="2.4.2" data-path="reproducible.html"><a href="reproducible.html#training"><i class="fa fa-check"></i><b>2.4.2</b> Training</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="references-1.html"><a href="references-1.html"><i class="fa fa-check"></i><b>3</b> References</a></li>
 <li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Publicado con bookdown</a></li>
 
 </ul>
 
@@ -154,7 +217,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">BIO 4022. Análisis y manipulación de datos en R</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Reproducible research in R</a>
           </h1>
         </div>
 
@@ -162,18 +225,45 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references-1" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="references-1" class="section level1" number="3">
+<h1><span class="header-section-number">Chapter 3</span> References</h1>
 
-<div id="refs" class="references">
-<div>
-<p>Wickham, Hadley, Romain François, Lionel Henry, and Kirill Müller. 2018. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://CRAN.R-project.org/package=dplyr" class="uri">https://CRAN.R-project.org/package=dplyr</a>.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div class="csl-entry">
+Allaire, JJ, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin Ushey, Aron Atkins, Hadley Wickham, Joe Cheng, and Winston Chang. 2018. <em>Rmarkdown: Dynamic Documents for r</em>. <a href="https://CRAN.R-project.org/package=rmarkdown">https://CRAN.R-project.org/package=rmarkdown</a>.
 </div>
-<div>
-<p>Xie, Yihui. 2015. <em>Dynamic Documents with R and Knitr</em>. 2nd ed. Boca Raton, Florida: Chapman; Hall/CRC. <a href="http://yihui.name/knitr/" class="uri">http://yihui.name/knitr/</a>.</p>
+<div class="csl-entry">
+Anderson, Edgar. 1935. <span>“The Irises of the Gaspe Peninsula.”</span> <em>Bulletin of the American Iris Society</em> 59: 2–5.
 </div>
-<div>
-<p>———. 2018. <em>Bookdown: Authoring Books and Technical Documents with R Markdown</em>. <a href="https://CRAN.R-project.org/package=bookdown" class="uri">https://CRAN.R-project.org/package=bookdown</a>.</p>
+<div class="csl-entry">
+Henderson, Harold V, and Paul F Velleman. 1981. <span>“Building Multiple Regression Models Interactively.”</span> <em>Biometrics</em>, 391–411.
+</div>
+<div class="csl-entry">
+Kross, Sean, Nick Carchedi, Bill Bauer, and Gina Grdina. 2017. <em>Swirl: Learn r, in r</em>. <a href="https://CRAN.R-project.org/package=swirl">https://CRAN.R-project.org/package=swirl</a>.
+</div>
+<div class="csl-entry">
+Leek, Jeff. 2015. <span>“The Elements of Data Analytic Style.”</span> <em>J. Leek.—Amazon Digital Services, Inc</em>.
+</div>
+<div class="csl-entry">
+Peng, Roger D. 2011. <span>“Reproducible Research in Computational Science.”</span> <em>Science</em> 334 (6060): 1226–27.
+</div>
+<div class="csl-entry">
+R Core Team. 2021. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
+</div>
+<div class="csl-entry">
+Wickham, Hadley, Jennifer Bryan, and Malcolm Barrett. 2021. <em>Usethis: Automate Package and Project Setup</em>. <a href="https://CRAN.R-project.org/package=usethis">https://CRAN.R-project.org/package=usethis</a>.
+</div>
+<div class="csl-entry">
+Wickham, Hadley, Romain François, Lionel Henry, and Kirill Müller. 2022. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://CRAN.R-project.org/package=dplyr">https://CRAN.R-project.org/package=dplyr</a>.
+</div>
+<div class="csl-entry">
+Wickham, Hadley, and others. 2014. <span>“Tidy Data.”</span> <em>Journal of Statistical Software</em> 59 (10): 1–23.
+</div>
+<div class="csl-entry">
+Xie, Yihui. 2015. <em>Dynamic Documents with <span>R</span> and Knitr</em>. 2nd ed. Boca Raton, Florida: Chapman; Hall/CRC. <a href="http://yihui.name/knitr/">http://yihui.name/knitr/</a>.
+</div>
+<div class="csl-entry">
+Zhu, Hao. 2021. <em>kableExtra: Construct Complex Table with ’Kable’ and Pipe Syntax</em>. <a href="https://CRAN.R-project.org/package=kableExtra">https://CRAN.R-project.org/package=kableExtra</a>.
 </div>
 </div>
 </div>
@@ -182,17 +272,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="references.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="reproducible.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
 
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
@@ -200,12 +291,12 @@ gitbook.start({
 "github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -216,7 +307,19 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["Libro.pdf", "Libro.epub"],
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Libro.pdf"],
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }

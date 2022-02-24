@@ -185,19 +185,21 @@ knitr::include_graphics("Rmark.png")
 library(downloadthis)
 
 ## Link in Github repo
-download_link(
-  link = 'https://raw.githubusercontent.com/Sustainscapes/Sustainscapes.github.io/master/ForRichness.csv',
+download_file(
+  path = 'https://raw.githubusercontent.com/Sustainscapes/Sustainscapes.github.io/master/ForRichness.csv',
   button_label = "Download for richness",
   button_type = "danger",
+  output_extension = ".csv",
   has_icon = TRUE,
   icon = "fa fa-save",
   self_contained = FALSE
 )
 
-download_link(
-  link = 'https://raw.githubusercontent.com/Sustainscapes/Sustainscapes.github.io/master/Richness.csv',
+download_file(
+  path = 'https://raw.githubusercontent.com/Sustainscapes/Sustainscapes.github.io/master/Richness.csv',
   button_label = "Download Richness",
   button_type = "danger",
+  output_extension = ".csv",
   has_icon = TRUE,
   icon = "fa fa-save",
   self_contained = FALSE

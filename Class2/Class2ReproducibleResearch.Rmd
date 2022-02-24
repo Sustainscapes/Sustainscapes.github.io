@@ -181,10 +181,28 @@ knitr::include_graphics("Rmark.png")
 
 ## Datasets to work
 
-```{r, eval = F, echo = T}
-plants <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-08-18/plants.csv')
-actions <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-08-18/actions.csv')
-threats <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-08-18/threats.csv')
+```{r, eval = T, echo = F}
+library(downloadthis)
+
+## Link in Github repo
+download_link(
+  link = 'https://raw.githubusercontent.com/Sustainscapes/Sustainscapes.github.io/master/ForRichness.csv',
+  button_label = "Download for richness",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+download_link(
+  link = 'https://raw.githubusercontent.com/Sustainscapes/Sustainscapes.github.io/master/Richness.csv',
+  button_label = "Download Richness",
+  button_type = "danger",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
 ```
 
 

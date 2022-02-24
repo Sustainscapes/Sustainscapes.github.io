@@ -103,6 +103,34 @@ knitr::include_graphics("GitPan.png")
 * **Git push:** Save to remote repository (In the cloud)
 * Others like git merge, git pull, git clone, etc.
 
+## Datasets to work
+
+```{r, eval = T, echo = F}
+library(downloadthis)
+
+## Link in Github repo
+download_file(
+  path = 'https://raw.githubusercontent.com/Sustainscapes/Sustainscapes.github.io/master/ForRichness.csv',
+  button_label = "Download for richness",
+  button_type = "danger",
+  output_extension = ".csv",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+download_file(
+  path = 'https://raw.githubusercontent.com/Sustainscapes/Sustainscapes.github.io/master/Richness.csv',
+  button_label = "Download Richness",
+  button_type = "danger",
+  output_extension = ".csv",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+```
+
 ## Git Add
 
 * Add a file to the repository
@@ -178,35 +206,6 @@ knitr::include_graphics("Rmark.png")
 
 * So far we have used `data` (only for databases built into R)
 * From today we will use `read_csv` (For csv, for other files there are other functions)
-
-## Datasets to work
-
-```{r, eval = T, echo = F}
-library(downloadthis)
-
-## Link in Github repo
-download_file(
-  path = 'https://raw.githubusercontent.com/Sustainscapes/Sustainscapes.github.io/master/ForRichness.csv',
-  button_label = "Download for richness",
-  button_type = "danger",
-  output_extension = ".csv",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-
-download_file(
-  path = 'https://raw.githubusercontent.com/Sustainscapes/Sustainscapes.github.io/master/Richness.csv',
-  button_label = "Download Richness",
-  button_type = "danger",
-  output_extension = ".csv",
-  has_icon = TRUE,
-  icon = "fa fa-save",
-  self_contained = FALSE
-)
-
-```
-
 
 ## Create a new Rmarkdown
 

@@ -60,13 +60,13 @@ For this example we will use a simple linear model, for this following the table
 Fit1 <- lm(uptake ~ Type, data = CO2)
 ```
 
-#### usando broom para sacarle más a tu modelo
+#### Using broom to get more out of your model
 
-El paquete broom [@Robinson2018] es un paquete adyacente al tidyverse (por lo que debes cargarlo aparte del tidyverse), el cual nos permite tomar información de modelos generados en formato tidy. Hoy veremos 3 funciones de *broom*, estas son `glance`, `tidy` y `augment`.
+the broom package [@Robinson2018] is a package adjacent to the tidyverse (so you have to load it separately from the tidyverse), which allows us to take information from models generated in tidy format. Today we will look at 3 *broom* functions, these are `glance`, `tidy` and `augment`.
 
 ##### glance
 
-la función glance, nos entregará información general del modelo, como el valor de p, el $R^2$, log-likelihood, grados de libertad, y/o otros parametros dependiendo del modelo a utilizar. Esta información nos es entregada en un formato de data frame, como vemos en el código siguiente y en la tabla \@ref(tab:glance)
+The glance function will give us general information about the model, such as the p value, the $R^2$, log-likelihood, degrees of freedom, and/or other parameters depending on the model to be used. This information is delivered to us in a data frame format, as we see in the following code and in the table \@ref(tab:glance)
 
 ```{r, eval=FALSE}
 library(broom)
@@ -75,38 +75,38 @@ glance(Fit1)
 
 ```{r glance, echo = FALSE}
 library(broom)
-knitr::kable(glance(Fit1), caption = 'Información del modelo fi1 entregada por la función glance', booktabs = TRUE, row.names = FALSE)
+knitr::kable(glance(Fit1), caption = 'Model information fi1 delivered by the glance function', booktabs = TRUE, row.names = FALSE)
 ```
 
 ##### tidy
 
-la función tidy, nos entregará información sobre los parametros del modelo, esto es el intercepto, la pendiente y/o interacciones, como vemos en el código siguiente y en la tabla \@ref(tab:tidy)
+the tidy function will give us information about the model parameters, that is the intercept, the slope and/or interactions, as we see in the following code and in the table \@ref(tab:tidy)
 
 ```{r, eval=FALSE}
 tidy(Fit1)
 ```
 
 ```{r tidy, echo = FALSE}
-knitr::kable(tidy(Fit1), caption = 'Información del modelo fi1 entregada por la función glance', booktabs = TRUE, row.names = FALSE)
+knitr::kable(tidy(Fit1), caption = 'Model information fit1 delivered by the glance function', booktabs = TRUE, row.names = FALSE)
 ```
 
 ##### augment
 
-la función augment, nos entregará para cada observación de nuestro modelo, varios parametros importantes como el valor predicho, los residuales, el distancia de cook entre otros, esto nos sirve principalmente para estudiar los supuestos de nuestro modelo. A continuación vemos el uso de la función `augment` y 20 de sus observaciones en la tabla \@ref(tab:augment)
+The augment function will give us, for each observation of our model, several important parameters such as the predicted value, the residuals, the cook distance, among others, this mainly serves us to study the assumptions of our model. Below we see the use of the `augment` function and 20 of its observations in the table \@ref(tab:augment)
 
 ```{r, eval=FALSE}
 augment(Fit1)
 ```
 
 ```{r augment, echo = FALSE}
-knitr::kable(sample_n(augment(Fit1), 20), caption = 'Información del modelo fi1 entregada por la función augment', booktabs = TRUE, row.names = FALSE)
+knitr::kable(sample_n(augment(Fit1), 20), caption = 'Fit1 model information returned by the augment function', booktabs = TRUE, row.names = FALSE)
 ```
 
-#### Selección de modelos usando broom y el AIC
+#### Model selection using broom and the AIC
 
-El AIC, o Criterio de informacion de Akaike [@aho2014model], es una medida de cuanta información nos entrega un modelo dada su complejidad. Esta última medida a partir del número de parámetros que tiene. Cuanto más bajo sea el AIC, mejor comparativamente es un modelo, y en general, un modelo que sea dos unidades de AIC menor que otro modelo, será considerado un modelo que es significativamente mejor que otro.
+The AIC, or Akaike Information Criterion [@aho2014model], is a measure of how much information a model gives us given its complexity. This last measure from the number of parameters it has. The lower the AIC, the comparatively better a model is, and in general, a model that is two AIC units lower than another model will be considered a model that is significantly better than another.
 
-La formula del criterio de selección de Akaike es la que vemos en la ecuación \@ref(eq:AIC).
+The Akaike selection criterion formula is the one we see in the equation \@ref(eq:AIC).
 
 \begin{equation} 
   AIC = 2 K - 2 \ln{(\hat{L})}
@@ -114,16 +114,16 @@ La formula del criterio de selección de Akaike es la que vemos en la ecuación 
 \end{equation} 
 
 
-Donde $K$ es el número de parametros, lo cual podemos ver con tidy, si vemos la tabla \@ref(tab:tidy), vemos que el modelo *Fit1* tiene 2 parametros, esto es $K$ es igual a 2.
+Where $K$ is the number of parameters, which we can see with tidy, if we look at the table \@ref(tab:tidy), we see that the model *Fit1* has 2 parameters, that is $K$ is equal to 2 .
 
-El log-likelihood del modelo ($\ln{(\hat{L})}$) es el ajuste que este tiene a los datos. Cuanto más positivo es este valor mejor se ajusta el modelo a los datos, y cuanto mas negativo es, menos se ajusta a los datos, en nuestro modelo, usando glance, podemos ver que el valor del log-likelyhood del modelo es de -300.8 (ver tabla \@ref(tab:tidy)).
+The log-likelihood of the model ($\ln{(\hat{L})}$) is the fit it has to the data. The more positive this value is, the better the model fits the data, and the more negative it is, the less it fits the data. In our model, using glance, we can see that the model's log-likelyhood value is -300.8 (see table \@ref(tab:tidy)).
 
-Por lo tanto remplazando la ecuación \@ref(eq:AIC), obtenemos 605.6, que es un valor muy cercano a los 608, que aparecen en el glance del modelo (tabla \@ref(tab:tidy)).
+Therefore, substituting the equation \@ref(eq:AIC), we obtain 605.6, which is a value very close to the 608, which appear in the model's glance (table \@ref(tab:tidy)).
 
-##### Modelos candidatos
+##### Candidate Models
 
-Veamos la figura \@ref(fig:CO2Mods). para pensar cuales podrían ser modelos interesantes a explorar.
+Let's look at the figure \@ref(fig:CO2Mods). to think about what might be interesting models to explore.
 
-```{r CO2Mods, fig.cap='Gráfico exploratorio para generar modelos de la base de datos CO2', out.width='80%', fig.asp=.75, fig.align='center', echo = TRUE, cache = TRUE}
+```{r CO2Mods, fig.cap='Exploratory graph to generate models from the CO2 database', out.width='80%', fig.asp=.75, fig.align='center', echo = TRUE, cache = TRUE}
 ggplot(CO2, aes(x = conc, y = uptake)) + geom_point(aes(color = Type, shape = Treatment), size = 3)
 ```

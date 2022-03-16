@@ -722,17 +722,17 @@ gbm()
 <h3><span class="header-section-number">4.2.3</span> Let’s go back to the example of plants<a href="models.html#lets-go-back-to-the-example-of-plants" class="anchor-section" aria-label="Anchor link to header"></a></h3>
 <p>For this example we will use a simple linear model, for this following the table <a href="models.html#tab:Modelos">4.2</a> lets use the <code>lm</code> function:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="models.html#cb25-1" aria-hidden="true" tabindex="-1"></a>Fit1 <span class="ot">&lt;-</span> <span class="fu">lm</span>(uptake <span class="sc">~</span> Type, <span class="at">data =</span> CO2)</span></code></pre></div>
-<div id="usando-broom-para-sacarle-más-a-tu-modelo" class="section level4 hasAnchor" number="4.2.3.1">
-<h4><span class="header-section-number">4.2.3.1</span> usando broom para sacarle más a tu modelo<a href="models.html#usando-broom-para-sacarle-más-a-tu-modelo" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>El paquete broom <span class="citation">(<a href="#ref-Robinson2018" role="doc-biblioref">Robinson and Hayes 2018</a>)</span> es un paquete adyacente al tidyverse (por lo que debes cargarlo aparte del tidyverse), el cual nos permite tomar información de modelos generados en formato tidy. Hoy veremos 3 funciones de <em>broom</em>, estas son <code>glance</code>, <code>tidy</code> y <code>augment</code>.</p>
+<div id="using-broom-to-get-more-out-of-your-model" class="section level4 hasAnchor" number="4.2.3.1">
+<h4><span class="header-section-number">4.2.3.1</span> Using broom to get more out of your model<a href="models.html#using-broom-to-get-more-out-of-your-model" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>the broom package <span class="citation">(<a href="#ref-Robinson2018" role="doc-biblioref">Robinson and Hayes 2018</a>)</span> is a package adjacent to the tidyverse (so you have to load it separately from the tidyverse), which allows us to take information from models generated in tidy format. Today we will look at 3 <em>broom</em> functions, these are <code>glance</code>, <code>tidy</code> and <code>augment</code>.</p>
 <div id="glance" class="section level5 hasAnchor" number="4.2.3.1.1">
 <h5><span class="header-section-number">4.2.3.1.1</span> glance<a href="models.html#glance" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<p>la función glance, nos entregará información general del modelo, como el valor de p, el <span class="math inline">\(R^2\)</span>, log-likelihood, grados de libertad, y/o otros parametros dependiendo del modelo a utilizar. Esta información nos es entregada en un formato de data frame, como vemos en el código siguiente y en la tabla <a href="models.html#tab:glance">4.3</a></p>
+<p>The glance function will give us general information about the model, such as the p value, the <span class="math inline">\(R^2\)</span>, log-likelihood, degrees of freedom, and/or other parameters depending on the model to be used. This information is delivered to us in a data frame format, as we see in the following code and in the table <a href="models.html#tab:glance">4.3</a></p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="models.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(broom)</span>
 <span id="cb26-2"><a href="models.html#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glance</span>(Fit1)</span></code></pre></div>
 <table>
 <caption>
-<span id="tab:glance">Table 4.3: </span>Información del modelo fi1 entregada por la función glance
+<span id="tab:glance">Table 4.3: </span>Model information fi1 delivered by the glance function
 </caption>
 <thead>
 <tr>
@@ -818,11 +818,11 @@ nobs
 </div>
 <div id="tidy" class="section level5 hasAnchor" number="4.2.3.1.2">
 <h5><span class="header-section-number">4.2.3.1.2</span> tidy<a href="models.html#tidy" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<p>la función tidy, nos entregará información sobre los parametros del modelo, esto es el intercepto, la pendiente y/o interacciones, como vemos en el código siguiente y en la tabla <a href="models.html#tab:tidy">4.4</a></p>
+<p>the tidy function will give us information about the model parameters, that is the intercept, the slope and/or interactions, as we see in the following code and in the table <a href="models.html#tab:tidy">4.4</a></p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="models.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(Fit1)</span></code></pre></div>
 <table>
 <caption>
-<span id="tab:tidy">Table 4.4: </span>Información del modelo fi1 entregada por la función glance
+<span id="tab:tidy">Table 4.4: </span>Model information fit1 delivered by the glance function
 </caption>
 <thead>
 <tr>
@@ -883,11 +883,11 @@ TypeMississippi
 </div>
 <div id="augment" class="section level5 hasAnchor" number="4.2.3.1.3">
 <h5><span class="header-section-number">4.2.3.1.3</span> augment<a href="models.html#augment" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<p>la función augment, nos entregará para cada observación de nuestro modelo, varios parametros importantes como el valor predicho, los residuales, el distancia de cook entre otros, esto nos sirve principalmente para estudiar los supuestos de nuestro modelo. A continuación vemos el uso de la función <code>augment</code> y 20 de sus observaciones en la tabla <a href="models.html#tab:augment">4.5</a></p>
+<p>The augment function will give us, for each observation of our model, several important parameters such as the predicted value, the residuals, the cook distance, among others, this mainly serves us to study the assumptions of our model. Below we see the use of the <code>augment</code> function and 20 of its observations in the table <a href="models.html#tab:augment">4.5</a></p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="models.html#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">augment</span>(Fit1)</span></code></pre></div>
 <table>
 <caption>
-<span id="tab:augment">Table 4.5: </span>Información del modelo fi1 entregada por la función augment
+<span id="tab:augment">Table 4.5: </span>Fit1 model information returned by the augment function
 </caption>
 <thead>
 <tr>
@@ -1442,26 +1442,26 @@ Mississippi
 </table>
 </div>
 </div>
-<div id="selección-de-modelos-usando-broom-y-el-aic" class="section level4 hasAnchor" number="4.2.3.2">
-<h4><span class="header-section-number">4.2.3.2</span> Selección de modelos usando broom y el AIC<a href="models.html#selección-de-modelos-usando-broom-y-el-aic" class="anchor-section" aria-label="Anchor link to header"></a></h4>
-<p>El AIC, o Criterio de informacion de Akaike <span class="citation">(<a href="#ref-aho2014model" role="doc-biblioref">Aho, Derryberry, and Peterson 2014</a>)</span>, es una medida de cuanta información nos entrega un modelo dada su complejidad. Esta última medida a partir del número de parámetros que tiene. Cuanto más bajo sea el AIC, mejor comparativamente es un modelo, y en general, un modelo que sea dos unidades de AIC menor que otro modelo, será considerado un modelo que es significativamente mejor que otro.</p>
-<p>La formula del criterio de selección de Akaike es la que vemos en la ecuación <a href="models.html#eq:AIC">(4.1)</a>.</p>
+<div id="model-selection-using-broom-and-the-aic" class="section level4 hasAnchor" number="4.2.3.2">
+<h4><span class="header-section-number">4.2.3.2</span> Model selection using broom and the AIC<a href="models.html#model-selection-using-broom-and-the-aic" class="anchor-section" aria-label="Anchor link to header"></a></h4>
+<p>The AIC, or Akaike Information Criterion <span class="citation">(<a href="#ref-aho2014model" role="doc-biblioref">Aho, Derryberry, and Peterson 2014</a>)</span>, is a measure of how much information a model gives us given its complexity. This last measure from the number of parameters it has. The lower the AIC, the comparatively better a model is, and in general, a model that is two AIC units lower than another model will be considered a model that is significantly better than another.</p>
+<p>The Akaike selection criterion formula is the one we see in the equation <a href="models.html#eq:AIC">(4.1)</a>.</p>
 <p><span class="math display" id="eq:AIC">\[\begin{equation} 
   AIC = 2 K - 2 \ln{(\hat{L})}
   \tag{4.1}
 \end{equation}\]</span></p>
-<p>Donde <span class="math inline">\(K\)</span> es el número de parametros, lo cual podemos ver con tidy, si vemos la tabla <a href="models.html#tab:tidy">4.4</a>, vemos que el modelo <em>Fit1</em> tiene 2 parametros, esto es <span class="math inline">\(K\)</span> es igual a 2.</p>
-<p>El log-likelihood del modelo (<span class="math inline">\(\ln{(\hat{L})}\)</span>) es el ajuste que este tiene a los datos. Cuanto más positivo es este valor mejor se ajusta el modelo a los datos, y cuanto mas negativo es, menos se ajusta a los datos, en nuestro modelo, usando glance, podemos ver que el valor del log-likelyhood del modelo es de -300.8 (ver tabla <a href="models.html#tab:tidy">4.4</a>).</p>
-<p>Por lo tanto remplazando la ecuación <a href="models.html#eq:AIC">(4.1)</a>, obtenemos 605.6, que es un valor muy cercano a los 608, que aparecen en el glance del modelo (tabla <a href="models.html#tab:tidy">4.4</a>).</p>
-<div id="modelos-candidatos" class="section level5 hasAnchor" number="4.2.3.2.1">
-<h5><span class="header-section-number">4.2.3.2.1</span> Modelos candidatos<a href="models.html#modelos-candidatos" class="anchor-section" aria-label="Anchor link to header"></a></h5>
-<p>Veamos la figura <a href="models.html#fig:CO2Mods">4.2</a>. para pensar cuales podrían ser modelos interesantes a explorar.</p>
+<p>Where <span class="math inline">\(K\)</span> is the number of parameters, which we can see with tidy, if we look at the table <a href="models.html#tab:tidy">4.4</a>, we see that the model <em>Fit1</em> has 2 parameters, that is <span class="math inline">\(K\)</span> is equal to 2 .</p>
+<p>The log-likelihood of the model (<span class="math inline">\(\ln{(\hat{L})}\)</span>) is the fit it has to the data. The more positive this value is, the better the model fits the data, and the more negative it is, the less it fits the data. In our model, using glance, we can see that the model’s log-likelyhood value is -300.8 (see table <a href="models.html#tab:tidy">4.4</a>).</p>
+<p>Therefore, substituting the equation <a href="models.html#eq:AIC">(4.1)</a>, we obtain 605.6, which is a value very close to the 608, which appear in the model’s glance (table <a href="models.html#tab:tidy">4.4</a>).</p>
+<div id="candidate-models" class="section level5 hasAnchor" number="4.2.3.2.1">
+<h5><span class="header-section-number">4.2.3.2.1</span> Candidate Models<a href="models.html#candidate-models" class="anchor-section" aria-label="Anchor link to header"></a></h5>
+<p>Let’s look at the figure <a href="models.html#fig:CO2Mods">4.2</a>. to think about what might be interesting models to explore.</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="models.html#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(CO2, <span class="fu">aes</span>(<span class="at">x =</span> conc, <span class="at">y =</span> uptake)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">color =</span> Type,</span>
 <span id="cb29-2"><a href="models.html#cb29-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">shape =</span> Treatment), <span class="at">size =</span> <span class="dv">3</span>)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:CO2Mods"></span>
-<img src="Libro_files/figure-html/CO2Mods-1.png" alt="Gráfico exploratorio para generar modelos de la base de datos CO2" width="80%" />
+<img src="Libro_files/figure-html/CO2Mods-1.png" alt="Exploratory graph to generate models from the CO2 database" width="80%" />
 <p class="caption">
-Figure 4.2: Gráfico exploratorio para generar modelos de la base de datos CO2
+Figure 4.2: Exploratory graph to generate models from the CO2 database
 </p>
 </div>
 

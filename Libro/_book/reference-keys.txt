@@ -80,9 +80,9 @@ statistical-models
 example
 representing-a-model-in-r
 lets-go-back-to-the-example-of-plants
-usando-broom-para-sacarle-más-a-tu-modelo
+using-broom-to-get-more-out-of-your-model
 glance
 tidy
 augment
-selección-de-modelos-usando-broom-y-el-aic
-modelos-candidatos
+model-selection-using-broom-and-the-aic
+candidate-models

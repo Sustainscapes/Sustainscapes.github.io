@@ -1,5 +1,5 @@
 ---
-title: "Class 5 Models"
+title: "Class 3 Models"
 author: "Derek Corcoran"
 date: "`r format(Sys.time(), '%d/%m, %Y')`"
 output:

@@ -64,12 +64,13 @@ This course is focused on delivering basic principles of reproducible research i
 + Chapter \@ref(tidydata) *Tidy Data*: In this chapter you will learn how to optimize a database, about cleaning and transforming databases, what a *tidy* database is and how to manipulate these databases with the *dplyr* package [@R-dplyr].
 
 + Chapter \@ref(reproducible) *Reproducible research*: In this chapter we will work on making a document that combines `R` codes and text to generate reproducible documents using the *rmarkdown* [@Allaire2018] package. In addition, you will see how using RStudio you can save projects to a github repository.
+
++ Chapter \@ref(models) *Models in R* Learn how to generate models in R, from ANOVA to GLM.
     
 + Chapter \@ref(tidyverse) *The tidyverse* and the pipeline concept: In this chapter you will learn about cleaning complex data.
 
 + Chapter \@ref(visualization) *Data visualization* visualize data vs. view models. Insert graphics with legend in an Rmd document
 
-+ Chapter \@ref(models) *Models in R* Learn how to generate models in R, from ANOVA to GLM.
 
 + Chapter \@ref(loops) *Loops*. Generation of own functions in R and loops
 

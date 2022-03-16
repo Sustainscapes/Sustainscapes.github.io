@@ -1,0 +1,294 @@
+---
+title: "Class 5 Models"
+author: "Derek Corcoran"
+date: "`r format(Sys.time(), '%d/%m, %Y')`"
+output:
+  ioslides_presentation:
+    widescreen: true
+    incremental: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, cache = FALSE, tidy = TRUE, tidy.opts = list(width.cutoff = 50))
+library(tidyverse)
+library(broom)
+library(kableExtra)
+library(knitr)
+options("kableExtra.html.bsTable" = T)
+```
+
+# Models
+
+## What is a model?
+
+* A model is a simplified version of reality that allows us to make inferences or predictions about a population
+* A model is an adequate summary of reality
+* A model is a simplification or approximation to reality and therefore will not reflect all of reality (Burnham and Anderson)
+* All models are wrong, some are useful (George Box)
+
+## Let's see an example
+
+* ¿How much $CO_2$ do plants capture?
+
+```{r, echo = FALSE, cache = TRUE}
+data("CO2")
+knitr::kable(CO2, row.names = FALSE) %>% kable_styling(bootstrap_options = c("striped")) %>% scroll_box(height = "800px", width = "650px")
+```
+
+## ¿Is it the subspecies?
+
+```{r}
+ggplot(CO2, aes(x = Type, y=uptake)) + geom_boxplot(aes(fill = Type), notch = TRUE) + theme_classic()
+```
+
+## ¿Is it the treatment?
+
+```{r}
+ggplot(CO2, aes(x = Treatment, y=uptake)) + geom_boxplot(aes(fill = Treatment), notch = TRUE) + theme_classic()
+```
+
+## ¿Is it the concentration?
+
+```{r}
+ggplot(CO2, aes(x = conc, y=uptake)) + geom_point() + theme_classic()
+```
+
+# ¿How do we determine this?
+
+## Model formulation
+
+```{r, echo = TRUE, eval=FALSE}
+some_function(Y ~ X1 + X2 + ... + Xn, data = data.frame)
+```
+
+* **Y:** Response variable ($CO_2$ Uptake)
+* **`~`:** Explained by
+* **$X_n$:** Explainatory variable n (Subespecies, treatment, etc.)
+* **data.frame:** data base (CO2)
+* **some_function:** The model to test (our simplification of reality)
+
+## Some models in R
+
+```{r Modelos, echo = FALSE}
+Models <- data.frame(Modelos = c("t-test" ,"ANOVA", "Linear model", "Generalized linear model", "Generalized aditive model", "non-linear model", "Mixed effect models", "Boosted regression trees"), Funcion = c("t.test()", "aov()", "lm()", "glm()", "gam()", "nls()", "lmer()", "gbm()"))
+
+kable(Models, row.names = FALSE) %>% kable_styling(bootstrap_options = "striped")
+```
+
+## ¿Which one do we use to study the plant?
+
+```{r, echo = TRUE}
+Fit1 <- lm(uptake ~ Type, data = CO2)
+```
+
+* For this exercise we will start by using a simple linear model
+* Equivalent to an ANOVA
+
+## Using broom to get more out of your model (glance)
+
+* To see general data of the model
+
+```{r, eval = FALSE}
+library(broom)
+glance(Fit1)
+```
+
+```{r, echo=FALSE}
+library(broom)
+kable(glance(Fit1), digits = 2) %>% kable_styling(bootstrap_options = "striped")
+```
+
+## Using broom to get more out of your model (tidy)
+
+* To see model parameters
+
+```{r, eval = FALSE}
+tidy(Fit1)
+```
+
+```{r, echo=FALSE}
+kable(tidy(Fit1)) %>% kable_styling(bootstrap_options = "striped")
+```
+
+
+## Using broom to get more out of your model (augment)
+
+* To view model predictions and residuals
+
+```{r, eval = FALSE}
+augment(Fit1)
+```
+
+```{r, echo=FALSE}
+knitr::kable(augment(Fit1)) %>% kable_styling(bootstrap_options = c("striped")) %>% scroll_box(height = "300px", width = "900px")
+```
+
+## Model Selection
+
+* Based on information criteria
+* We will work with AIC
+* $K$ number of parameters
+* $\ln{(\hat{L})}$ fit, more positive better, more negative is bad
+
+$$AIC = 2 K - 2 \ln{(\hat{L})}$$
+
+## Candidate models
+
+```{r, echo = FALSE}
+ggplot(CO2, aes(x = conc, y = uptake)) + geom_point(aes(color = Type, shape = Treatment), size = 2)
+```
+
+
+## Candidate models
+
+```{r, echo = TRUE}
+Fit1 <- lm(uptake ~ Type, data = CO2)
+Fit2 <- lm(uptake ~ Treatment, data = CO2)
+Fit3 <- lm(uptake ~ conc, data = CO2)
+Fit4 <- lm(uptake ~ Type + Treatment + conc, data = CO2)
+Fit5 <- lm(uptake ~ Type + conc + I(log(conc)), data = CO2)
+Fit6 <- lm(uptake ~ Type:Treatment + conc + I(log(conc)), data = CO2)
+```
+
+# Interpreting models
+
+## Model 1
+
+* uptake ~ Type
+
+```{r echo= F, fig.height=3.5, fig.width=8}
+Pred1 <- CO2
+Pred1$Pred <- predict(Fit1, CO2) 
+Pred1$SE <- predict(Fit1, CO2, se.fit = T)$se.fit 
+
+ggplot(Pred1, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE, fill = Type), alpha = 0.5) + geom_path(aes(color = Type, )) + geom_point(aes(x = conc, y = uptake, color = Type)) + theme_bw() 
+```
+
+```{r, echo=F}
+equatiomatic::extract_eq(Fit1, use_coefs = T)
+```
+
+
+## Model 2
+
+* uptake ~ Treatment
+
+```{r, echo = F, fig.height=3.5, fig.width=8}
+Pred2 <- CO2
+Pred2$Pred <- predict(Fit2, CO2) 
+Pred2$SE <- predict(Fit2, CO2, se.fit = T)$se.fit 
+
+ggplot(Pred2, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE, fill = Treatment), alpha = 0.5) + geom_path(aes(color = Treatment)) + geom_point(aes(x = conc, y = uptake, color = Treatment)) + theme_bw() 
+```
+
+```{r, echo=F}
+equatiomatic::extract_eq(Fit2, use_coefs = T)
+```
+
+## Modelo 3
+
+* uptake ~ conc
+
+```{r, echo = F, fig.height=3.5, fig.width=8}
+Pred3 <- CO2
+Pred3$Pred <- predict(Fit3, CO2) 
+Pred3$SE <- predict(Fit3, CO2, se.fit = T)$se.fit 
+
+ggplot(Pred3, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE), alpha = 0.5) + geom_path() + geom_point(aes(x = conc, y = uptake)) + theme_bw() 
+```
+
+```{r, echo=F}
+equatiomatic::extract_eq(Fit3, use_coefs = T)
+```
+
+## Modelo 4
+
+* uptake ~ Type + Treatment + conc
+
+```{r, echo = F, fig.height=3.5, fig.width=8}
+Pred4 <- CO2
+Pred4$Pred <- predict(Fit4, CO2) 
+Pred4$SE <- predict(Fit4, CO2, se.fit = T)$se.fit 
+
+ggplot(Pred4, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE, fill = Type), alpha = 0.5) + geom_path(aes(lty = Type)) + facet_grid(~Treatment) + geom_point(aes(x = conc, y = uptake, color = Type)) + theme_bw() 
+```
+
+```{r, echo=F}
+equatiomatic::extract_eq(Fit4, use_coefs = T, wrap = T, terms_per_line = 2)
+```
+
+## Modelo 5
+
+* uptake ~ Type + conc + I(log(conc))
+
+```{r, echo = F, fig.height=3.5, fig.width=8}
+Pred5 <- CO2
+Pred5$Pred <- predict(Fit5, CO2) 
+Pred5$SE <- predict(Fit5, CO2, se.fit = T)$se.fit 
+
+ggplot(Pred5, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE, fill = Type), alpha = 0.5) + geom_line(aes(lty = Type)) + geom_point(aes(x = conc, y = uptake, color = Type)) + theme_bw() 
+```
+
+```{r, echo=F}
+equatiomatic::extract_eq(Fit5, use_coefs = T)
+```
+
+## Model 6
+
+* uptake ~ Type:Treatment + conc + I(log(conc))
+
+```{r, echo = F, fig.height=3.5, fig.width=8}
+Pred6 <- CO2
+Pred6$Pred <- predict(Fit6, CO2) 
+Pred6$SE <- predict(Fit6, CO2, se.fit = T)$se.fit 
+
+ggplot(Pred6, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE, fill = interaction(Treatment, Type)), alpha = 0.5) + geom_line(aes(lty = interaction(Treatment, Type))) + geom_point(aes(x = conc, y = uptake, color = interaction(Treatment, Type))) + theme_bw() 
+```
+
+```{r, echo=F}
+equatiomatic::extract_eq(Fit6, use_coefs = T, wrap = T, terms_per_line = 3)
+```
+
+# Seleccion de modelos
+
+## Selección de modelos con broom
+
+```{r, echo = TRUE}
+Model1 <- glance(Fit1) %>% dplyr::select(r.squared, AIC) %>% mutate(Model = "Fit1")
+Model2 <- glance(Fit2) %>% dplyr::select(r.squared, AIC) %>% mutate(Model = "Fit2")
+Model3 <- glance(Fit3) %>% dplyr::select(r.squared, AIC) %>% mutate(Model = "Fit3")
+Model4 <- glance(Fit4) %>% dplyr::select(r.squared, AIC) %>% mutate(Model = "Fit4")
+Model5 <- glance(Fit5) %>% dplyr::select(r.squared, AIC) %>% mutate(Model = "Fit5")
+Model6 <- glance(Fit6) %>% dplyr::select(r.squared, AIC) %>% mutate(Model = "Fit6")
+Models <- bind_rows(Model1, Model2, Model3, Model4, Model5, Model6) %>% arrange(AIC) %>% mutate(DeltaAIC = AIC-min(AIC))
+```
+
+## Model selection with broom
+
+```{r, echo = FALSE}
+kable(Models)  %>% kable_styling(bootstrap_options = "striped")
+```
+
+# Any other ideas?
+
+## Individuals
+
+```{r, echo = F}
+ggplot(CO2, aes(x = conc, y = uptake, group = Plant)) + geom_line(aes(color = Type, lty = Treatment)) + geom_point(aes(x = conc, y = uptake, color = Type, shape = Treatment)) + theme_bw() 
+```
+
+
+## Mixed effect models
+
+```{r}
+library(lme4)
+
+Fit7 <- lmer(uptake ~ Type:Treatment + conc + I(log(conc)) + (1 | Plant), CO2)
+
+```
+
+
+```{r, echo = FALSE}
+broomExtra::glance_performance(Fit7) %>% dplyr::select(-sigma, -bic, -remlcrit) %>% kable() %>% kable_styling(bootstrap_options = "striped")
+```
+

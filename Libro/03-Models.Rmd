@@ -6,7 +6,7 @@ For this chapter you need to have the *tidyverse*, *broom* and *MuMIn* packages 
 
 This chapter will explain how to generate models in R, how to obtain information and tables from models with the *Broom* package [@Robinson2018] and a brief introduction to model selection with the *MuMIn* package [@Barton2018 ]
 
-This class of the course can also be followed at this [link]([link](https://sustainscapes.github.io/Class3/Modelos.html)). 
+This class of the course can also be followed at this [link](https://sustainscapes.github.io/Class3/Modelos.html). 
 
 ## Statistical models
 

@@ -1,0 +1,129 @@
+# Models in R {#models}
+
+## Packages required for this chapter
+
+For this chapter you need to have the *tidyverse*, *broom* and *MuMIn* packages installed.
+
+This chapter will explain how to generate models in R, how to obtain information and tables from models with the *Broom* package [@Robinson2018] and a brief introduction to model selection with the *MuMIn* package [@Barton2018 ]
+
+This class of the course can also be followed at this [link]([link](https://sustainscapes.github.io/Class3/Modelos.html)). 
+
+## Statistical models
+
+A statistical model tries to explain the causes of an event based on a sample of the total population. The assumption is that if the sample we obtain from the population is representative of it, we will be able to infer the causes of the population variation by measuring explanatory variables. In general, we have a response variable (the phenomenon we want to explain), and one or more explanatory variables that would deterministically generate part of the variability in the response variable.
+
+### Example
+
+Let's take the example of the *CO2* database present in R [@potvin1990statistical]. Suppose we are interested in knowing what factors affect the uptake of $CO_2$ in plants.
+
+```{r TablaCo2, echo = FALSE}
+knitr::kable(CO2[1:20,], caption = 'First 20 observations of the CO2 database.', booktabs = TRUE, row.names = FALSE)
+```
+
+In the table \@ref(tab:TablaCo2) we see the first 20 observations of this database. We see that within the factors we have to explain the capture of $CO_2$ are:
+
+* *Type:* Subspecies of plant (Mississippi or Quebec)
+* *Treatment:* Plant treatment, chilled or nonchilled
+* *conc:* Environmental concentration of $CO_2$, in mL/L.
+
+A possible explanation that would allow us to try to explain this phenomenon is that the plants of different subspecies will have different uptake of $CO_2$, which we explore in the graph \@ref(fig:Subespecie):
+
+```{r Subespecie, fig.cap='CO2 uptake by plants dependent on their subspecies', out.width='80%', fig.asp=.75, fig.align='center', echo = FALSE, cache = TRUE}
+
+ggplot(CO2, aes(x = Type, y=uptake)) + geom_boxplot() + geom_jitter(aes(color = Type)) + theme_classic()
+```
+
+We see that there is a tendency for plants originating in Quebec to capture more $CO_2$ than those from the Mississippi, but can we effectively say that both populations have different means? That's where models come in.
+
+### Representing a model in R
+
+In R most models are represented with the following code:
+
+```{r, echo = TRUE, eval=FALSE}
+some_function(Y ~ X1 + X2 + ... + Xn, data = data.frame)
+```
+
+In this model, we have the response variable *Y*, which can be explained by one or multiple explanatory variables *X*, that is why the symbol `~` reads explained by, where what is on its left is the response variable and to the right the explanatory variable. The data is in a data frame and finally we will use some function, which will identify some model. Some of these functions are found in the table \@ref(tab:Modelos)
+
+```{r Modelos, echo = FALSE}
+Models <- data.frame(Modelos = c("t-test" ,"ANOVA", "Linear model", "Generalized linear model", "Generalized aditive model", "non-linear model", "Mixed effect models", "Boosted regression trees"), Funcion = c("t.test()", "aov()", "lm()", "glm()", "gam()", "nls()", "lmer()", "gbm()"))
+
+knitr::kable(Models, caption = 'Some models that we can generate in R', booktabs = TRUE, row.names = FALSE)
+```
+
+
+### Let's go back to the example of plants
+
+For this example we will use a simple linear model, for this following the table \@ref(tab:Modelos) lets use the `lm` function:
+
+```{r}
+Fit1 <- lm(uptake ~ Type, data = CO2)
+```
+
+#### usando broom para sacarle más a tu modelo
+
+El paquete broom [@Robinson2018] es un paquete adyacente al tidyverse (por lo que debes cargarlo aparte del tidyverse), el cual nos permite tomar información de modelos generados en formato tidy. Hoy veremos 3 funciones de *broom*, estas son `glance`, `tidy` y `augment`.
+
+##### glance
+
+la función glance, nos entregará información general del modelo, como el valor de p, el $R^2$, log-likelihood, grados de libertad, y/o otros parametros dependiendo del modelo a utilizar. Esta información nos es entregada en un formato de data frame, como vemos en el código siguiente y en la tabla \@ref(tab:glance)
+
+```{r, eval=FALSE}
+library(broom)
+glance(Fit1)
+```
+
+```{r glance, echo = FALSE}
+library(broom)
+knitr::kable(glance(Fit1), caption = 'Información del modelo fi1 entregada por la función glance', booktabs = TRUE, row.names = FALSE)
+```
+
+##### tidy
+
+la función tidy, nos entregará información sobre los parametros del modelo, esto es el intercepto, la pendiente y/o interacciones, como vemos en el código siguiente y en la tabla \@ref(tab:tidy)
+
+```{r, eval=FALSE}
+tidy(Fit1)
+```
+
+```{r tidy, echo = FALSE}
+knitr::kable(tidy(Fit1), caption = 'Información del modelo fi1 entregada por la función glance', booktabs = TRUE, row.names = FALSE)
+```
+
+##### augment
+
+la función augment, nos entregará para cada observación de nuestro modelo, varios parametros importantes como el valor predicho, los residuales, el distancia de cook entre otros, esto nos sirve principalmente para estudiar los supuestos de nuestro modelo. A continuación vemos el uso de la función `augment` y 20 de sus observaciones en la tabla \@ref(tab:augment)
+
+```{r, eval=FALSE}
+augment(Fit1)
+```
+
+```{r augment, echo = FALSE}
+knitr::kable(sample_n(augment(Fit1), 20), caption = 'Información del modelo fi1 entregada por la función augment', booktabs = TRUE, row.names = FALSE)
+```
+
+#### Selección de modelos usando broom y el AIC
+
+El AIC, o Criterio de informacion de Akaike [@aho2014model], es una medida de cuanta información nos entrega un modelo dada su complejidad. Esta última medida a partir del número de parámetros que tiene. Cuanto más bajo sea el AIC, mejor comparativamente es un modelo, y en general, un modelo que sea dos unidades de AIC menor que otro modelo, será considerado un modelo que es significativamente mejor que otro.
+
+La formula del criterio de selección de Akaike es la que vemos en la ecuación \@ref(eq:AIC).
+
+\begin{equation} 
+  AIC = 2 K - 2 \ln{(\hat{L})}
+  (\#eq:AIC)
+\end{equation} 
+
+
+Donde $K$ es el número de parametros, lo cual podemos ver con tidy, si vemos la tabla \@ref(tab:tidy), vemos que el modelo *Fit1* tiene 2 parametros, esto es $K$ es igual a 2.
+
+El log-likelihood del modelo ($\ln{(\hat{L})}$) es el ajuste que este tiene a los datos. Cuanto más positivo es este valor mejor se ajusta el modelo a los datos, y cuanto mas negativo es, menos se ajusta a los datos, en nuestro modelo, usando glance, podemos ver que el valor del log-likelyhood del modelo es de -300.8 (ver tabla \@ref(tab:tidy)).
+
+Por lo tanto remplazando la ecuación \@ref(eq:AIC), obtenemos 605.6, que es un valor muy cercano a los 608, que aparecen en el glance del modelo (tabla \@ref(tab:tidy)).
+
+##### Modelos candidatos
+
+Veamos la figura \@ref(fig:CO2Mods). para pensar cuales podrían ser modelos interesantes a explorar.
+
+```{r CO2Mods, fig.cap='Gráfico exploratorio para generar modelos de la base de datos CO2', out.width='80%', fig.asp=.75, fig.align='center', echo = TRUE, cache = TRUE}
+ggplot(CO2, aes(x = conc, y = uptake)) + geom_point(aes(color = Type, shape = Treatment), size = 3)
+```

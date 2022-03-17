@@ -212,7 +212,7 @@ Pred4 <- CO2
 Pred4$Pred <- predict(Fit4, CO2) 
 Pred4$SE <- predict(Fit4, CO2, se.fit = T)$se.fit 
 
-ggplot(Pred4, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE, fill = Type), alpha = 0.5) + geom_path(aes(lty = Type)) + facet_grid(~Treatment) + geom_point(aes(x = conc, y = uptake, color = Type)) + theme_bw() 
+ggplotly(ggplot(Pred4, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE, fill = Type), alpha = 0.5) + geom_path(aes(lty = Type)) + facet_grid(~Treatment) + geom_point(aes(x = conc, y = uptake, color = Type)) + theme_bw())
 ```
 
 ```{r, echo=F}
@@ -228,7 +228,7 @@ Pred5 <- CO2
 Pred5$Pred <- predict(Fit5, CO2) 
 Pred5$SE <- predict(Fit5, CO2, se.fit = T)$se.fit 
 
-ggplot(Pred5, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE, fill = Type), alpha = 0.5) + geom_line(aes(lty = Type)) + geom_point(aes(x = conc, y = uptake, color = Type)) + theme_bw() 
+ggplotly(ggplot(Pred5, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE, fill = Type), alpha = 0.5) + geom_line(aes(lty = Type)) + geom_point(aes(x = conc, y = uptake, color = Type)) + theme_bw())
 ```
 
 ```{r, echo=F}
@@ -244,7 +244,7 @@ Pred6 <- CO2
 Pred6$Pred <- predict(Fit6, CO2) 
 Pred6$SE <- predict(Fit6, CO2, se.fit = T)$se.fit 
 
-ggplot(Pred6, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE, fill = interaction(Treatment, Type)), alpha = 0.5) + geom_line(aes(lty = interaction(Treatment, Type))) + geom_point(aes(x = conc, y = uptake, color = interaction(Treatment, Type))) + theme_bw() 
+ggplotly(ggplot(Pred6, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE, fill = interaction(Treatment, Type)), alpha = 0.5) + geom_line(aes(lty = interaction(Treatment, Type))) + geom_point(aes(x = conc, y = uptake, color = interaction(Treatment, Type))) + theme_bw()) 
 ```
 
 ```{r, echo=F}
@@ -276,7 +276,7 @@ kable(Models)  %>% kable_styling(bootstrap_options = "striped")
 ## Individuals
 
 ```{r, echo = F}
-ggplot(CO2, aes(x = conc, y = uptake, group = Plant)) + geom_line(aes(color = Type, lty = Treatment)) + geom_point(aes(x = conc, y = uptake, color = Type, shape = Treatment)) + theme_bw() 
+ggplotly(ggplot(CO2, aes(x = conc, y = uptake, group = Plant)) + geom_line(aes(color = Type, lty = Treatment)) + geom_point(aes(x = conc, y = uptake, color = Type, shape = Treatment)) + theme_bw())
 ```
 
 

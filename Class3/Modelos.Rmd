@@ -294,3 +294,72 @@ Fit7 <- lmer(uptake ~ Type:Treatment + conc + I(log(conc)) + (1 | Plant), CO2)
 broomExtra::glance_performance(Fit7) %>% dplyr::select(-sigma, -bic, -remlcrit) %>% kable() %>% kable_styling(bootstrap_options = "striped")
 ```
 
+## What should be the shape
+
+```{r, echo = F}
+MolsPlantLitter <- readRDS("MolsPlantLitter.rds")
+
+ MolsPlantLitter %>% 
+  dplyr::filter(InitialHabitat == "Rangeland") %>% 
+  ggplot(aes(x = YEAR, y = PlantLitter, group = interaction(BlockNo, Treatment))) + 
+   geom_path(aes(color = as.factor(BlockNo))) + geom_point(aes(color = as.factor(BlockNo))) + facet_wrap(~Treatment) + labs(y = "Plant litter cover", x = "Year") +
+   ggtitle("Rangelands")  +
+   theme_bw()+ theme(legend.position = "none")
+```
+
+
+## Year 2018
+
+```{r, echo = FALSE}
+ MolsPlantLitter %>% 
+  dplyr::filter(InitialHabitat == "Rangeland") %>% 
+  ggplot(aes(x = YEAR, y = PlantLitter, group = interaction(BlockNo, Treatment))) + 
+   geom_path(aes(color = as.factor(BlockNo))) + geom_point(aes(color = as.factor(BlockNo))) + facet_wrap(~Treatment) + labs(y = "Plant litter cover", x = "Year") +
+   ggtitle("Rangelands")  +
+  geom_vline(xintercept = 2018, lty = 2, color = "red") + 
+   theme_bw()+ theme(legend.position = "none")
+```
+
+# Thoughts
+
+## Hinge
+
+```{r, echo = FALSE}
+ MolsPlantLitter %>% 
+  mutate(YEAR = YEAR -2018) %>% 
+  dplyr::filter(InitialHabitat == "Rangeland") %>% 
+  ggplot(aes(x = YEAR, y = PlantLitter, group = interaction(BlockNo, Treatment))) + 
+   geom_path(aes(color = as.factor(BlockNo))) + geom_point(aes(color = as.factor(BlockNo))) + facet_wrap(~Treatment) + labs(y = "Plant litter cover", x = "Year") +
+   ggtitle("Rangelands")  +
+  geom_vline(xintercept = 0, lty = 2, color = "red") +
+   theme_bw()+ theme(legend.position = "none")
+```
+
+## Equation
+
+
+```{r, eval=F}
+y ~ I(abs(YEAR - 1)) + I((YEAR-1)^2) + YEAR:InitialHabitat + YEAR:Treatment
+```
+
+
+## Effect of drought (Abs value - 1)
+
+```{r, echo = F}
+DF <- expand.grid(Year = seq(0, 3, by = 0.2), 
+                  Slope = seq(-0.1,0.1, length.out = 3), 
+                  Drought = seq(-0.1, 0.1, length.out = 5),
+                  Intercept = 1.47,
+                  stringsAsFactors = F) %>% 
+  mutate(Diversity = Intercept + Year*Slope + abs(Year-1)*Drought, Slope = as.character(Slope), Drought = as.character(Drought)) %>% 
+  mutate(Slope = fct_relevel(Slope, as.character(seq(-0.1,0.1, length.out = 3))),
+         Drought = fct_relevel(Drought, as.character(seq(-0.1,0.1, length.out = 5))),
+         Year = Year + 2017)
+
+
+ggplot(DF, aes(x = Year, y = Diversity)) + 
+  geom_path() +
+  facet_grid(Slope~Drought,labeller = labeller(.rows = label_both, .cols = label_both)) +
+  theme_bw() +
+  geom_vline(xintercept = 2018, lty = 2)
+```

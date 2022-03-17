@@ -14,6 +14,7 @@ library(tidyverse)
 library(broom)
 library(kableExtra)
 library(knitr)
+library(plotly)
 options("kableExtra.html.bsTable" = T)
 ```
 
@@ -37,20 +38,20 @@ knitr::kable(CO2, row.names = FALSE) %>% kable_styling(bootstrap_options = c("st
 
 ## ¿Is it the subspecies?
 
-```{r}
-ggplot(CO2, aes(x = Type, y=uptake)) + geom_boxplot(aes(fill = Type), notch = TRUE) + theme_classic()
+```{r, echo = FALSE}
+ggplotly(ggplot(CO2, aes(x = Type, y=uptake)) + geom_boxplot(aes(fill = Type), notch = TRUE) + theme_classic())
 ```
 
 ## ¿Is it the treatment?
 
-```{r}
-ggplot(CO2, aes(x = Treatment, y=uptake)) + geom_boxplot(aes(fill = Treatment), notch = TRUE) + theme_classic()
+```{r, echo = FALSE}
+ggplotly(ggplot(CO2, aes(x = Treatment, y=uptake)) + geom_boxplot(aes(fill = Treatment), notch = TRUE) + theme_classic())
 ```
 
 ## ¿Is it the concentration?
 
-```{r}
-ggplot(CO2, aes(x = conc, y=uptake)) + geom_point() + theme_classic()
+```{r, echo = FALSE}
+ggplotly(ggplot(CO2, aes(x = conc, y=uptake)) + geom_point() + theme_classic())
 ```
 
 # ¿How do we determine this?
@@ -135,9 +136,10 @@ $$AIC = 2 K - 2 \ln{(\hat{L})}$$
 ## Candidate models
 
 ```{r, echo = FALSE}
-ggplot(CO2, aes(x = conc, y = uptake)) + geom_point(aes(color = Type, shape = Treatment), size = 2)
+ggplotly(ggplot(CO2, aes(x = conc, y = uptake, group = Plant)) + geom_line(aes(color = Type, lty = Treatment)) + geom_point(aes(x = conc, y = uptake, color = Type, shape = Treatment)) + theme_bw())
 ```
 
+# What equation do we do
 
 ## Candidate models
 
@@ -161,7 +163,7 @@ Pred1 <- CO2
 Pred1$Pred <- predict(Fit1, CO2) 
 Pred1$SE <- predict(Fit1, CO2, se.fit = T)$se.fit 
 
-ggplot(Pred1, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE, fill = Type), alpha = 0.5) + geom_path(aes(color = Type, )) + geom_point(aes(x = conc, y = uptake, color = Type)) + theme_bw() 
+ggplotly(ggplot(Pred1, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE, fill = Type), alpha = 0.5) + geom_path(aes(color = Type, )) + geom_point(aes(x = conc, y = uptake, color = Type)) + theme_bw())
 ```
 
 ```{r, echo=F}
@@ -178,7 +180,7 @@ Pred2 <- CO2
 Pred2$Pred <- predict(Fit2, CO2) 
 Pred2$SE <- predict(Fit2, CO2, se.fit = T)$se.fit 
 
-ggplot(Pred2, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE, fill = Treatment), alpha = 0.5) + geom_path(aes(color = Treatment)) + geom_point(aes(x = conc, y = uptake, color = Treatment)) + theme_bw() 
+ggplotly(ggplot(Pred2, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE, fill = Treatment), alpha = 0.5) + geom_path(aes(color = Treatment)) + geom_point(aes(x = conc, y = uptake, color = Treatment)) + theme_bw())
 ```
 
 ```{r, echo=F}
@@ -194,7 +196,7 @@ Pred3 <- CO2
 Pred3$Pred <- predict(Fit3, CO2) 
 Pred3$SE <- predict(Fit3, CO2, se.fit = T)$se.fit 
 
-ggplot(Pred3, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE), alpha = 0.5) + geom_path() + geom_point(aes(x = conc, y = uptake)) + theme_bw() 
+ggplotly(ggplot(Pred3, aes(x = conc, y = Pred)) + geom_ribbon(aes(ymax = Pred + SE, ymin = Pred - SE), alpha = 0.5) + geom_path() + geom_point(aes(x = conc, y = uptake)) + theme_bw())
 ```
 
 ```{r, echo=F}

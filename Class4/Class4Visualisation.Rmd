@@ -189,7 +189,7 @@ data("mtcars")
 ggplot(mtcars, aes(x = wt, y = mpg)) + geom_smooth(method = "lm") + geom_point()
 ```
 
-## Datos de temperatura y humedad
+## Temperature and humidity data
 
 ```{r}
 githubURL <- ("https://raw.githubusercontent.com/derek-corcoran-barrios/derek-corcoran-barrios.github.io/master/Clase4/TempHum.rds")
@@ -268,9 +268,9 @@ Algunos <- TempHum %>% filter(Ciudad_localidad %in% c("Arica", "Rapa Nui", "La S
 ggplot(Algunos , aes(x = Mes, y = medida)) + geom_point(aes(color = Unidad)) +  stat_smooth(method = "lm", formula = y ~ x + I(x^2), aes(fill = Unidad, color = Unidad), alpha = 0.5) + facet_wrap(~Ciudad_localidad, ncol = 2)
 ```
 
-# Mapas en ggplot2
+# Maps in ggplot2
 
-## Mapas en ggplot2
+## Maps in ggplot2
 
 ```{r, echo = FALSE, out.width="500px", fig.align='center'}
 #knitr::include_graphics("https://ia803206.us.archive.org/23/items/Comunas/Metropolitana_Map_Comunas.gif")

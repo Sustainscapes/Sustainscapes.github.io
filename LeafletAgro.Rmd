@@ -1,0 +1,86 @@
+---
+title: "Case Landscapes"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+SF_TO_POINT_LEAFLET <- function(path, name){
+  SF <- st_read(path) %>% 
+    suppressWarnings(st_centroid()) %>% 
+    st_transform(crs = '+proj=longlat +datum=WGS84') %>% 
+    st_coordinates() %>% 
+    as.data.frame() %>% 
+    dplyr::select(X, Y) %>% 
+    mutate(Name = name) %>% 
+    group_by(Name) %>% 
+    summarise_all(median) %>% 
+    ungroup() %>% 
+    st_as_sf(coords = c("X", "Y"), crs = '+proj=longlat +datum=WGS84')
+  return(SF)
+}
+
+library(sf)
+library(tidyverse)
+library(leaflet)
+
+SHAPES <- list.files(pattern = "shp", path = "CaseLandscapes/", full.names = T)
+
+SHAPES  <- SHAPES[stringr::str_detect(SHAPES, pattern = ".xml", negate = T)]
+
+Areas  <- SHAPES %>% purrr::map(read_sf) %>% purrr::map(~st_transform(.x ,crs = '+proj=longlat +datum=WGS84')) 
+
+Paths <- c("Rewild/Gyttegaard/GIS/Gytteg├еrd hegninger.shp", "Rewild/Husby/Husby_ProjectArea.shp", "Rewild/Husby/Trojborg_ProjectArea.shp", "Rewild/KattrupVildnis/Kattrup_Vildnis_graense_jan2022.shp","Rewild/Mols/MolsRewildingArea_polygon2.shp","Rewild/RyeNoskov/RyeNorskov_Exp_Centroids.shp")
+  
+Names <- c("Gyttegaard", "Husby", "Trojborg", "Kattrup Vildnis", "Mols", "RyeNorskov")
+
+Rewilding <- Paths %>% map2(.y = Names,~SF_TO_POINT_LEAFLET(.x, name = .y)) %>% purrr::reduce(bind_rows)
+
+Sinks <- read_sf("Samplet_au_sinks_2021/samplede_AU_pkt_2021.shp") %>% st_transform(crs = '+proj=longlat +datum=WGS84')
+```
+
+
+```{r NationalPark}
+
+NationalParks <- list.files(path = "NationalParks/", pattern = ".shp", recursive = T, full.names = T)
+
+NationalNames <- list.dirs(path = "NationalParks/", full.names = F)
+NationalNames <- NationalNames[str_detect(NationalNames, pattern = "GIS", negate = T)]
+
+NationalNames <- NationalNames[-1]
+
+NationalParks <- NationalParks %>% 
+  purrr::map(read_sf) %>% purrr::map2(.y = NationalNames,~mutate(.x, Name = .y)) %>% purrr::reduce(bind_rows) %>% st_transform(crs = '+proj=longlat +datum=WGS84')
+```
+
+
+```{r}
+l <- leaflet() 
+
+esri <- grep("^Esri", providers, value = TRUE)
+
+for (provider in esri) {
+  l <- l %>% addProviderTiles(provider, group = provider)
+}
+
+l %>%
+  addLayersControl(baseGroups = names(esri),
+    options = layersControlOptions(collapsed = TRUE),
+    overlayGroups = c("Catchment","Rewildling", "Sinks", "National Parks"))  %>%
+  htmlwidgets::onRender("
+    function(el, x) {
+      var myMap = this;
+      myMap.on('baselayerchange',
+        function (e) {
+          myMap.minimap.changeLayer(L.tileLayer.provider(e.name));
+        })
+    }") %>% 
+  addPolygons(data = as_Spatial(st_zm(Areas[[1]])), popup = ~Vandområd, group = "Catchment", weight = 1, color = "blue") %>%
+  addPolygons(data = NationalParks, weight = 1, popup = ~Name, color = "green", group = "National Parks") %>% 
+  addCircleMarkers(data = Rewilding, group = "Rewildling", popup = ~Name, color = "red") %>% 
+  addCircleMarkers(data = Sinks, color = "orange", group = "Sinks", popup = ~Dato) %>% 
+  addLegend(colors = c("blue", "red", "orange", "green"), labels = c("Catchment","Rewildling", "Sinks", "National Parks")) %>% 
+  addMeasure(position = "bottomleft", primaryAreaUnit = "sqmeters", primaryLengthUnit = "meters", thousandsSep = ",") %>% 
+  leafem::addMouseCoordinates()
+```

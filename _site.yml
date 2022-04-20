@@ -13,6 +13,8 @@ navbar:
     - text: "Maps"
       icon: fa-gear
       menu:
+      - text: "Case landscapes"
+        href: LeafletAgro.html
       - text: "Map Husby"
         href: InteractiveMaps/HusbyInteractive.html
       - text: "Map Trojborg"

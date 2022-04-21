@@ -23,7 +23,7 @@ navbar:
       icon: fa-gear
       menu:
       - text: "Test App"
-        href: TestShinApps.html
+        href: TestShinyApps.html
 output_dir: "."
 output:
   html_document:

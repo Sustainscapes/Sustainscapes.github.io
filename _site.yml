@@ -22,7 +22,7 @@ navbar:
     - text: "Apps"
       icon: fa-gear
       menu:
-      - text: "Test App"
+      - text: "Plot comparison app"
         href: TestShinyApps.html
 output_dir: "."
 output:

@@ -19,6 +19,11 @@ navbar:
         href: InteractiveMaps/HusbyInteractive.html
       - text: "Map Trojborg"
         href: InteractiveMaps/TrojborgInteractive.html
+    - text: "Apps"
+      icon: fa-gear
+      menu:
+      - text: "Test App"
+        href: TestShinApps.html
 output_dir: "."
 output:
   html_document:

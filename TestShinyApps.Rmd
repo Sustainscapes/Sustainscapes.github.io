@@ -1,0 +1,12 @@
+---
+title: "Test app"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+
+
+<iframe src="http://18.159.101.5/shiny/rstudio/sample-apps/hello/" width="100%" height="1000px"></iframe>

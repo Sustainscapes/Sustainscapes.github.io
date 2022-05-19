@@ -316,22 +316,27 @@ y <- Train$mpg
 Evals <- list()
 for(i in 1:length(Alphas)){
   Temp <- cv.glmnet(x, y, alpha = Alphas[i], foldid = Folds)
-  Best_Temp <- glmnet(x, y, alpha = 1, lambda = Temp$lambda.min)
+  Best_Temp <- glmnet(x, y, alpha = Alphas[i], lambda = Temp$lambda.min)
   Models[[i]] <- Best_Temp
-  Evals[[i]] <- caret::postResample(pred = predict(Best_Temp, newx = NewX), obs = NewY) %>% t %>% as.data.frame() %>% mutate(Alpha = Alphas[i], Lambda = Temp$lambda.min) %>% tibble::rowid_to_column()
+  Evals[[i]] <- caret::postResample(pred = predict(Best_Temp, newx = NewX), obs = NewY) %>% t %>% as.data.frame() %>% mutate(Alpha = Alphas[i], Lambda = Temp$lambda.min) 
 }
 ```
 
 ## Results
 
 ```{r, echo=FALSE}
-Evals <- Evals %>% purrr::reduce(bind_rows) %>% arrange(Alpha)
+Evals <- Evals %>% purrr::reduce(bind_rows) %>% tibble::rowid_to_column() %>% arrange(Alpha)
 
-ggplot(Evals, aes(x = Alpha, y = RMSE)) + geom_path() + theme_bw()
+ggplot(Evals, aes(x = Alpha, y = RMSE)) + geom_path() + theme_bw() + geom_hline(aes(yintercept = min(RMSE)), col = "red", lty = 2)
+
 ```
 
+## More results
 
-
+```{r, echo=FALSE}
+Best <- Evals %>% dplyr::slice_min(order_by = RMSE, n = 10)
+plot(Models[[Best$rowid[1]]])
+```
 
 # It has the same families as a glm
 

@@ -246,6 +246,7 @@ tidy(Best_Ridge) %>% kable() %>% kable_paper("hover")
 ## Elastic net
 
 $$\underset{SEE}{\text{minimize}}  = \sum_{i = 1}^n{(y_i - \hat{y_i})^2} + \lambda(\alpha\times\lvert \beta \lvert + (1- \alpha)\times \beta^2)$$
+
 # What alpha do I use? (second hyperparameter)
 
 ## Lets prepare the folds:
@@ -299,6 +300,37 @@ caret::postResample(pred = predict(Best_Lasso, newx = NewX), obs = NewY)
 
 caret::postResample(pred = predict(Best_Elastic, newx = NewX), obs = NewY)
 ```
+
+
+## Loop it
+
+
+```{r}
+Alphas <- seq(0, 1, length.out = 101)
+
+Models <- list()
+
+x <- model.matrix(mpg ~., data =Train)
+x <- x[,-1] 
+y <- Train$mpg
+Evals <- list()
+for(i in 1:length(Alphas)){
+  Temp <- cv.glmnet(x, y, alpha = Alphas[i], foldid = Folds)
+  Best_Temp <- glmnet(x, y, alpha = 1, lambda = Temp$lambda.min)
+  Models[[i]] <- Best_Temp
+  Evals[[i]] <- caret::postResample(pred = predict(Best_Temp, newx = NewX), obs = NewY) %>% t %>% as.data.frame() %>% mutate(Alpha = Alphas[i], Lambda = Temp$lambda.min) %>% tibble::rowid_to_column()
+}
+```
+
+## Results
+
+```{r, echo=FALSE}
+Evals <- Evals %>% purrr::reduce(bind_rows) %>% arrange(Alpha)
+
+ggplot(Evals, aes(x = Alpha, y = RMSE)) + geom_path() + theme_bw()
+```
+
+
 
 
 # It has the same families as a glm

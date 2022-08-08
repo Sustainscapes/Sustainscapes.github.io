@@ -19,6 +19,8 @@ navbar:
         href: InteractiveMaps/HusbyInteractive.html
       - text: "Map Trojborg"
         href: InteractiveMaps/TrojborgInteractive.html
+      - text: "Map Kattrup"
+        href: InteractiveMaps/Kattrup/Kattrup.html
     - text: "Apps"
       icon: fa-gear
       menu:

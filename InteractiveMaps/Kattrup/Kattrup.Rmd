@@ -1,0 +1,64 @@
+---
+title: ""
+output:
+  rmdformats::robobook:
+    highlight: kate
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+library(rmdformats)
+## Global options
+options(max.print="75")
+opts_chunk$set(echo=FALSE,
+	             cache = FALSE,
+               prompt=FALSE,
+               tidy=TRUE,
+               comment=NA,
+               message=FALSE,
+               warning=FALSE)
+opts_knit$set(width=75)
+library(tidyverse)
+library(leaflet)
+library(leaflet.extras)
+library(sf)
+library(raster)
+Points <- read_sf("Samples2.shp") %>% 
+  st_transform(crs = "+proj=longlat +datum=WGS84 +no_defs") 
+```
+
+```{r, out.width= "100%"}
+
+l <-leaflet()
+esri <- grep("^Esri", providers, value = TRUE)
+esri <- esri[c(5,2,4,10)]
+pal <- colorFactor(
+  palette = c('#1b9e77','#d95f02','#7570b3'),
+  domain= as.character(sort(unique(Points$Class))),
+  ordered = TRUE,
+  na.color = "#808080"
+)
+for (provider in esri) {
+  l <- l %>% addProviderTiles(provider, group = provider)    
+}
+l <- l %>% 
+    leaflet::addCircleMarkers(data = as_Spatial(Points), radius = 6, group = "Monitoring", color = ~pal(Class), popup = paste("Code:",Points$ID)) %>% 
+#  addPolygons(data = as_Spatial(RyeNoskov), group = "Groups", color = ~pal(Group), fillColor = ~pal(Group), opacity = 0.8, popup = RyeNoskov$Group, fillOpacity = 0.8) %>% 
+#  addPolylines(data = as_Spatial(RyeNorskov_outline), color = "blue", fillOpacity = 0, group = "Outline") %>% 
+  addLegend("bottomright", pal = pal ,title = "Kattrup sites",opacity = 1, values = Points$Class,  group = "Legend") %>% 
+  addLayersControl(baseGroups = names(esri),
+                   overlayGroups = c("Monitoring", "Legend"),
+                   options = layersControlOptions(collapsed = TRUE),
+                   position = "topright") %>%
+  addMeasure(position = "topleft",
+             primaryLengthUnit = "meters",
+             primaryAreaUnit = "hectares") 
+  l  %>%
+   addControlGPS(
+    options = gpsOptions(
+      position = "topleft",
+      activate = TRUE, 
+      autoCenter = TRUE,
+      setView = TRUE)) %>% 
+  activateGPS()
+```

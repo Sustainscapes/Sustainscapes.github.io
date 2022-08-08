@@ -28,6 +28,9 @@ Points <- read_sf("Samples2.shp") %>%
 
 WetPoints <- read_sf("SamplesWet2.shp") %>% 
   st_transform(crs = "+proj=longlat +datum=WGS84 +no_defs")
+
+Outline <- read_sf("Kattrup_Vildnis_graense_jan2022.shp") %>% 
+  st_transform(crs = "+proj=longlat +datum=WGS84 +no_defs")
 ```
 
 ```{r, out.width= "100%"}
@@ -48,10 +51,10 @@ l <- l %>%
     leaflet::addCircleMarkers(data = as_Spatial(Points), radius = 6, group = "Dry", color = ~pal(Class), popup = paste("Code:",Points$ID)) %>%
   leaflet::addCircleMarkers(data = as_Spatial(WetPoints), radius = 6, group = "Wet", color = ~pal(Class), popup = paste("Code:",Points$ID)) %>%
 #  addPolygons(data = as_Spatial(RyeNoskov), group = "Groups", color = ~pal(Group), fillColor = ~pal(Group), opacity = 0.8, popup = RyeNoskov$Group, fillOpacity = 0.8) %>% 
-#  addPolylines(data = as_Spatial(RyeNorskov_outline), color = "blue", fillOpacity = 0, group = "Outline") %>% 
+ addPolylines(data = as_Spatial(Outline), color = "blue", fillOpacity = 0, group = "Outline") %>% 
   addLegend("bottomright", pal = pal ,title = "Kattrup sites",opacity = 1, values = Points$Class,  group = "Legend") %>% 
   addLayersControl(baseGroups = names(esri),
-                   overlayGroups = c("Dry", "Wet", "Legend"),
+                   overlayGroups = c("Dry", "Wet", "Legend", "Outline"),
                    options = layersControlOptions(collapsed = TRUE),
                    position = "topright") %>%
   hideGroup("Wet") %>% 

@@ -1,0 +1,369 @@
+---
+title: "Penalized Regression"
+author: "Derek Corcoran"
+date: "`r format(Sys.time(), '%d/%m, %Y')`"
+output:
+  ioslides_presentation:
+    widescreen: true
+    incremental: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE, tidy = TRUE, cache = F)
+library(MuMIn)
+library(tidyverse)
+library(broom)
+library(caret)
+library(kableExtra)
+library(glmnet)
+library(patchwork)
+options("kableExtra.html.bsTable" = T)
+```
+
+## Penalized Regression
+
+Let's start with a simple linear regression:
+
+```{r}
+data("mtcars")
+Fit <- lm(mpg ~ wt, data = mtcars)
+```
+
+```{r, echo = FALSE}
+kable(broom::tidy(Fit), digits = 3) %>% kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+## How do we get the slope and intercept? {.build}
+
+* Using least squares
+
+$$\underset{SEE}{\text{minimize}}  = \sum_{i = 1}^n{(y_i - \hat{y_i})^2}$$
+
+## Least Squares
+
+```{r}
+Preds <- augment(Fit)
+ggplot(Preds, aes(x = wt, y = mpg)) + geom_point() + geom_path(aes(y = .fitted)) + geom_linerange(aes(ymin = .fitted, ymax = mpg)) + theme_bw()
+```
+
+## Sum of squared errors
+
+```{r}
+SSE <- Preds %>% mutate(SE = .resid^2) %>% summarise(SSE = sum(SE))
+```
+
+```{r, echo = F}
+kable(SSE, digits = 2) %>%  kable_paper("hover")
+```
+
+## Example:
+
+```{r, echo = F, animation.hook="gifski", interval = 0.15}
+MinSq <- data.frame(Beta = seq(0, -10, length.out = 80), MinSq = NA) %>% arrange(Beta)
+mt <- mtcars
+
+for(i in 1:nrow(MinSq)){
+  mt$pred <- 30.1 + MinSq$Beta[i]*mt$wt
+MinSq$MinSq[i] <- mt %>% mutate(resid_sq = (mpg - pred)^2) %>% summarise(MinSq = sum(resid_sq)) %>% pull(MinSq)
+
+G1 <- ggplot(mt, aes(x = wt, y = mpg)) + geom_path(aes(y = pred)) + geom_linerange(aes(ymin = pred, ymax = mpg)) + geom_point() + theme_bw()
+
+G2 <- ggplot(MinSq, aes(x = Beta, y = MinSq)) + geom_path() + ylim(c(400,17000))+ theme_bw() + geom_label(aes(x = -5, y = 12000, label = paste0("MinSq =",round(min(MinSq, na.rm = T),0)))) + geom_vline(data =(dplyr::filter(MinSq, MinSq == min(MinSq, na.rm = T))) ,aes(xintercept = Beta), lty = 2, color = "red")
+Final <- G1 + G2
+print(Final)
+  }
+
+```
+
+## when this is a problem
+
+* Sometimes our population is very different from our sample
+
+```{r, echo = F}
+mt <- mtcars
+set.seed(672)
+mt_20 <- mt %>% dplyr::sample_frac(0.2)
+Fit_20 <- lm(mpg ~ wt, data = mt_20)
+  
+mt$Pred <- predict(Fit_20, mt)
+
+ggplot(mt, aes(x = wt, y = mpg)) + geom_path(aes(y = Pred)) + geom_point() + geom_point(data = mt_20, color = "red") + theme_bw()
+```
+
+## Parameters
+
+```{r, echo = F}
+tidy(Fit_20) %>% kable %>% kable_styling(bootstrap_options = c("striped", "hover"))
+```
+
+
+## We penalize with $\lambda$
+
+* Using penalty
+
+$$\underset{SEE}{\text{minimize}}  = \sum_{i = 1}^n{(y_i - \hat{y_i})^2} + \lambda(\beta_{}^2)$$
+
+## Let's see how the parameters change:
+
+```{r, animation.hook="gifski", interval = 0.1, echo = F}
+x <- mt_20 %>% dplyr::select(wt) %>% mutate(New = 0) %>% as.matrix()
+# Outcome variable
+y <- mt_20 %>% pull(mpg)
+Fit_Pen <- glmnet(x, y, alpha = 0)
+DF <- Fit_Pen$beta %>% as.matrix() %>% t() %>% as.data.frame()
+DF$a0 <- Fit_Pen$a0
+DF$Lambda <- Fit_Pen$lambda
+DF <- DF %>% filter(Lambda < 300) %>% arrange(Lambda)
+for(i in 1:nrow(DF)){
+  mt$Pred <- DF$a0[i] + mt$wt*DF$wt[i]
+  DF$MinSq[i] <- mt %>% mutate(MinSq = (Pred - mpg)^2) %>% summarise(MinSq = sum(MinSq)) %>% pull(MinSq)
+g <- ggplot(mt, aes(x = wt, y = mpg)) + geom_path(aes(y = Pred)) + geom_point() + geom_point(data = mt_20, color = "red") + theme_bw() + ggtitle(paste("Lambda =", round(DF$Lambda[i],2))) + ylim(c(-10, 35))
+print(g)
+}
+```
+
+
+## Selecting Lambda
+
+```{r, echo = FALSE}
+ggplot(DF, aes(x = Lambda, y = MinSq)) + geom_path() + theme_bw()
+```
+
+```{r, echo = F}
+DF %>% dplyr::filter(MinSq == min(MinSq)) %>% select(-New) %>% kable(digits = 2) %>% kable_paper("hover")
+```
+
+# Our first hyperparameter $\lambda$
+
+## We use cross-validation to select it
+
+* **ridge:** alpha = 0, better at predictions (all variables are useful)
+
+$$\underset{SEE}{\text{minimize}}  = \sum_{i = 1}^n{(y_i - \hat{y_i})^2} + \lambda(\beta_{}^2)$$
+
+* **Lasso:** alpha = 1, select variables (there may be useless variables)
+
+$$\underset{SEE}{\text{minimize}}  = \sum_{i = 1}^n{(y_i - \hat{y_i})^2} + \lambda(\lvert \beta \lvert)$$
+
+* **Elatic-net:** 1 > alpha > 0, intermediate
+
+# Lets compare with a model
+
+## Example
+
+```{r}
+library(glmnet)
+x <- model.matrix(mpg ~., data = mtcars)
+x <- x[,-1]
+y <- mtcars$mpg
+```
+
+```{r}
+set.seed(2022)
+ridge <- cv.glmnet(x, y, alpha = 0, nfolds = 10)
+```
+
+```{r}
+set.seed(2022)
+lasso <- cv.glmnet(x, y, alpha = 1, nfolds = 10)
+```
+
+## See lasso crossvalidation
+
+```{r}
+plot(lasso)
+```
+
+## Variables
+
+```{r, echo = FALSE}
+DF <- lasso$glmnet.fit$beta %>% as.matrix() %>% t() %>% as.data.frame()
+
+DF$Lambda <- lasso$glmnet.fit$lambda
+
+DF <- DF %>% pivot_longer(-Lambda, names_to = "Parameter", values_to = "Estimator")
+
+ggplot(DF, aes(x = Lambda, y = Estimator, color = Parameter)) + geom_path() + geom_vline(xintercept = lasso$lambda.min, color = "red", lty = 2) + theme_bw() 
+```
+
+## Parameters
+
+```{r, echo = FALSE}
+DF %>% dplyr::filter(Lambda == lasso$lambda.min) %>% dplyr::filter(Estimator !=0) %>% kable() %>% kable_paper("hover") 
+```
+
+# Ridge
+
+## See ridge crossvalidation
+
+```{r}
+plot(ridge)
+```
+
+## Variables
+
+```{r, echo = FALSE}
+DF <- ridge$glmnet.fit$beta %>% as.matrix() %>% t() %>% as.data.frame()
+
+DF$Lambda <- ridge$glmnet.fit$lambda
+
+DF <- DF %>% pivot_longer(-Lambda, names_to = "Parameter", values_to = "Estimator")
+
+ggplot(DF, aes(x = Lambda, y = Estimator, color = Parameter)) + geom_path() + geom_vline(xintercept = ridge$lambda.min, color = "red", lty = 2) + theme_bw() + scale_x_log10()
+```
+
+## Parameters
+
+```{r, echo = FALSE}
+DF %>% dplyr::filter(Lambda == ridge$lambda.min) %>% kable() %>% kable_paper("hover")
+```
+
+
+## Best model
+
+```{r}
+Best_Lasso <- glmnet(x, y,alpha = 1, lambda = lasso$lambda.min)
+```
+
+```{r}
+Best_Ridge <- glmnet(x, y,alpha = 0, lambda = ridge$lambda.min)
+```
+
+## Tidy lasso
+
+```{r, echo = FALSE}
+tidy(Best_Lasso) %>% kable() %>% kable_paper("hover")
+```
+
+## Tidy ridge
+
+```{r, echo = FALSE}
+tidy(Best_Ridge) %>% kable() %>% kable_paper("hover")
+```
+
+# Elastic net
+
+## Elastic net
+
+$$\underset{SEE}{\text{minimize}}  = \sum_{i = 1}^n{(y_i - \hat{y_i})^2} + \lambda(\alpha\times\lvert \beta \lvert + (1- \alpha)\times \beta^2)$$
+
+# What alpha do I use? (second hyperparameter)
+
+## Lets prepare the folds:
+
+```{r}
+library(caret)
+set.seed(2020)
+Index <- createDataPartition(mtcars$mpg, p = 0.8, list = F)
+Train <- mtcars[Index,] 
+Test <- mtcars[-Index,] 
+
+set.seed(2020)
+Folds <- createFolds(Train$mpg, k = 10, list = F)
+```
+
+## Let's generate the models
+
+```{r}
+x <- model.matrix(mpg ~., data =Train)
+x <- x[,-1] 
+y <- Train$mpg
+
+lasso <- cv.glmnet(x, y, alpha = 1, foldid = Folds)
+
+ridge <- cv.glmnet(x, y, alpha = 0, foldid = Folds)
+
+ElasticNet <- cv.glmnet(x, y, alpha = 0.5, foldid = Folds)
+```
+
+## Best models
+
+```{r}
+Best_Lasso <- glmnet(x, y, alpha = 1, lambda = lasso$lambda.min)
+
+Best_Ridge <- glmnet(x, y, alpha = 0, lambda = ridge$lambda.min)
+
+Best_Elastic <- glmnet(x, y, alpha = 0.5, lambda = ElasticNet$lambda.min)
+```
+
+## Test
+
+```{r}
+NewX <- model.matrix(mpg ~., data =Test)
+NewX <- NewX[,-1] 
+
+NewY <- Test$mpg
+
+caret::postResample(pred = predict(Best_Ridge, newx = NewX), obs = NewY)
+
+caret::postResample(pred = predict(Best_Lasso, newx = NewX), obs = NewY)
+
+caret::postResample(pred = predict(Best_Elastic, newx = NewX), obs = NewY)
+```
+
+
+## Loop it
+
+
+```{r}
+Alphas <- seq(0, 1, length.out = 101)
+
+Models <- list()
+
+x <- model.matrix(mpg ~., data =Train)
+x <- x[,-1] 
+y <- Train$mpg
+Evals <- list()
+for(i in 1:length(Alphas)){
+  Temp <- cv.glmnet(x, y, alpha = Alphas[i], foldid = Folds)
+  Best_Temp <- glmnet(x, y, alpha = Alphas[i], lambda = Temp$lambda.min)
+  Models[[i]] <- Best_Temp
+  Evals[[i]] <- caret::postResample(pred = predict(Best_Temp, newx = NewX), obs = NewY) %>% t %>% as.data.frame() %>% mutate(Alpha = Alphas[i], Lambda = Temp$lambda.min) 
+}
+```
+
+## Results
+
+```{r, echo=FALSE}
+Evals <- Evals %>% purrr::reduce(bind_rows) %>% tibble::rowid_to_column() %>% arrange(Alpha)
+
+ggplot(Evals, aes(x = Alpha, y = RMSE)) + geom_path() + theme_bw() + geom_hline(aes(yintercept = min(RMSE)), col = "red", lty = 2)
+
+```
+
+## More results
+
+```{r, echo=FALSE}
+Best <- Evals %>% dplyr::slice_min(order_by = RMSE, n = 10)
+plot(Models[[Best$rowid[1]]])
+```
+
+# It has the same families as a glm
+
+## Binomial 
+
+```{r}
+train <-  read_csv("https://raw.githubusercontent.com/derek-corcoran-barrios/derek-corcoran-barrios.github.io/master/CursoMultiPres/Capitulo_3/train.csv") 
+train <- train[complete.cases(train),]
+```
+
+```{r}
+x <- model.matrix(Survived ~., data = train)
+x <- x[,-1]
+y <- train$Survived
+set.seed(2020)
+Fit <- cv.glmnet(x, y , nfolds = 10, family = "binomial", alpha = 1)
+```
+
+## Best model
+
+```{r}
+Best.Fit <- glmnet(x, y, family = "binomial", alpha = 1)
+```
+
+```{r}
+tidy(Best.Fit)
+```
+
+
+

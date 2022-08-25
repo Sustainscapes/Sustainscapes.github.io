@@ -26,8 +26,14 @@ library(raster)
 Points <- read_sf("AllPoints.shp") %>% 
   st_transform(crs = "+proj=longlat +datum=WGS84 +no_defs") 
 
+Sampled <- Points %>% dplyr::filter(Sampled == "Y")
+NonSampled <- Points %>% dplyr::filter(Sampled == "N")
+
 
 Outline <- read_sf("Kattrup_Vildnis_graense_jan2022.shp") %>% 
+  st_transform(crs = "+proj=longlat +datum=WGS84 +no_defs")
+
+OpenPairs <- read_sf("OpenPairs.shp") %>% 
   st_transform(crs = "+proj=longlat +datum=WGS84 +no_defs")
 ```
 
@@ -46,15 +52,17 @@ for (provider in esri) {
   l <- l %>% addProviderTiles(provider, group = provider)    
 }
 l <- l %>% 
-    leaflet::addCircleMarkers(data = as_Spatial(Points), radius = 6, group = "Points", color = ~pal(Type), popup = paste("Code:",Points$ID)) %>%
-#  addPolygons(data = as_Spatial(RyeNoskov), group = "Groups", color = ~pal(Group), fillColor = ~pal(Group), opacity = 0.8, popup = RyeNoskov$Group, fillOpacity = 0.8) %>% 
+    leaflet::addCircleMarkers(data = as_Spatial(Sampled), radius = 6, group = "Sampled", color = ~pal(Type), popup = paste("Code:",Sampled$ID)) %>%
+   leaflet::addCircleMarkers(data = as_Spatial(NonSampled), radius = 6, group = "Not sampled", color = ~pal(Type), popup = paste("Code:",NonSampled$ID)) %>%  addPolygons(data = as_Spatial(OpenPairs), group = "New Open pairs", popup = paste("Code:",OpenPairs$ID_GPX)) %>% 
  addPolylines(data = as_Spatial(Outline), color = "blue", fillOpacity = 0, group = "Outline") %>% 
-  addLegend("bottomright", pal = pal ,title = "Kattrup sites",opacity = 1, values = unique(Points$Type),  group = "Legend") %>% 
+  addLegend("bottomright", pal = pal ,title = "Kattrup sites",opacity = 1, values = unique(Points$Type),  group = "Legend old") %>% 
   addLayersControl(baseGroups = names(esri),
-                   overlayGroups = c("Points", "Legend", "Outline"),
+                   overlayGroups = c("New Open pairs", "Sampled", "Not sampled", "Legend old", "Outline"),
                    options = layersControlOptions(collapsed = TRUE),
                    position = "topright") %>%
-  hideGroup("Wet") %>% 
+  hideGroup("Sampled") %>% 
+  hideGroup("Not sampled") %>% 
+  hideGroup("Legend old") %>% 
   addMeasure(position = "topleft",
              primaryLengthUnit = "meters",
              primaryAreaUnit = "hectares") 

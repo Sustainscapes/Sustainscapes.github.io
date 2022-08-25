@@ -49,7 +49,7 @@ pal <- colorFactor(
   na.color = "#808080"
 )
 
-NewPal <- pal <- colorFactor(
+NewPal <- colorFactor(
   palette = rainbow(length(unique(OpenPairs$NewLabel))),
   domain= as.character(sort(unique(OpenPairs$NewLabel))),
   ordered = TRUE,

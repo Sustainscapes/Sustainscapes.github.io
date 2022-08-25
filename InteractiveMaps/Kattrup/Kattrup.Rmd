@@ -62,7 +62,7 @@ l <- l %>%
     leaflet::addCircleMarkers(data = as_Spatial(Sampled), radius = 6, group = "Sampled", color = ~pal(Type), popup = paste("Code:",Sampled$ID)) %>%
    leaflet::addCircleMarkers(data = as_Spatial(NonSampled), radius = 6, group = "Not sampled", color = ~pal(Type), popup = paste("Code:",NonSampled$ID)) %>%  addPolygons(data = as_Spatial(OpenPairs), group = "New Open pairs", popup = paste("Code:",OpenPairs$ID_GPX), color = ~NewPal(NewLabel)) %>% 
  addPolylines(data = as_Spatial(Outline), color = "blue", fillOpacity = 0, group = "Outline") %>% 
-  addLegend("bottomright", pal = pal ,title = "Kattrup sites",opacity = 1, values = unique(Points$Type),  group = "Legend old") %>%
+  addLegend("bottomright", pal = pal ,title = "Kattrup sites",opacity = 1, values = as.character(sort(unique(Points$Type))),  group = "Legend old") %>%
   addLegend("bottomright", pal = NewPal ,title = "Kattrup new open pairs",opacity = 1, values = as.character(sort(unique(OpenPairs$NewLabel))),  group = "Legend New") %>%
   addLayersControl(baseGroups = names(esri),
                    overlayGroups = c("New Open pairs", "Sampled", "Not sampled", "Legend New","Legend old", "Outline"),

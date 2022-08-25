@@ -33,7 +33,7 @@ NonSampled <- Points %>% dplyr::filter(Sampled == "N")
 Outline <- read_sf("Kattrup_Vildnis_graense_jan2022.shp") %>% 
   st_transform(crs = "+proj=longlat +datum=WGS84 +no_defs")
 
-OpenPairs <- read_sf("OpenPairs_ForestDry.shp") %>% 
+OpenPairs <- read_sf("OpenPairs_ForestAll.shp") %>% 
   st_transform(crs = "+proj=longlat +datum=WGS84 +no_defs") %>% mutate(NewLabel = paste(substr(ID_GPX,8,9),Group, sep = "_"))
 ```
 

@@ -21,6 +21,13 @@ navbar:
         href: InteractiveMaps/HusbyInteractive.html
       - text: "Map Trojborg"
         href: InteractiveMaps/TrojborgInteractive.html
+    - text: "R Packages"
+      icon: fa-gear
+      menu:
+      - text: "AICc Permanova"
+        href: AICcPerm
+      - text: "AICc Permanova"
+        href: TroublemakeR
     - text: "Apps"
       icon: fa-gear
       menu:

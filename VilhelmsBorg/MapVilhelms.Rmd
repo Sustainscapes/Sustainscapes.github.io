@@ -1,0 +1,186 @@
+---
+title: "Map Vilhelmsborg"
+author: "Derek Corcoran"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      message = FALSE,
+                      error = FALSE)
+
+library(terra)
+library(leaflet)
+library(leaflet.extras2)
+library(leaflet.providers)
+library(leafpop)
+library(dplyr)
+library(sf)
+library(DT)
+library(spThin)
+
+Circle_1000 <- terra::vect("CircleVilhelm.shp") |> 
+  terra::project("+proj=longlat +datum=WGS84") |> 
+  sf::st_as_sf() |> 
+  dplyr::mutate(distance = "1000")
+
+Circle_1500 <- terra::vect("Circle_1500_Vilhelm.shp") |> 
+  terra::project("+proj=longlat +datum=WGS84") |> 
+  sf::st_as_sf()|> 
+  dplyr::mutate(distance = "1500")
+
+Circle_2000 <- terra::vect("Circle_2000_Vilhelm.shp") |> 
+  terra::project("+proj=longlat +datum=WGS84") |> 
+  sf::st_as_sf()|> 
+  dplyr::mutate(distance = "2000")
+
+Circle <- list(Circle_1000, Circle_1500, Circle_2000) |> 
+  purrr::reduce(rbind)
+
+Sites <- terra::vect("Ownership.shp")
+Sites$Area <- Sites |> 
+  terra::expanse(unit = "ha") |> 
+  as.numeric() |> 
+  round(2)
+
+Sites$Area_Buffer_15 <- Sites |> 
+  terra::buffer(-15) |> 
+  terra::expanse(unit = "ha") |> 
+  as.numeric()
+  
+Sites$Area_Buffer_10 <- Sites |> 
+  terra::buffer(-10) |> 
+  terra::expanse(unit = "ha") |> 
+  as.numeric()
+
+Sites$Area_Buffer_8 <- Sites |> 
+  terra::buffer(-8) |> 
+  terra::expanse(unit = "ha") |> 
+  as.numeric()
+
+Sites$n_samples <- ifelse(Sites$Area < 1, 1, floor(Sites$Area))
+
+Sites <- Sites[Sites$Ownership == "Kommunal"]
+Sites$ID <- 1:nrow(Sites)
+
+terra::writeVector(Sites, "Sites.shp")
+
+Lakes <- Sites[Sites$Natyp_navn == "S<f8>"]
+
+Mose <- Sites[Sites$Natyp_navn == "Mose"]
+
+Eng <- Sites[Sites$Natyp_navn == "Eng"]
+
+set.seed(2023)
+LakePoints <-  terra::spatSample(x = Lakes, size = 1, strata = "ID")
+
+Mose_A <- Mose[Mose$Area_Buffer_8 > 0]
+Mose_B <- Mose[Mose$Area_Buffer_8 == 0]
+
+set.seed(2023)
+
+MosePointsA <- terra::spatSample(x = terra::buffer(Mose_A, -8), size = 1, strata = "ID")
+
+set.seed(2023)
+
+MosePointsB <- terra::spatSample(x = Mose_B, size = 1, strata = "ID")
+
+Eng_A <- Eng[Eng$Area_Buffer_8 > 0 & Eng$n_samples > 1]
+Eng_B <- Eng[Eng$Area_Buffer_8 > 0 & Eng$n_samples == 1]
+Eng_C <- Eng[Eng$Area_Buffer_8 == 0]
+
+set.seed(2023)
+
+
+EngPointsA <- list()
+
+for(i in 1:nrow(Eng_A)){
+  Temp <- terra::buffer(Eng_A[i,], -8)
+  set.seed(i)
+  TempPoints <- terra::spatSample(x = Temp, size = Temp$n_samples*10) |> terra::project("+proj=longlat +datum=WGS84") |> 
+    as.data.frame(geom = "XY") |> 
+    dplyr::rename("Latitude" = y, "Longitude" = x)
+  EngPointsA[[i]] <- spThin::thin(TempPoints, lat.col = "Latitude", long.col = "Longitude", spec.col = "ID", thin.par = 0.1, write.files = F, write.log.file = F, reps = 1, locs.thinned.list.return = T)[[1]] |> left_join(TempPoints) |> 
+    slice_sample(n = TempPoints$n_samples[1]) |> 
+    terra::vect(geom=c("Longitude", "Latitude"), crs = "+proj=longlat +datum=WGS84") |> 
+    terra::project("EPSG:25832")
+}
+
+EngPointsA <- EngPointsA  |> 
+  purrr::reduce(rbind)
+
+set.seed(2023)
+
+EngPointsB <- terra::spatSample(x = terra::buffer(Eng_B, -8), size = 1, strata = "ID")
+
+set.seed(2023)
+EngPointsC <- terra::spatSample(x = Eng_C, size = 1, strata = "ID")
+
+
+Points <- list(LakePoints, MosePointsA, MosePointsB, EngPointsA, EngPointsB,EngPointsC) |> 
+  purrr::reduce(rbind)
+
+Points <- Points[c("Natyp_navn", "ID")]
+Points$PointID <- 1:nrow(Points)
+Points$Natyp_navn <- stringr::str_replace_all(Points$Natyp_navn,"<f8>", "ø")
+
+terra::writeVector(Points, "SamplingPoints.shp", overwrite = T)
+
+Points <- Points |> 
+  terra::project("+proj=longlat +datum=WGS84") |> 
+  sf::st_as_sf()
+  
+
+Sites <- Sites |> 
+  terra::project("+proj=longlat +datum=WGS84") |> 
+  sf::st_as_sf() |> 
+  dplyr::select(Natyp_navn, Ownership, Status, Area) |> 
+  dplyr::mutate(Natyp_navn = stringr::str_replace_all(Natyp_navn,"<f8>", "ø"), Own_nature = paste(Natyp_navn, Ownership))
+
+Pal <- leaflet::colorFactor(palette = c('#d53e4f','#fee08b','#e6f598','#3288bd'), domain = sort(unique(Sites$Own_nature)))
+
+PalDist <- leaflet::colorFactor(palette = c('#7fc97f','#beaed4','#fdc086'), domain = sort(unique(Circle$distance)))
+```
+
+## Generating maps
+
+```{r}
+ESRI <- c("Esri.WorldImagery", "Esri.WorldStreetMap", "Esri.WorldGrayCanvas")
+
+
+l <- leaflet() 
+
+for (provider in ESRI) {
+  l <- l %>% addProviderTiles(provider, group = provider)
+}
+
+
+l |> addPolylines(data = Circle, weight = 1, color = ~PalDist(distance)) |> addPolygons(data = Sites, color = ~Pal(Own_nature), weight = 1, opacity = 0.8, popup = popupTable(Sites)) |> 
+  addCircleMarkers(data = Points, popup = popupTable(Points), group = "Points", radius = 3) |> 
+  leaflet::addLegend(data = Sites, "bottomright", pal = Pal, values = ~Own_nature,
+    title = "Nature and ownership",
+    opacity = 1,
+    group = "Legend"
+  ) |>  
+  addLayersControl(baseGroups = ESRI,
+    overlayGroups = c("Legend", "Points"),
+    options = layersControlOptions(collapsed = FALSE)
+  ) |> 
+  addMeasure(
+    position = "topleft",
+    primaryLengthUnit = "meters",
+    primaryAreaUnit = "hectares",
+    activeColor = "#3D535D",
+    completedColor = "#7D4479")
+```
+
+We can also see a table of all the sites in the following table:
+
+```{r}
+Table <- as.data.frame(Sites) |> dplyr::select(-geometry)
+
+DT::datatable(Table)
+```
+

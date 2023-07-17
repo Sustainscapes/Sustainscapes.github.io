@@ -1,0 +1,154 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# Vilhelmsborg
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of Vilhelmsborg is to find around 56.066330, 10.185723. a 500
+meter radius and 1000 meter radius, and place 1 plot per hectare in the
+protected area ocuring withing
+
+``` r
+Circle <- terra::vect(data.frame(lon = 10.185723, lat = 56.066330), geom=c("lon", "lat"), crs="+proj=longlat +datum=WGS84") |>  
+  terra::project("EPSG:25832") |> 
+  terra::buffer(1000)
+
+terra::writeVector(Circle, "CircleVilhelm.shp", overwrite = TRUE)
+
+
+Circle_1500 <- terra::vect(data.frame(lon = 10.185723, lat = 56.066330), geom=c("lon", "lat"), crs="+proj=longlat +datum=WGS84") |>  
+  terra::project("EPSG:25832") |> 
+  terra::buffer(1500)
+
+terra::writeVector(Circle_1500, "Circle_1500_Vilhelm.shp", overwrite = TRUE)
+
+Circle_2000 <- terra::vect(data.frame(lon = 10.185723, lat = 56.066330), geom=c("lon", "lat"), crs="+proj=longlat +datum=WGS84") |>  
+  terra::project("EPSG:25832") |> 
+  terra::buffer(2000)
+
+terra::writeVector(Circle_2000, "Circle_2000_Vilhelm.shp", overwrite = TRUE)
+```
+
+This has 313.08 hectares.
+
+The steps to go in this project is:
+
+- Find out from Paragraph 3 and Natura 2000 protected areas within this
+  area
+- For each protected area within this calculate the area in Hectares
+- We will test to round up or down, for each hectare of protected area,
+  we need one plot
+- This plot should be at least 10 meters from the border and tentatively
+  50 meters from each other
+- Extra: A interactive map will be made of this
+
+## Read in Natura 2000 and paragraph 3
+
+From the biodiversity council read in the layers
+
+``` r
+
+Paragraph3 <-  terra::vect("O:/Nat_BDR-data/Arealanalyse/RAW/BES_NATURTYPER_SHAPE") |> 
+  terra::project("EPSG:25832") |> terra::intersect(Circle)
+
+Paragraph3$Status <- iconv(Paragraph3$Status, from="Windows-1252", to="UTF-8")
+
+Paragraph3$CVR_navn <- iconv(Paragraph3$CVR_navn, from="Windows-1252", to="UTF-8")
+
+Paragraph3$Natyp_navn <- iconv(Paragraph3$Natyp_navn, from="Windows-1252", to="UTF-8")
+
+
+nfiles <- nrow(Paragraph3)
+
+terra::writeVector(Paragraph3, "Paragraph3Vilhelm.shp", overwrite = TRUE)
+
+
+
+Paragraph3_1500 <-  terra::vect("O:/Nat_BDR-data/Arealanalyse/RAW/BES_NATURTYPER_SHAPE") |> 
+  terra::project("EPSG:25832") |> terra::intersect(Circle_1500)
+
+Paragraph3_1500$Status <- iconv(Paragraph3_1500$Status, from="Windows-1252", to="UTF-8")
+
+Paragraph3_1500$CVR_navn <- iconv(Paragraph3_1500$CVR_navn, from="Windows-1252", to="UTF-8")
+
+Paragraph3_1500$Natyp_navn <- iconv(Paragraph3_1500$Natyp_navn, from="Windows-1252", to="UTF-8")
+
+
+nfiles_1500 <- nrow(Paragraph3_1500)
+
+terra::writeVector(Paragraph3_1500, "Paragraph3Vilhelm_1500.shp", overwrite = TRUE)
+
+
+Paragraph3_2000 <-  terra::vect("O:/Nat_BDR-data/Arealanalyse/RAW/BES_NATURTYPER_SHAPE") |> 
+  terra::project("EPSG:25832") |> terra::intersect(Circle_2000)
+
+Paragraph3_2000$Status <- iconv(Paragraph3_2000$Status, from="Windows-1252", to="UTF-8")
+
+Paragraph3_2000$CVR_navn <- iconv(Paragraph3_2000$CVR_navn, from="Windows-1252", to="UTF-8")
+
+Paragraph3_2000$Natyp_navn <- iconv(Paragraph3_2000$Natyp_navn, from="Windows-1252", to="UTF-8")
+
+
+nfiles_2000 <- nrow(Paragraph3_2000)
+
+Ownership <- terra::vect("O:/Nat_BDR-data/Arealanalyse/RAW/Archive/ejerskab_20220609.gpkg")
+Ownership$Ownership <- ifelse(Ownership$ejerforhold_dni %in% c("fond", "andet"), "Privat",
+                              ifelse(Ownership$ejerforhold_dni %in% c("naturstyrelsen", "forsvaret","landbrugsstyrelsen", "kystdirektoratet"), "Statslig", "Kommunal"))
+
+Ownership <- Ownership["Ownership"]
+
+Ownership <- Ownership |> 
+  terra::project("EPSG:25832") |> 
+  terra::crop(Circle_2000) |> 
+  terra::aggregate("Ownership") |> 
+  terra::intersect(Paragraph3_2000)
+
+terra::writeVector(Ownership, "Ownership.shp", overwrite = TRUE)
+
+terra::writeVector(Paragraph3_2000, "Paragraph3Vilhelm_2000.shp", overwrite = TRUE)
+```
+
+There are 22 paragraph 3 areas within the Vilhemsborg area, in the
+following figure, paragraph 3 areas are in green and the 1000 km radius
+circle inside in red
+
+``` r
+plot(Circle, col = "red")
+plot(Paragraph3, col = "green", add = T)
+```
+
+![](README_files/figure-gfm/P3plot-1.png)<!-- -->
+
+## More distances
+
+For paragraph 3 we made 2 more distances, 1500 and 2000 meters, with 52
+polygons at 1500 meters and 89 at 2000 meters of distance.
+
+We can see the representation of this in the following plot:
+
+``` r
+Circle_1000 <- terra::vect("CircleVilhelm.shp")
+Circle_1000$Distance <- 1000
+
+Circle_1500 <- terra::vect("Circle_1500_Vilhelm.shp")
+Circle_1500$Distance <- 1500
+
+
+Circle_2000 <- terra::vect("Circle_2000_Vilhelm.shp")
+Circle_2000$Distance <- 2000
+
+Circles <- list(Circle_1000, Circle_1500, Circle_2000) |> purrr::reduce(rbind)
+
+Circles$Distance <- as.character(Circles$Distance)
+
+Sites <- terra::vect("Paragraph3Vilhelm_2000.shp")
+Sites$Natyp_navn <- stringr::str_replace_all(Sites$Natyp_navn, "<f8>", "ø")
+
+
+ggplot() + geom_spatvector(data = Circles, aes(color = Distance), alpha = 0) + scale_color_viridis_d() +
+  geom_spatvector(data = Sites, aes(fill = Natyp_navn))  + theme_minimal()
+```
+
+![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->

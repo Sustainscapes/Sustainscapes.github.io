@@ -21,6 +21,8 @@ navbar:
         href: InteractiveMaps/HusbyInteractive.html
       - text: "Map Trojborg"
         href: InteractiveMaps/TrojborgInteractive.html
+      - text: "Map Vilhelmsborg"
+        href: VilhelmsborgInteractive.html
     - text: "Tools"
       icon: fa-gear
       menu:

@@ -1,0 +1,123 @@
+---
+title: "Vilhelmsborg"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      error = FALSE,
+                      message = FALSE)
+library(terra)
+library(leaflet)
+library(leaflet.extras2)
+library(leaflet.providers)
+library(leafpop)
+library(dplyr)
+library(sf)
+library(DT)
+library(spThin)
+
+Circle_1000 <- terra::vect("VilhelmsBorg/CircleVilhelm.shp") |> 
+  terra::project("+proj=longlat +datum=WGS84") |> 
+  sf::st_as_sf() |> 
+  dplyr::mutate(distance = "1000")
+
+Circle_1500 <- terra::vect("VilhelmsBorg/Circle_1500_Vilhelm.shp") |> 
+  terra::project("+proj=longlat +datum=WGS84") |> 
+  sf::st_as_sf()|> 
+  dplyr::mutate(distance = "1500")
+
+Circle_2000 <- terra::vect("VilhelmsBorg/Circle_2000_Vilhelm.shp") |> 
+  terra::project("+proj=longlat +datum=WGS84") |> 
+  sf::st_as_sf()|> 
+  dplyr::mutate(distance = "2000")
+
+Circle <- list(Circle_1000, Circle_1500, Circle_2000) |> 
+  purrr::reduce(rbind)
+
+Sites <- terra::vect("VilhelmsBorg/Sites.shp")
+
+Forest_Sites <- terra::vect("VilhelmsBorg/ForestVilhelm_2000.shp")
+
+Points <-  terra::vect("VilhelmsBorg/SamplingPoints.shp")
+
+
+Points <- Points |> 
+  terra::project("+proj=longlat +datum=WGS84") |> 
+  sf::st_as_sf()
+
+ForestPoints <- terra::vect("VilhelmsBorg/Forest_points.shp") |> 
+  terra::project("+proj=longlat +datum=WGS84") |> 
+  sf::st_as_sf() |> 
+  dplyr::mutate(ID = readr::parse_number(p25_id))
+
+ForestPoints$PointID <- (1:nrow(ForestPoints) + max(Points$PointID))
+  
+ForestPoints$Natyp_navn <- "Skov"
+
+ForestPoints <- ForestPoints |> 
+  dplyr::select("Natyp_navn", "ID", "PointID")
+
+Points <- rbind(Points, ForestPoints)
+
+Sites <- Sites |> 
+  terra::project("+proj=longlat +datum=WGS84") |> 
+  sf::st_as_sf() |> 
+  dplyr::select(Natyp_navn, Ownership, Status, Area) |> 
+  dplyr::mutate(Natyp_navn = stringr::str_replace_all(Natyp_navn,"<f8>", "ø"), Own_nature = paste(Natyp_navn, Ownership))
+
+Forest_Sites <- Forest_Sites |> 
+  terra::project("+proj=longlat +datum=WGS84") |> 
+  sf::st_as_sf() |> 
+  dplyr::mutate(Natyp_navn = "Skov", Status = "Unknown") |> 
+  dplyr::select(Natyp_navn, Ownership, Status, Area) |> 
+  dplyr::mutate(Own_nature = paste(Natyp_navn, Ownership))
+
+Sites <- rbind(Sites, Forest_Sites)
+
+Pal <- leaflet::colorFactor(palette = c('#d53e4f','#fee08b','#7fc97f','#3288bd'), domain = sort(unique(Sites$Natyp_navn)))
+
+PalDist <- leaflet::colorFactor(palette = c('#7fc97f','#beaed4','#fdc086'), domain = sort(unique(Circle$distance)))
+```
+```
+
+## Generating maps
+
+```{r}
+ESRI <- c("Esri.WorldImagery", "Esri.WorldStreetMap", "Esri.WorldGrayCanvas")
+
+
+l <- leaflet() 
+
+for (provider in ESRI) {
+  l <- l %>% addProviderTiles(provider, group = provider)
+}
+
+
+l |> addPolylines(data = Circle, weight = 1, color = ~PalDist(distance)) |> addPolygons(data = Sites, color = ~Pal(Own_nature), weight = 1, opacity = 0.8, popup = popupTable(Sites)) |> 
+  addCircleMarkers(data = Points, popup = popupTable(Points), group = "Points", radius = 3) |> 
+  leaflet::addLegend(data = Sites, "bottomright", pal = Pal, values = ~Own_nature,
+    title = "Nature and ownership",
+    opacity = 1,
+    group = "Legend"
+  ) |>  
+  addLayersControl(baseGroups = ESRI,
+    overlayGroups = c("Legend", "Points"),
+    options = layersControlOptions(collapsed = FALSE)
+  ) |> 
+  addMeasure(
+    position = "topleft",
+    primaryLengthUnit = "meters",
+    primaryAreaUnit = "hectares",
+    activeColor = "#3D535D",
+    completedColor = "#7D4479")
+```
+
+We can also see a table of all the sites in the following table:
+
+```{r}
+Table <- as.data.frame(Sites) |> dplyr::select(-geometry)
+
+DT::datatable(Table)
+```

@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = FALSE,
 library(terra)
 library(leaflet)
 library(leaflet.extras2)
+library(leaflet.extras)
 library(leaflet.providers)
 library(leafpop)
 library(dplyr)
@@ -80,7 +81,6 @@ Pal <- leaflet::colorFactor(palette = c('#d53e4f','#fee08b','#7fc97f','#3288bd')
 
 PalDist <- leaflet::colorFactor(palette = c('#7fc97f','#beaed4','#fdc086'), domain = sort(unique(Circle$distance)))
 ```
-```
 
 ## Generating maps
 
@@ -95,9 +95,9 @@ for (provider in ESRI) {
 }
 
 
-l |> addPolylines(data = Circle, weight = 1, color = ~PalDist(distance)) |> addPolygons(data = Sites, color = ~Pal(Own_nature), weight = 1, opacity = 0.8, popup = popupTable(Sites)) |> 
+l |> addPolylines(data = Circle, weight = 1, color = ~PalDist(distance)) |> addPolygons(data = Sites, color = ~Pal(Natyp_navn), weight = 1, opacity = 0.8, popup = popupTable(Sites)) |> 
   addCircleMarkers(data = Points, popup = popupTable(Points), group = "Points", radius = 3) |> 
-  leaflet::addLegend(data = Sites, "bottomright", pal = Pal, values = ~Own_nature,
+  leaflet::addLegend(data = Sites, "bottomright", pal = Pal, values = ~Natyp_navn,
     title = "Nature and ownership",
     opacity = 1,
     group = "Legend"
@@ -111,7 +111,13 @@ l |> addPolylines(data = Circle, weight = 1, color = ~PalDist(distance)) |> addP
     primaryLengthUnit = "meters",
     primaryAreaUnit = "hectares",
     activeColor = "#3D535D",
-    completedColor = "#7D4479")
+    completedColor = "#7D4479")|>   addControlGPS(
+    options = gpsOptions(
+      position = "topleft",
+      activate = TRUE, 
+      autoCenter = TRUE,
+      setView = TRUE)) |> 
+leaflet.extras::activateGPS()
 ```
 
 We can also see a table of all the sites in the following table:

@@ -38,8 +38,34 @@ Circle <- list(Circle_1000, Circle_1500, Circle_2000) |>
   purrr::reduce(rbind)
 
 Sites <- terra::vect("VilhelmsBorg/Sites.shp")
+PrivateSites <- terra::vect("VilhelmsBorg/AllSites.shp")
+PrivateSites <- PrivateSites[PrivateSites$Ownership == "Privat",]
+
+Sites <- rbind(Sites, PrivateSites)
+
 
 Forest_Sites <- terra::vect("VilhelmsBorg/ForestVilhelm_2000.shp")
+Private_Forest_Sites <- terra::vect("VilhelmsBorg/ForestVilhelm_All_2000.shp")
+Private_Forest_Sites <- Private_Forest_Sites[Private_Forest_Sites$Ownership == "Privat",]
+
+Forest_Sites <- rbind(Forest_Sites, Private_Forest_Sites)
+
+
+
+Sites <- Sites |> 
+  terra::project("+proj=longlat +datum=WGS84") |> 
+  sf::st_as_sf() |> 
+  dplyr::select(Natyp_navn, Ownership, Status, Area) |> 
+  dplyr::mutate(Natyp_navn = stringr::str_replace_all(Natyp_navn,"<f8>", "ø"), Own_nature = paste(Natyp_navn, Ownership))
+
+Forest_Sites <- Forest_Sites |> 
+  terra::project("+proj=longlat +datum=WGS84") |> 
+  sf::st_as_sf() |> 
+  dplyr::mutate(Natyp_navn = "Skov", Status = "Unknown") |> 
+  dplyr::select(Natyp_navn, Ownership, Status, Area) |> 
+  dplyr::mutate(Own_nature = paste(Natyp_navn, Ownership))
+
+Sites <- rbind(Sites, Forest_Sites) %>% mutate(combined_var = paste0(Ownership, "_", Natyp_navn))
 
 Points <-  terra::vect("VilhelmsBorg/SamplingPoints.shp")
 
@@ -62,22 +88,20 @@ ForestPoints <- ForestPoints |>
 
 Points <- rbind(Points, ForestPoints)
 
-Sites <- Sites |> 
-  terra::project("+proj=longlat +datum=WGS84") |> 
-  sf::st_as_sf() |> 
-  dplyr::select(Natyp_navn, Ownership, Status, Area) |> 
-  dplyr::mutate(Natyp_navn = stringr::str_replace_all(Natyp_navn,"<f8>", "ø"), Own_nature = paste(Natyp_navn, Ownership))
+mapping_table <- data.frame(
+    combined_var = c("Kommunal_Eng", "Privat_Eng", 
+"Kommunal_Mose", "Privat_Mose", "Kommunal_Overdrev", "Privat_Overdrev", 
+"Kommunal_Sø", "Privat_Sø", "Kommunal_Skov", "Privat_Skov", 
+NA),
+    pal_colour = c("#d53e4f", "#8c0f21", "#fee08b", "#e5b527", 
+"#d9d9d9", "#bdbdbd", "#3288bd", "#1e5577", "#7fc97f", "#477b42", 
+"#808080"),
+    stringsAsFactors = FALSE
+  )
 
-Forest_Sites <- Forest_Sites |> 
-  terra::project("+proj=longlat +datum=WGS84") |> 
-  sf::st_as_sf() |> 
-  dplyr::mutate(Natyp_navn = "Skov", Status = "Unknown") |> 
-  dplyr::select(Natyp_navn, Ownership, Status, Area) |> 
-  dplyr::mutate(Own_nature = paste(Natyp_navn, Ownership))
 
-Sites <- rbind(Sites, Forest_Sites)
-
-Pal <- leaflet::colorFactor(palette = c('#d53e4f','#fee08b','#7fc97f','#3288bd'), domain = sort(unique(Sites$Natyp_navn)))
+Pal <- leaflet::colorFactor(palette = mapping_table$pal_colour, 
+domain = mapping_table$combined_var)
 
 PalDist <- leaflet::colorFactor(palette = c('#7fc97f','#beaed4','#fdc086'), domain = sort(unique(Circle$distance)))
 ```
@@ -95,9 +119,9 @@ for (provider in ESRI) {
 }
 
 
-l |> addPolylines(data = Circle, weight = 1, color = ~PalDist(distance)) |> addPolygons(data = Sites, color = ~Pal(Natyp_navn), weight = 1, opacity = 0.8, popup = popupTable(Sites)) |> 
+l |> addPolylines(data = Circle, weight = 1, color = ~PalDist(distance)) |> addPolygons(data = Sites, color = ~Pal(combined_var), weight = 1, opacity = 0.8, popup = popupTable(Sites)) |> 
   addCircleMarkers(data = Points, popup = popupTable(Points), group = "Points", radius = 3) |> 
-  leaflet::addLegend(data = Sites, "bottomright", pal = Pal, values = ~Natyp_navn,
+  leaflet::addLegend(data = Sites, "bottomright", pal = Pal, values = ~combined_var,
     title = "Nature and ownership",
     opacity = 1,
     group = "Legend"

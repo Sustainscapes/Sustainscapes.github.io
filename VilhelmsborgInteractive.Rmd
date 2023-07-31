@@ -91,22 +91,63 @@ Points <- rbind(Points, ForestPoints)
 mapping_table <- data.frame(
     combined_var = c("Kommunal_Eng", "Privat_Eng", 
 "Kommunal_Mose", "Privat_Mose", "Kommunal_Overdrev", "Privat_Overdrev", 
-"Kommunal_Sø", "Privat_Sø", "Kommunal_Skov", "Privat_Skov", 
-NA),
+"Kommunal_Sø", "Privat_Sø", "Kommunal_Skov", "Privat_Skov"),
     pal_colour = c("#d53e4f", "#8c0f21", "#fee08b", "#e5b527", 
-"#d9d9d9", "#bdbdbd", "#3288bd", "#1e5577", "#7fc97f", "#477b42", 
-"#808080"),
+"#d9d9d9", "#bdbdbd", "#3288bd", "#1e5577", "#7fc97f", "#477b42"),
     stringsAsFactors = FALSE
   )
 
 
 Pal <- leaflet::colorFactor(palette = mapping_table$pal_colour, 
-domain = mapping_table$combined_var)
+domain = mapping_table$combined_var, ordered = T)
 
 PalDist <- leaflet::colorFactor(palette = c('#7fc97f','#beaed4','#fdc086'), domain = sort(unique(Circle$distance)))
 ```
 
 ## Generating maps
+
+```{r}
+html_string <- '<style>
+  .grid-container {
+    display: grid;
+    grid-template-columns: 53px 53px 53px;
+    grid-auto-rows: 27px 27px 27px 27px 27px 27px;
+  }
+
+  /* Reduce font size for nature types */
+  .nature-types {
+    font-size: 11px;
+  }
+</style>
+
+<div class="grid-container">
+  <!-- Categories -->
+  <div class="var1-label" style="grid-row: 1; font-size: 11px;">Eng</div>
+  <div class="var1-label" style="grid-row: 2; font-size: 11px;">Mose</div>
+  <div class="var1-label" style="grid-row: 3; font-size: 11px;">Overdrev</div>
+  <div class="var1-label" style="grid-row: 4; font-size: 11px;">Sø</div>
+  <div class="var1-label" style="grid-row: 5; font-size: 11px;">Skov</div>
+
+  <!-- Kommunal -->
+  <div style="background-color: #d53e4f; color: #d53e4f;">3</div>
+  <div style="background-color: #fee08b; color: #fee08b;">6</div>
+  <div style="background-color: #d9d9d9; color: #d9d9d9;">9</div>
+  <div style="background-color: #3288bd; color: #3288bd;">2</div>
+  <div style="background-color: #7fc97f; color: #7fc97f;">5</div>
+
+  <!-- Privat -->
+  <div style="background-color: #8c0f21; color: #8c0f21; grid-column: 3; grid-row: 1;">8</div>
+  <div style="background-color: #e5b527; color: #e5b527; grid-column: 3; grid-row: 2;">1</div>
+  <div style="background-color: #bdbdbd; color: #bdbdbd; grid-column: 3; grid-row: 3;">4</div>
+  <div style="background-color: #1e5577; color: #1e5577; grid-column: 3; grid-row: 4;">7</div>
+  <div style="background-color: #477b42; color: #477b42; grid-column: 3; grid-row: 5;">6</div>
+
+  <!-- Labels -->
+  <div class="nature-types" style="text-align: center; grid-row: 6; grid-column: 2;">Kommunal</div>
+  <div class="nature-types" style="text-align: center; grid-row: 6; grid-column: 3;">Privat</div>
+</div>'
+```
+
 
 ```{r}
 ESRI <- c("Esri.WorldImagery", "Esri.WorldStreetMap", "Esri.WorldGrayCanvas")
@@ -121,13 +162,15 @@ for (provider in ESRI) {
 
 l |> addPolylines(data = Circle, weight = 1, color = ~PalDist(distance)) |> addPolygons(data = Sites, color = ~Pal(combined_var), weight = 1, opacity = 0.8, popup = popupTable(Sites)) |> 
   addCircleMarkers(data = Points, popup = popupTable(Points), group = "Points", radius = 3) |> 
-  leaflet::addLegend(data = Sites, "bottomright", pal = Pal, values = ~combined_var,
-    title = "Nature and ownership",
-    opacity = 1,
-    group = "Legend"
-  ) |>  
+  #leaflet::addLegend(data = Sites, "bottomright", pal = Pal, values = ~combined_var,
+    #title = "Nature and ownership",
+    #opacity = 1,
+    #group = "Legend"
+  #) 
+  leaflet::addControl(html = html_string,
+                                                       position = "bottomleft") |>  
   addLayersControl(baseGroups = ESRI,
-    overlayGroups = c("Legend", "Points"),
+    overlayGroups = c("Points"),
     options = layersControlOptions(collapsed = FALSE)
   ) |> 
   addMeasure(

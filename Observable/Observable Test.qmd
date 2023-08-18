@@ -1,0 +1,81 @@
+---
+title: "Test with some data"
+format: 
+  html:
+    page-layout: custom
+execute:
+  echo: false
+  Rendering:
+    embed-resources: true
+    standalone: true
+---
+
+## Objective
+
+To test the possibility to explore data sets using observable, this is linked to this [notebook](https://observablehq.com/d/befcd4c865b3b17d)
+
+## Bar chart
+
+
+```{ojs}
+//| panel: sidebar
+
+viewof selectedvar = Inputs.checkbox(["Exclusive", "Non-exclusive"], {label: "Select some", value: ["Exclusive", "Non-exclusive"]})
+
+viewof range = Inputs.range([0, 5], {label: "Minimum percentage to show", step: 0.01, value: 0})
+```
+
+
+```{ojs}
+LT = FileAttachment("LongTableBar.csv").csv().then(data => {
+  // Convert Percentage values to numbers
+  data.forEach(d => {
+    d.Percentage = parseFloat(d.Percentage);
+  });
+
+  // Now you can use the processed data
+  return data;
+})
+```
+
+```{ojs}
+more_test = LT.filter((d, i) => selectedvar.includes(d.intersections))
+```
+
+```{ojs}
+further_test = more_test.filter((d, i) => d.Percentage >= range)
+```
+
+```{ojs}
+colorScale = d3.scaleOrdinal()
+  .domain(["Exclusive", "Non-exclusive"])
+  .range(['#fc8d62','#8da0cb'])
+```
+
+```{ojs}
+//| panel: fill
+
+Plot.plot({
+  color: {legend: true},
+  y: {
+    grid: true
+  },
+  x: { axis: null },
+  marks: [
+    Plot.ruleY([0]),
+    Plot.barY(further_test, {x: "ID", y: "Percentage", sort: {x: "y", reverse: true}, fill: (d) => colorScale(d.intersections)})
+  ]
+})
+```
+
+
+```{ojs}
+//| panel: fill
+ 
+Inputs.table(further_test, {
+  format: {
+    Percentage: x => (parseFloat(x) || 0).toFixed(2)
+  }
+});
+
+```

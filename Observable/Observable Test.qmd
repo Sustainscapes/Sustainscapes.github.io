@@ -15,6 +15,31 @@ execute:
 To test the possibility to explore data sets using observable, this is linked to this [notebook](https://observablehq.com/d/befcd4c865b3b17d)
 
 ## Bar chart
+```{ojs}
+
+//Downloadb button
+button = (data, filename = 'data.csv') => {
+  if (!data) throw new Error('Array of data required as first argument');
+
+  let downloadData;
+  if (filename.includes('.csv')) {
+    downloadData = new Blob([d3.csvFormat(data)], { type: "text/csv" });
+  } else {
+    downloadData = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json"
+    });
+  }
+
+  const size = (downloadData.size / 1024).toFixed(0);
+  const button = DOM.download(
+    downloadData,
+    filename,
+    `Download ${filename} (~${size} KB)`
+  );
+  return button;
+}
+```
+
 
 
 ```{ojs}
@@ -79,3 +104,13 @@ Inputs.table(further_test, {
 });
 
 ```
+
+```{ojs}
+{
+  const div = DOM.element('div');
+  const csvBtn = button(further_test, 'Selected.csv');
+  div.appendChild(csvBtn);
+  return div;
+}
+```
+

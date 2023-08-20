@@ -83,7 +83,15 @@ more_test = LT.filter((d, i) => selectedvar.includes(d.intersections))
 ```
 
 ```{ojs}
+more_test_points = datalong.filter((d, i) => selectedvar.includes(d.intersections))
+```
+
+```{ojs}
 further_test = more_test.filter((d, i) => d.Percentage >= range)
+```
+
+```{ojs}
+further_test_points = more_test_points.filter((d, i) => d.Percentage >= range)
 ```
 
 ```{ojs}
@@ -120,8 +128,8 @@ Plot.plot({
   x: { axis: null, sort: { field: "Percentage", reverse: true } },
   y: { label: null },
   marks: [
-    Plot.dot(datalong, { x: "ID", y: "metric_name", fill: "black" }),
-    Plot.ruleX(datalong, { x: "ID", y1: "min_met", y2: "max_met", stroke: "black" })
+    Plot.dot(further_test_points, { x: "ID", y: "metric_name", fill: "black" }),
+    Plot.ruleX(further_test_points, { x: "ID", y1: "min_met", y2: "max_met", stroke: "black" })
   ],
   marginLeft: 80
 })

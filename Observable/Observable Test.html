@@ -197,7 +197,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb4" data-startfrom="66" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 65;"><span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>more_test <span class="op">=</span> LT<span class="op">.</span><span class="fu">filter</span>((d<span class="op">,</span> i) <span class="kw">=&gt;</span> selectedvar<span class="op">.</span><span class="fu">includes</span>(d<span class="op">.</span><span class="at">intersections</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb4" data-startfrom="66" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 65;"><span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>datalong <span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"LongTablePoints.csv"</span>)<span class="op">.</span><span class="fu">csv</span>()<span class="op">.</span><span class="fu">then</span>(data <span class="kw">=&gt;</span> {</span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Convert Percentage values to numbers</span></span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>  data<span class="op">.</span><span class="fu">forEach</span>(d <span class="kw">=&gt;</span> {</span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>    d<span class="op">.</span><span class="at">Percentage</span> <span class="op">=</span> <span class="pp">parseFloat</span>(d<span class="op">.</span><span class="at">Percentage</span>)<span class="op">;</span></span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Now you can use the processed data</span></span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> data<span class="op">;</span></span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-4" data-nodetype="declaration">
 
@@ -205,7 +213,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb5" data-startfrom="70" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 69;"><span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>further_test <span class="op">=</span> more_test<span class="op">.</span><span class="fu">filter</span>((d<span class="op">,</span> i) <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">Percentage</span> <span class="op">&gt;=</span> range)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb5" data-startfrom="81" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 80;"><span id="cb5-81"><a href="#cb5-81" aria-hidden="true" tabindex="-1"></a>more_test <span class="op">=</span> LT<span class="op">.</span><span class="fu">filter</span>((d<span class="op">,</span> i) <span class="kw">=&gt;</span> selectedvar<span class="op">.</span><span class="fu">includes</span>(d<span class="op">.</span><span class="at">intersections</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-5" data-nodetype="declaration">
 
@@ -213,45 +221,39 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb6" data-startfrom="74" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 73;"><span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>colorScale <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleOrdinal</span>()</span>
-<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">domain</span>([<span class="st">"Exclusive"</span><span class="op">,</span> <span class="st">"Non-exclusive"</span>])</span>
-<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">range</span>([<span class="st">'#fc8d62'</span><span class="op">,</span><span class="st">'#8da0cb'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb6" data-startfrom="85" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 84;"><span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>further_test <span class="op">=</span> more_test<span class="op">.</span><span class="fu">filter</span>((d<span class="op">,</span> i) <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">Percentage</span> <span class="op">&gt;=</span> range)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-6" data-nodetype="declaration">
 
 </div>
 </div>
 </div>
-<div class="panel-fill panel-grid">
-<div class="g-col-24">
-<div class="cell panel-fill">
-<div class="sourceCode cell-code hidden" id="cb7" data-startfrom="81" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 80;"><span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>  <span class="dt">color</span><span class="op">:</span> {<span class="dt">legend</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
-<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {</span>
-<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a>    <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span></span>
-<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
-<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> { <span class="dt">axis</span><span class="op">:</span> <span class="kw">null</span> }<span class="op">,</span></span>
-<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
-<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])<span class="op">,</span></span>
-<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">barY</span>(further_test<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"ID"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"Percentage"</span><span class="op">,</span> <span class="dt">sort</span><span class="op">:</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">reverse</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> (d) <span class="kw">=&gt;</span> <span class="fu">colorScale</span>(d<span class="op">.</span><span class="at">intersections</span>)})</span>
-<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb7" data-startfrom="89" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 88;"><span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>colorScale <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleOrdinal</span>()</span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">domain</span>([<span class="st">"Exclusive"</span><span class="op">,</span> <span class="st">"Non-exclusive"</span>])</span>
+<span id="cb7-91"><a href="#cb7-91" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">range</span>([<span class="st">'#fc8d62'</span><span class="op">,</span><span class="st">'#8da0cb'</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="ojs-cell-7" data-nodetype="expression">
+<div id="ojs-cell-7" data-nodetype="declaration">
 
 </div>
 </div>
 </div>
-</div>
-</div>
 <div class="panel-fill panel-grid">
 <div class="g-col-24">
 <div class="cell panel-fill">
-<div class="sourceCode cell-code hidden" id="cb8" data-startfrom="98" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 97;"><span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(further_test<span class="op">,</span> {</span>
-<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a>  <span class="dt">format</span><span class="op">:</span> {</span>
-<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Percentage</span><span class="op">:</span> x <span class="kw">=&gt;</span> (<span class="pp">parseFloat</span>(x) <span class="op">||</span> <span class="dv">0</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)</span>
-<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb8" data-startfrom="96" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 95;"><span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">1000</span><span class="op">,</span></span>
+<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a>  <span class="dt">color</span><span class="op">:</span> {<span class="dt">legend</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span></span>
+<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> {</span>
+<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a>    <span class="dt">grid</span><span class="op">:</span> <span class="kw">true</span></span>
+<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span></span>
+<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> { <span class="dt">axis</span><span class="op">:</span> <span class="kw">null</span> }<span class="op">,</span></span>
+<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])<span class="op">,</span></span>
+<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">barY</span>(further_test<span class="op">,</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"ID"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"Percentage"</span><span class="op">,</span> <span class="dt">sort</span><span class="op">:</span> {<span class="dt">x</span><span class="op">:</span> <span class="st">"y"</span><span class="op">,</span> <span class="dt">reverse</span><span class="op">:</span> <span class="kw">true</span>}<span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> (d) <span class="kw">=&gt;</span> <span class="fu">colorScale</span>(d<span class="op">.</span><span class="at">intersections</span>)})</span>
+<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">,</span></span>
+<span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">80</span></span>
+<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-8" data-nodetype="expression">
 
@@ -260,15 +262,53 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 </div>
 </div>
-<div class="cell">
-<div class="sourceCode cell-code hidden" id="cb9" data-startfrom="108" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 107;"><span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a>{</span>
-<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> div <span class="op">=</span> DOM<span class="op">.</span><span class="fu">element</span>(<span class="st">'div'</span>)<span class="op">;</span></span>
-<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> csvBtn <span class="op">=</span> <span class="fu">button</span>(further_test<span class="op">,</span> <span class="st">'Selected.csv'</span>)<span class="op">;</span></span>
-<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a>  div<span class="op">.</span><span class="fu">appendChild</span>(csvBtn)<span class="op">;</span></span>
-<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> div<span class="op">;</span></span>
-<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="panel-fill panel-grid">
+<div class="g-col-24">
+<div class="cell panel-fill">
+<div class="sourceCode cell-code hidden" id="cb9" data-startfrom="115" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 114;"><span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a>  <span class="dt">width</span><span class="op">:</span> <span class="dv">1000</span><span class="op">,</span></span>
+<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a>  <span class="dt">height</span><span class="op">:</span> <span class="dv">400</span><span class="op">,</span> <span class="co">// Increase the height</span></span>
+<span id="cb9-118"><a href="#cb9-118" aria-hidden="true" tabindex="-1"></a>  <span class="dt">x</span><span class="op">:</span> { <span class="dt">axis</span><span class="op">:</span> <span class="kw">null</span><span class="op">,</span> <span class="dt">sort</span><span class="op">:</span> { <span class="dt">field</span><span class="op">:</span> <span class="st">"Percentage"</span><span class="op">,</span> <span class="dt">reverse</span><span class="op">:</span> <span class="kw">true</span> } }<span class="op">,</span></span>
+<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> { <span class="dt">label</span><span class="op">:</span> <span class="kw">null</span> }<span class="op">,</span></span>
+<span id="cb9-120"><a href="#cb9-120" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb9-121"><a href="#cb9-121" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">dot</span>(datalong<span class="op">,</span> { <span class="dt">x</span><span class="op">:</span> <span class="st">"ID"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"metric_name"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"black"</span> })<span class="op">,</span></span>
+<span id="cb9-122"><a href="#cb9-122" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleX</span>(datalong<span class="op">,</span> { <span class="dt">x</span><span class="op">:</span> <span class="st">"ID"</span><span class="op">,</span> <span class="dt">y1</span><span class="op">:</span> <span class="st">"min_met"</span><span class="op">,</span> <span class="dt">y2</span><span class="op">:</span> <span class="st">"max_met"</span><span class="op">,</span> <span class="dt">stroke</span><span class="op">:</span> <span class="st">"black"</span> })</span>
+<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">,</span></span>
+<span id="cb9-124"><a href="#cb9-124" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marginLeft</span><span class="op">:</span> <span class="dv">80</span></span>
+<span id="cb9-125"><a href="#cb9-125" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-9" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="panel-fill panel-grid">
+<div class="g-col-24">
+<div class="cell panel-fill">
+<div class="sourceCode cell-code hidden" id="cb10" data-startfrom="133" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 132;"><span id="cb10-133"><a href="#cb10-133" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(further_test<span class="op">,</span> {</span>
+<span id="cb10-134"><a href="#cb10-134" aria-hidden="true" tabindex="-1"></a>  <span class="dt">format</span><span class="op">:</span> {</span>
+<span id="cb10-135"><a href="#cb10-135" aria-hidden="true" tabindex="-1"></a>    <span class="dt">Percentage</span><span class="op">:</span> x <span class="kw">=&gt;</span> (<span class="pp">parseFloat</span>(x) <span class="op">||</span> <span class="dv">0</span>)<span class="op">.</span><span class="fu">toFixed</span>(<span class="dv">2</span>)</span>
+<span id="cb10-136"><a href="#cb10-136" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb10-137"><a href="#cb10-137" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-10" data-nodetype="expression">
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code hidden" id="cb11" data-startfrom="143" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 142;"><span id="cb11-143"><a href="#cb11-143" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb11-144"><a href="#cb11-144" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> div <span class="op">=</span> DOM<span class="op">.</span><span class="fu">element</span>(<span class="st">'div'</span>)<span class="op">;</span></span>
+<span id="cb11-145"><a href="#cb11-145" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> csvBtn <span class="op">=</span> <span class="fu">button</span>(further_test<span class="op">,</span> <span class="st">'Selected.csv'</span>)<span class="op">;</span></span>
+<span id="cb11-146"><a href="#cb11-146" aria-hidden="true" tabindex="-1"></a>  div<span class="op">.</span><span class="fu">appendChild</span>(csvBtn)<span class="op">;</span></span>
+<span id="cb11-147"><a href="#cb11-147" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> div<span class="op">;</span></span>
+<span id="cb11-148"><a href="#cb11-148" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="ojs-cell-11" data-nodetype="expression">
 
 </div>
 </div>
@@ -278,7 +318,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 
 <script type="ojs-module-contents">
-{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"\n//Downloadb button\nbutton = (data, filename = 'data.csv') => {\n  if (!data) throw new Error('Array of data required as first argument');\n\n  let downloadData;\n  if (filename.includes('.csv')) {\n    downloadData = new Blob([d3.csvFormat(data)], { type: \"text/csv\" });\n  } else {\n    downloadData = new Blob([JSON.stringify(data, null, 2)], {\n      type: \"application/json\"\n    });\n  }\n\n  const size = (downloadData.size / 1024).toFixed(0);\n  const button = DOM.download(\n    downloadData,\n    filename,\n    `Download ${filename} (~${size} KB)`\n  );\n  return button;\n}\n"},{"methodName":"interpret","cellName":"ojs-cell-2","inline":false,"source":"\nviewof selectedvar = Inputs.checkbox([\"Exclusive\", \"Non-exclusive\"], {label: \"Select some\", value: [\"Exclusive\", \"Non-exclusive\"]})\n\nviewof range = Inputs.range([0, 5], {label: \"Minimum percentage to show\", step: 0.01, value: 0})\n"},{"methodName":"interpret","cellName":"ojs-cell-3","inline":false,"source":"LT = FileAttachment(\"LongTableBar.csv\").csv().then(data => {\n  // Convert Percentage values to numbers\n  data.forEach(d => {\n    d.Percentage = parseFloat(d.Percentage);\n  });\n\n  // Now you can use the processed data\n  return data;\n})\n"},{"methodName":"interpret","cellName":"ojs-cell-4","inline":false,"source":"more_test = LT.filter((d, i) => selectedvar.includes(d.intersections))\n"},{"methodName":"interpret","cellName":"ojs-cell-5","inline":false,"source":"further_test = more_test.filter((d, i) => d.Percentage >= range)\n"},{"methodName":"interpret","cellName":"ojs-cell-6","inline":false,"source":"colorScale = d3.scaleOrdinal()\n  .domain([\"Exclusive\", \"Non-exclusive\"])\n  .range(['#fc8d62','#8da0cb'])\n"},{"methodName":"interpret","cellName":"ojs-cell-7","inline":false,"source":"\nPlot.plot({\n  color: {legend: true},\n  y: {\n    grid: true\n  },\n  x: { axis: null },\n  marks: [\n    Plot.ruleY([0]),\n    Plot.barY(further_test, {x: \"ID\", y: \"Percentage\", sort: {x: \"y\", reverse: true}, fill: (d) => colorScale(d.intersections)})\n  ]\n})\n"},{"methodName":"interpret","cellName":"ojs-cell-8","inline":false,"source":" \nInputs.table(further_test, {\n  format: {\n    Percentage: x => (parseFloat(x) || 0).toFixed(2)\n  }\n});\n\n"},{"methodName":"interpret","cellName":"ojs-cell-9","inline":false,"source":"{\n  const div = DOM.element('div');\n  const csvBtn = button(further_test, 'Selected.csv');\n  div.appendChild(csvBtn);\n  return div;\n}\n"},{"methodName":"interpretQuiet","source":"shinyInput('selectedvar')"},{"methodName":"interpretQuiet","source":"shinyInput('range')"}]}
+{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"\n//Downloadb button\nbutton = (data, filename = 'data.csv') => {\n  if (!data) throw new Error('Array of data required as first argument');\n\n  let downloadData;\n  if (filename.includes('.csv')) {\n    downloadData = new Blob([d3.csvFormat(data)], { type: \"text/csv\" });\n  } else {\n    downloadData = new Blob([JSON.stringify(data, null, 2)], {\n      type: \"application/json\"\n    });\n  }\n\n  const size = (downloadData.size / 1024).toFixed(0);\n  const button = DOM.download(\n    downloadData,\n    filename,\n    `Download ${filename} (~${size} KB)`\n  );\n  return button;\n}\n"},{"methodName":"interpret","cellName":"ojs-cell-2","inline":false,"source":"\nviewof selectedvar = Inputs.checkbox([\"Exclusive\", \"Non-exclusive\"], {label: \"Select some\", value: [\"Exclusive\", \"Non-exclusive\"]})\n\nviewof range = Inputs.range([0, 5], {label: \"Minimum percentage to show\", step: 0.01, value: 0})\n"},{"methodName":"interpret","cellName":"ojs-cell-3","inline":false,"source":"LT = FileAttachment(\"LongTableBar.csv\").csv().then(data => {\n  // Convert Percentage values to numbers\n  data.forEach(d => {\n    d.Percentage = parseFloat(d.Percentage);\n  });\n\n  // Now you can use the processed data\n  return data;\n})\n"},{"methodName":"interpret","cellName":"ojs-cell-4","inline":false,"source":"datalong = FileAttachment(\"LongTablePoints.csv\").csv().then(data => {\n  // Convert Percentage values to numbers\n  data.forEach(d => {\n    d.Percentage = parseFloat(d.Percentage);\n  });\n\n  // Now you can use the processed data\n  return data;\n})\n"},{"methodName":"interpret","cellName":"ojs-cell-5","inline":false,"source":"more_test = LT.filter((d, i) => selectedvar.includes(d.intersections))\n"},{"methodName":"interpret","cellName":"ojs-cell-6","inline":false,"source":"further_test = more_test.filter((d, i) => d.Percentage >= range)\n"},{"methodName":"interpret","cellName":"ojs-cell-7","inline":false,"source":"colorScale = d3.scaleOrdinal()\n  .domain([\"Exclusive\", \"Non-exclusive\"])\n  .range(['#fc8d62','#8da0cb'])\n"},{"methodName":"interpret","cellName":"ojs-cell-8","inline":false,"source":"\nPlot.plot({\n  width: 1000,\n  color: {legend: true},\n  y: {\n    grid: true\n  },\n  x: { axis: null },\n  marks: [\n    Plot.ruleY([0]),\n    Plot.barY(further_test, {x: \"ID\", y: \"Percentage\", sort: {x: \"y\", reverse: true}, fill: (d) => colorScale(d.intersections)})\n  ],\n  marginLeft: 80\n})\n"},{"methodName":"interpret","cellName":"ojs-cell-9","inline":false,"source":"\nPlot.plot({\n  width: 1000,\n  height: 400, // Increase the height\n  x: { axis: null, sort: { field: \"Percentage\", reverse: true } },\n  y: { label: null },\n  marks: [\n    Plot.dot(datalong, { x: \"ID\", y: \"metric_name\", fill: \"black\" }),\n    Plot.ruleX(datalong, { x: \"ID\", y1: \"min_met\", y2: \"max_met\", stroke: \"black\" })\n  ],\n  marginLeft: 80\n})\n"},{"methodName":"interpret","cellName":"ojs-cell-10","inline":false,"source":" \nInputs.table(further_test, {\n  format: {\n    Percentage: x => (parseFloat(x) || 0).toFixed(2)\n  }\n});\n\n"},{"methodName":"interpret","cellName":"ojs-cell-11","inline":false,"source":"{\n  const div = DOM.element('div');\n  const csvBtn = button(further_test, 'Selected.csv');\n  div.appendChild(csvBtn);\n  return div;\n}\n"},{"methodName":"interpretQuiet","source":"shinyInput('selectedvar')"},{"methodName":"interpretQuiet","source":"shinyInput('range')"}]}
 </script>
 <script type="module">
 window._ojs.paths.runtimeToDoc = "../../..";

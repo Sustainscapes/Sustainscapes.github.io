@@ -64,6 +64,21 @@ LT = FileAttachment("LongTableBar.csv").csv().then(data => {
 ```
 
 ```{ojs}
+datalong = FileAttachment("LongTablePoints.csv").csv().then(data => {
+  // Convert Percentage values to numbers
+  data.forEach(d => {
+    d.Percentage = parseFloat(d.Percentage);
+  });
+
+  // Now you can use the processed data
+  return data;
+})
+```
+
+
+
+
+```{ojs}
 more_test = LT.filter((d, i) => selectedvar.includes(d.intersections))
 ```
 
@@ -81,6 +96,7 @@ colorScale = d3.scaleOrdinal()
 //| panel: fill
 
 Plot.plot({
+  width: 1000,
   color: {legend: true},
   y: {
     grid: true
@@ -89,9 +105,28 @@ Plot.plot({
   marks: [
     Plot.ruleY([0]),
     Plot.barY(further_test, {x: "ID", y: "Percentage", sort: {x: "y", reverse: true}, fill: (d) => colorScale(d.intersections)})
-  ]
+  ],
+  marginLeft: 80
 })
 ```
+
+
+```{ojs}
+//| panel: fill
+
+Plot.plot({
+  width: 1000,
+  height: 400, // Increase the height
+  x: { axis: null, sort: { field: "Percentage", reverse: true } },
+  y: { label: null },
+  marks: [
+    Plot.dot(datalong, { x: "ID", y: "metric_name", fill: "black" }),
+    Plot.ruleX(datalong, { x: "ID", y1: "min_met", y2: "max_met", stroke: "black" })
+  ],
+  marginLeft: 80
+})
+```
+
 
 
 ```{ojs}

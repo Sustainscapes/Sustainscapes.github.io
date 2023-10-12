@@ -1,0 +1,76 @@
+---
+title: "Interactive Carbon exploration"
+format: html
+---
+
+## Dataset
+
+first we load the dataset into the document
+
+```{ojs}
+//| echo: false
+//| panel: input
+LT= FileAttachment("Carbon.csv").csv()
+```
+
+Then we take a look at the current table
+
+```{ojs}
+//| echo: false
+d3 = require('d3')
+Inputs.table(LT)
+```
+
+Then we can filter by minimum and maximum carbon content
+
+```{ojs}
+//| echo: false
+viewof Maxrange = Inputs.range([0, 100], {label: "Maximum Carbon Percentage", step: 0.2, value: 100})
+viewof Minrange = Inputs.range([0, 100], {label: "Minimum Carbon Percentage", step: 0.2, value: 0})
+```
+
+
+We then get that when we filter that the percentage of Denmark within this contrains is:
+
+```{ojs}
+//| echo: false
+Test = LT.filter((d, i) => d.Carbon >= Minrange & d.Carbon <= Maxrange)
+d3.sum(Test, d => d.Percentage_unit)
+```
+
+This is shown in this plot 
+
+```{ojs}
+//| echo: false
+Plot.plot({
+  color: { legend: true },
+  y: { label: "Percentage of Denmark" },
+  marks: [
+    Plot.barY(
+      Test,
+      Plot.groupX(
+        { y: "sum" },
+        { x: "Class", y: "Percentage_unit", fill: "Class", tip: true }
+      )
+    ),
+    Plot.ruleY([0])
+  ]
+})
+```
+
+Finally we get this next plot:
+
+```{ojs}
+parsedData = Test.map(item => ({
+  Carbon: parseFloat(item.Carbon),
+  Percentage: parseFloat(item.Percentage)
+}))
+
+Plot.plot({
+  marks: [
+    Plot.areaY(parsedData, { x: "Carbon", y: "Percentage" }),
+    Plot.ruleY([0])
+  ]
+});
+```
+

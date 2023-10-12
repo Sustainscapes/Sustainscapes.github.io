@@ -129,17 +129,33 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
 <p>first we load the dataset into the document</p>
 <div class="cell panel-input card bg-light p-2">
-<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="12" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 11;"><span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>LT<span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"Carbon.csv"</span>)<span class="op">.</span><span class="fu">csv</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb1" data-startfrom="13" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 12;"><span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>LT1<span class="op">=</span> <span class="fu">FileAttachment</span>(<span class="st">"Carbon.csv"</span>)<span class="op">.</span><span class="fu">csv</span>()</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>LT <span class="op">=</span> LT1<span class="op">.</span><span class="fu">map</span>(item <span class="kw">=&gt;</span> ({</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Carbon</span><span class="op">:</span> <span class="pp">parseFloat</span>(item<span class="op">.</span><span class="at">Carbon</span>)<span class="op">,</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Area</span><span class="op">:</span> <span class="pp">parseFloat</span>(item<span class="op">.</span><span class="at">Area</span>)<span class="op">,</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Percentage</span><span class="op">:</span> <span class="pp">parseFloat</span>(item<span class="op">.</span><span class="at">Percentage</span>)<span class="op">,</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Percentage_unit</span><span class="op">:</span> <span class="pp">parseFloat</span>(item<span class="op">.</span><span class="at">Percentage_unit</span>)<span class="op">,</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Class</span><span class="op">:</span> item<span class="op">.</span><span class="at">Class</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>}))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div id="ojs-cell-1" data-nodetype="declaration">
+<div>
+<div id="ojs-cell-1-1" data-nodetype="declaration">
 
+</div>
+</div>
+</div>
+<div class="cell-output cell-output-display">
+<div>
+<div id="ojs-cell-1-2" data-nodetype="declaration">
+
+</div>
 </div>
 </div>
 </div>
 <p>Then we take a look at the current table</p>
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb2" data-startfrom="20" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 19;"><span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>d3 <span class="op">=</span> <span class="pp">require</span>(<span class="st">'d3'</span>)</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(LT)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb2" data-startfrom="27" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 26;"><span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>d3 <span class="op">=</span> <span class="pp">require</span>(<span class="st">'d3'</span>)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>Inputs<span class="op">.</span><span class="fu">table</span>(LT)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-2-1" data-nodetype="declaration">
@@ -157,8 +173,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Then we can filter by minimum and maximum carbon content</p>
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb3" data-startfrom="28" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 27;"><span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>viewof Maxrange <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">100</span>]<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Maximum Carbon Percentage"</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.2</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">100</span>})</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>viewof Minrange <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">100</span>]<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Minimum Carbon Percentage"</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.2</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">0</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb3" data-startfrom="35" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 34;"><span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>viewof Maxrange <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">100</span>]<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Maximum Carbon Percentage"</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.2</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">100</span>})</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>viewof Minrange <span class="op">=</span> Inputs<span class="op">.</span><span class="fu">range</span>([<span class="dv">0</span><span class="op">,</span> <span class="dv">100</span>]<span class="op">,</span> {<span class="dt">label</span><span class="op">:</span> <span class="st">"Minimum Carbon Percentage"</span><span class="op">,</span> <span class="dt">step</span><span class="op">:</span> <span class="fl">0.2</span><span class="op">,</span> <span class="dt">value</span><span class="op">:</span> <span class="dv">0</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-3-1" data-nodetype="declaration">
@@ -176,8 +192,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>We then get that when we filter that the percentage of Denmark within this contrains is:</p>
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb4" data-startfrom="37" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 36;"><span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>Test <span class="op">=</span> LT<span class="op">.</span><span class="fu">filter</span>((d<span class="op">,</span> i) <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">Carbon</span> <span class="op">&gt;=</span> Minrange <span class="op">&amp;</span> d<span class="op">.</span><span class="at">Carbon</span> <span class="op">&lt;=</span> Maxrange)</span>
-<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>d3<span class="op">.</span><span class="fu">sum</span>(Test<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">Percentage_unit</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb4" data-startfrom="44" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 43;"><span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>Test <span class="op">=</span> LT<span class="op">.</span><span class="fu">filter</span>((d<span class="op">,</span> i) <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">Carbon</span> <span class="op">&gt;=</span> Minrange <span class="op">&amp;</span> d<span class="op">.</span><span class="at">Carbon</span> <span class="op">&lt;=</span> Maxrange)</span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>d3<span class="op">.</span><span class="fu">sum</span>(Test<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">Percentage_unit</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-4-1" data-nodetype="declaration">
@@ -195,20 +211,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>This is shown in this plot</p>
 <div class="cell">
-<div class="sourceCode cell-code hidden" id="cb5" data-startfrom="44" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 43;"><span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a>  <span class="dt">color</span><span class="op">:</span> { <span class="dt">legend</span><span class="op">:</span> <span class="kw">true</span> }<span class="op">,</span></span>
-<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> { <span class="dt">label</span><span class="op">:</span> <span class="st">"Percentage of Denmark"</span> }<span class="op">,</span></span>
-<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
-<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">barY</span>(</span>
-<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>      Test<span class="op">,</span></span>
-<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">groupX</span>(</span>
-<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>        { <span class="dt">y</span><span class="op">:</span> <span class="st">"sum"</span> }<span class="op">,</span></span>
-<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>        { <span class="dt">x</span><span class="op">:</span> <span class="st">"Class"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"Percentage_unit"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"Class"</span><span class="op">,</span> <span class="dt">tip</span><span class="op">:</span> <span class="kw">true</span> }</span>
-<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>    )<span class="op">,</span></span>
-<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])</span>
-<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code hidden" id="cb5" data-startfrom="51" data-source-offset="0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 50;"><span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>  <span class="dt">color</span><span class="op">:</span> { <span class="dt">legend</span><span class="op">:</span> <span class="kw">true</span> }<span class="op">,</span></span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>  <span class="dt">y</span><span class="op">:</span> { <span class="dt">label</span><span class="op">:</span> <span class="st">"Percentage of Denmark"</span> }<span class="op">,</span></span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">barY</span>(</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>      Test<span class="op">,</span></span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>      Plot<span class="op">.</span><span class="fu">groupX</span>(</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a>        { <span class="dt">y</span><span class="op">:</span> <span class="st">"sum"</span> }<span class="op">,</span></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a>        { <span class="dt">x</span><span class="op">:</span> <span class="st">"Class"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"Percentage_unit"</span><span class="op">,</span> <span class="dt">fill</span><span class="op">:</span> <span class="st">"Class"</span><span class="op">,</span> <span class="dt">tip</span><span class="op">:</span> <span class="kw">true</span> }</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>    )<span class="op">,</span></span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])</span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div id="ojs-cell-5" data-nodetype="expression">
 
@@ -217,17 +233,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <p>Finally we get this next plot:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6" data-startfrom="64" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 63;"><span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>parsedData <span class="op">=</span> Test<span class="op">.</span><span class="fu">map</span>(item <span class="kw">=&gt;</span> ({</span>
-<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Carbon</span><span class="op">:</span> <span class="pp">parseFloat</span>(item<span class="op">.</span><span class="at">Carbon</span>)<span class="op">,</span></span>
-<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Percentage</span><span class="op">:</span> <span class="pp">parseFloat</span>(item<span class="op">.</span><span class="at">Percentage</span>)</span>
-<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>}))</span>
-<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
-<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
-<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">areaY</span>(parsedData<span class="op">,</span> { <span class="dt">x</span><span class="op">:</span> <span class="st">"Carbon"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"Percentage"</span> })<span class="op">,</span></span>
-<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])</span>
-<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>  ]</span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6" data-startfrom="71" data-source-offset="-0"><pre class="sourceCode js code-with-copy"><code class="sourceCode javascript" style="counter-reset: source-line 70;"><span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>parsedData <span class="op">=</span> Test<span class="op">.</span><span class="fu">map</span>(item <span class="kw">=&gt;</span> ({</span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Carbon</span><span class="op">:</span> <span class="pp">parseFloat</span>(item<span class="op">.</span><span class="at">Carbon</span>)<span class="op">,</span></span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>  <span class="dt">Percentage</span><span class="op">:</span> <span class="pp">parseFloat</span>(item<span class="op">.</span><span class="at">Percentage</span>)</span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>}))</span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>Plot<span class="op">.</span><span class="fu">plot</span>({</span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>  <span class="dt">marks</span><span class="op">:</span> [</span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">areaY</span>(parsedData<span class="op">,</span> { <span class="dt">x</span><span class="op">:</span> <span class="st">"Carbon"</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="st">"Percentage"</span> })<span class="op">,</span></span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a>    Plot<span class="op">.</span><span class="fu">ruleY</span>([<span class="dv">0</span>])</span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>  ]</span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <div id="ojs-cell-6-1" data-nodetype="declaration">
@@ -249,7 +265,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <!-- /main column -->
 
 <script type="ojs-module-contents">
-{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"LT= FileAttachment(\"Carbon.csv\").csv()\n"},{"methodName":"interpret","cellName":"ojs-cell-2","inline":false,"source":"d3 = require('d3')\nInputs.table(LT)\n"},{"methodName":"interpret","cellName":"ojs-cell-3","inline":false,"source":"viewof Maxrange = Inputs.range([0, 100], {label: \"Maximum Carbon Percentage\", step: 0.2, value: 100})\nviewof Minrange = Inputs.range([0, 100], {label: \"Minimum Carbon Percentage\", step: 0.2, value: 0})\n"},{"methodName":"interpret","cellName":"ojs-cell-4","inline":false,"source":"Test = LT.filter((d, i) => d.Carbon >= Minrange & d.Carbon <= Maxrange)\nd3.sum(Test, d => d.Percentage_unit)\n"},{"methodName":"interpret","cellName":"ojs-cell-5","inline":false,"source":"Plot.plot({\n  color: { legend: true },\n  y: { label: \"Percentage of Denmark\" },\n  marks: [\n    Plot.barY(\n      Test,\n      Plot.groupX(\n        { y: \"sum\" },\n        { x: \"Class\", y: \"Percentage_unit\", fill: \"Class\", tip: true }\n      )\n    ),\n    Plot.ruleY([0])\n  ]\n})\n"},{"methodName":"interpret","cellName":"ojs-cell-6","inline":false,"source":"parsedData = Test.map(item => ({\n  Carbon: parseFloat(item.Carbon),\n  Percentage: parseFloat(item.Percentage)\n}))\n\nPlot.plot({\n  marks: [\n    Plot.areaY(parsedData, { x: \"Carbon\", y: \"Percentage\" }),\n    Plot.ruleY([0])\n  ]\n});\n"},{"methodName":"interpretQuiet","source":"shinyInput('Maxrange')"},{"methodName":"interpretQuiet","source":"shinyInput('Minrange')"}]}
+{"contents":[{"methodName":"interpret","cellName":"ojs-cell-1","inline":false,"source":"LT1= FileAttachment(\"Carbon.csv\").csv()\nLT = LT1.map(item => ({\n  Carbon: parseFloat(item.Carbon),\n  Area: parseFloat(item.Area),\n  Percentage: parseFloat(item.Percentage),\n  Percentage_unit: parseFloat(item.Percentage_unit),\n  Class: item.Class\n}))\n"},{"methodName":"interpret","cellName":"ojs-cell-2","inline":false,"source":"d3 = require('d3')\nInputs.table(LT)\n"},{"methodName":"interpret","cellName":"ojs-cell-3","inline":false,"source":"viewof Maxrange = Inputs.range([0, 100], {label: \"Maximum Carbon Percentage\", step: 0.2, value: 100})\nviewof Minrange = Inputs.range([0, 100], {label: \"Minimum Carbon Percentage\", step: 0.2, value: 0})\n"},{"methodName":"interpret","cellName":"ojs-cell-4","inline":false,"source":"Test = LT.filter((d, i) => d.Carbon >= Minrange & d.Carbon <= Maxrange)\nd3.sum(Test, d => d.Percentage_unit)\n"},{"methodName":"interpret","cellName":"ojs-cell-5","inline":false,"source":"Plot.plot({\n  color: { legend: true },\n  y: { label: \"Percentage of Denmark\" },\n  marks: [\n    Plot.barY(\n      Test,\n      Plot.groupX(\n        { y: \"sum\" },\n        { x: \"Class\", y: \"Percentage_unit\", fill: \"Class\", tip: true }\n      )\n    ),\n    Plot.ruleY([0])\n  ]\n})\n"},{"methodName":"interpret","cellName":"ojs-cell-6","inline":false,"source":"parsedData = Test.map(item => ({\n  Carbon: parseFloat(item.Carbon),\n  Percentage: parseFloat(item.Percentage)\n}))\n\nPlot.plot({\n  marks: [\n    Plot.areaY(parsedData, { x: \"Carbon\", y: \"Percentage\" }),\n    Plot.ruleY([0])\n  ]\n});\n"},{"methodName":"interpretQuiet","source":"shinyInput('Maxrange')"},{"methodName":"interpretQuiet","source":"shinyInput('Minrange')"}]}
 </script>
 <script type="module">
 window._ojs.paths.runtimeToDoc = "../../..";

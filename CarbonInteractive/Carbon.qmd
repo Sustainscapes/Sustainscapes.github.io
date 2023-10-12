@@ -10,7 +10,14 @@ first we load the dataset into the document
 ```{ojs}
 //| echo: false
 //| panel: input
-LT= FileAttachment("Carbon.csv").csv()
+LT1= FileAttachment("Carbon.csv").csv()
+LT = LT1.map(item => ({
+  Carbon: parseFloat(item.Carbon),
+  Area: parseFloat(item.Area),
+  Percentage: parseFloat(item.Percentage),
+  Percentage_unit: parseFloat(item.Percentage_unit),
+  Class: item.Class
+}))
 ```
 
 Then we take a look at the current table

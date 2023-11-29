@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Vilhelmsborg Diversity</title>
+
+<script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.6.3/htmlwidgets.js"></script>
+<link href="site_libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="site_libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="site_libs/proj4-2.6.2/proj4.min.js"></script>
+<script src="site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="site_libs/leaflet-binding-2.2.1/leaflet.js"></script>
+<script src="site_libs/leaflet-providers-2.0.0/leaflet-providers_2.0.0.js"></script>
+<script src="site_libs/leaflet-providers-plugin-2.2.1/leaflet-providers-plugin.js"></script>
+<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">My Website</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    Workshops
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Courses</li>
+    <li>
+      <a href="Libro/_book/index.html">Reproducible research in R</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    Maps
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="InteractiveMaps/Kattrup/Kattrup.html">Map Kattrup</a>
+    </li>
+    <li>
+      <a href="LeafletAgro.html">Case landscapes</a>
+    </li>
+    <li>
+      <a href="InteractiveMaps/HusbyInteractive.html">Map Husby</a>
+    </li>
+    <li>
+      <a href="InteractiveMaps/TrojborgInteractive.html">Map Trojborg</a>
+    </li>
+    <li>
+      <a href="VilhelmsborgInteractive.html">Map Vilhelmsborg</a>
+    </li>
+    <li>
+      <a href="Vilhelmsborgdiversity.html">Map Vilhelmsborg diversity</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    Tools
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="AICcPerm">AICc Permanova</a>
+    </li>
+    <li>
+      <a href="TroublemakeR">TroublemakeR</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="fa fa-gear"></span>
+     
+    Apps
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="TestShinyApps.html">Plot comparison app</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Vilhelmsborg Diversity</h1>
+
+</div>
+
+
+<p>In the following document we will have several interactive
+interpretations of the potential future scenarios of Vilhelmsborg, in
+the first one in the next map, you can choose which potential habitat to
+use, and you will see the potential plant species richness</p>
+<div class="leaflet html-widget html-fill-item" id="htmlwidget-b74cefd65ca63720b3a7" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-b74cefd65ca63720b3a7">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addProviderTiles","args":["Esri.WorldImagery",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addRasterImage","args":["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAARUlEQVQ4jWP8//8/AzXAq+/z/osdv8HARBXTGBgYtj/6zsDg5EU9AzfuU2K4/PYGAyO1vAwDVHPhqIGjBo4aOGrgEDcQAA6/EpniAEEgAAAAAElFTkSuQmCC",[[56.0841939487475,10.15254032807942],[56.04808781130989,10.21701557350373]],0.7,null,null,"ForestDryPoor"]},{"method":"addRasterImage","args":["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAADIElEQVQ4jaWSbWhbVRjHf+fm3pvk5t4kbZq0NjZSO7eqbF9k1i+CL7hNxRdUBHVsbCBYFMRPgiAi++I+qmjjRPFlIMIEEUU3rBPGcLNuZS+WdqSstmvTtE1olzU3b/ccv6yd2qQM9/t4znN+53/O8wilFCvk3E9USG9BIRkpLDA8L0na8Fi8A/n1D7Dned75dZo37t8l6vKwcr0ijvGMAKD2k8o8dQCxIrxr/y/q9adH2RLTiActfJqBVB62EcOYPA9Hx+DBOygk2qjJClF/B5euTDM0J7F0eCLZTfHtz9H4B+czUU7OeZQ9l4jZTmvVjzFzAZGZQ/S0IYYniMkwumZQkxWW69BlC3oiGhRz2JucawlXeO/Ux+rR2yRddgqzUgG3iFrKIm7eDIUpaOtm5PI4naEIYaMdt75ISAWQXxwCpdYKAc7l02pjtAu/J6jrOvriLNRcMIKgJMVwiLK3TEiPYpXrcOw4hcPTSA/0NTZgpqToidSo+Azy5Yu0RpIESi7VkI1Zk5iaQhM+LGGDOwGhAC19rahStbHwzF8BtiaWyS4XOZHzCJuTJIKCc5kCt8clm2MmiaLE+/IQvv5nKfQF0IWJEFrjJwP8MZ9WZ/Mee3tfFgCDlwZUyhFETINT81VsA3qjAU7kXEyf4L7OFK53uXFCgNmSZDbrQO+1tbaAA8DQmJ/JbJhbU4tMTXfywD0zaMJH1OxAHBz7QI2Ot7Dv4edEM/l/2fHuESWBI69uEwC/59Lqzlg7VnYC/bfTHcwvBVaL3/zxKzWXD/LRziebXrD7kQyaANgGwN3tLwmAk2Za6ZMLFldqvtViy6pCPrhuwlsccVX4bwZHrLVNef/0AZUZj1Eo+nlxxxRH/3R466Gd1/0dDbs8cHZA5RdsXtha4tsRH/d21+kOW3w3UeSbnzfw/Svbm17QsMv9W/pXD7zWBx+eSSu/r0Q8KIjb1XUTauvuXuX4UBcXliTxgEbUrqxb23Sw/y9NB/t62H/sMxWOuAwNJ/l09+Ni3+BBdUPCjckSN4UEF6NlABynfGMJt6c6sWoao5umAOhJVPkbN0k8qcIBDKcAAAAASUVORK5CYII=",[[56.0841939487475,10.15254032807942],[56.04808781130989,10.21701557350373]],0.7,null,null,"ForestDryRich"]},{"method":"addRasterImage","args":["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAaElEQVQ4jWP8//8/A7GgYefS/z9+sjB0+IUz4lLDQqxhc65P/e9jxMxw8il+dUzEGijCwcggy8PMIMrzD686ol144xE3w8U7zAz1rqk4vcvAwMDASEoYEgOI9vKogaMGjho4auDgMhAAnhgXYnWVz9MAAAAASUVORK5CYII=",[[56.0841939487475,10.15254032807942],[56.04808781130989,10.21701557350373]],0.7,null,null,"ForestWetPoor"]},{"method":"addRasterImage","args":["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAADgElEQVQ4jZWSS2icZRSGn+///7lkZpJMMtPJxFwnNqk2WqEurAEVxdYEXASEKroIWFGiZFMQ60pwpbhTq0GUWm9YKCixlUrsQiuKSNKEWjtJCjYZQ2Myt0zmmvn/77iQhAYTaR/4Vu857/dyzlHHxr4Uj9umO7bKofYa/FYjIg7x7DITKw5tAYOB+nrsD89gHX2ONy4kOPbgkNJyXsrOGj5rUAFQOSPpVz5BiQjPnhyTzpYcfXes0VmraPQGsJQbjUPAFcK6/CvOeBxzoJdMrIOqrhD0RLleTNAReGHTkLkpDIBU3s3iUoDphIeJFc26U6LOFSZohLCWrsLcMuaeCOQrNHhaUEDJznE5pdnEsJDePqyhE9/I3vYiXq+NYWq0gC2aqqwzX7hGW6QDz+4U7LmX2eICi4tXKFSFii7zRNeLasNPLDcFO4tV56viaMVrB5/ZFOPZUYl4NaahmFxZ4P7YnZBJkDfg4ZZh9enMcXGZihsZ/2uGZr/C8HpsbNvYIibWhHVdRgHX1gTHXw+mi3RFACg74NnawukfbmM+p7HeGjy89Stg4k8f+8JpVkrCPWEDLQ65Wg8/X3TzaCtoUdiytSdXtKh1q3+3vB1vXvhYcqte/P519nbm6aozOPt7Da8+NPSfAABTyVGpOGBsJwIoJYTCBbw1VS7OBrmU0qQzNTuVE/UZZCqC+nz2uMSvBnl94GkF8NvyqLQGFGUbat1eyk6Zr2YUI/ufV4+/8534PQ5aQ7Fqcnbksc205xbel9kVC+uXySjLq97Nn2J1Xjymn/m1JE2+ILb+G6WE4S++licPLXKo3YOl3MytFrYk7G8fVv3tYMwnfSQLrk0hVS6TW08Tz2jy1RQ+VwPdIU24oUTJhjrXLvyuRvzWtqPEGnupf4vy03UHlwHx2TBeK8VgLMJdIYNcT4ZT410c7l7F1mVmspq7Q9vMfqctAxw5OSYP3JegL2piKPh2zuSpXpPpZIWDbcPbRvxfww3envhAgoEqhlLsCxl8P+fi6IEj2xrueDY38tn53Zz7sRNByFeF1ezO54OI3PQbOXVaVkon5KM/3pWdaqybSbhBc1MeESFSo3hvelSmLjXTE0tT469wJR4huqtwa4bBxiILeUVHrUFVa0q3p9jfXqHWrbCsJUzzFhOKKMYm63j5EQ9NviwHolWajVYo5+jpcZEsZ/gHD3SvUf6ZS1gAAAAASUVORK5CYII=",[[56.0841939487475,10.15254032807942],[56.04808781130989,10.21701557350373]],0.7,null,null,"ForestWetRich"]},{"method":"addRasterImage","args":["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAARUlEQVQ4jWP8//8/AzXAl99r/zO2rGZgooppDAwMe5+8ZOAu9KWegct2KTC8YPvGwEgtL8MA1Vw4auCogaMGjho4xA0EALAZEaN4keG4AAAAAElFTkSuQmCC",[[56.0841939487475,10.15254032807942],[56.04808781130989,10.21701557350373]],0.7,null,null,"OpenDryPoor"]},{"method":"addRasterImage","args":["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAADIklEQVQ4jaWSS2xUVRjHf+e+Zu6dO525085AXxRaLPheiOnCGBbGIiESiXGhIUETTSQSjSvjQl1oYnRnfHQgIfhK3OjCR0IkRSSRIJU22jTQQiHtQDvtDH2Pc2fm9t7jAluNnWmI/HYn3//8v/853yeklKyQc4/KiOYgkQzP5enPB7TYsMepx//0e9SXn+fd0+O8vvOACGSvdP0lIto+AUDluLy87whixfCB936Srz05zP0NCkkzgioMAulj6/Xol/oJTg4jdt3NXGszXlAmbmwkW7zOuWkfS4PHG9tYfOtzFP7F0Gicvmmfiu8SM1I4ZQXt2hCM5lC2JuH8GAkvjCZ0vKBMwZNssgUdMQWWprE77X8SrvDRwGG5txOarM1obgFKi5DLQvu9MJuBhnZG/hyn0XKoMzZQXJ7HWlYJjn0NkrWGABfm0vKO2Gb0iocfMlFnMlBxQQ8DkkLcoeQXiGgOpluCU2fI/5hF+hJtjRswUZBsqasgDZ1Z9yoJpwWjsMByNIFWLmGoOopQMQlDcQrsEA1dMWSxUt3w90yYHakCU8VFfp32iRljpEzB4NgCdzZI7qkPk5wvU/nsNMahp5h9yEJTQigo1Z8MMJBPyz9mfJ7b/pIA+HmiR26KKkR1g4EbJWwNOh2Tc1NFQqpgZ3Mb7vJi9YQA2WJAdioK22+eJZAI14GEvhGd8ckoHW3zZCaaeKRrEgWVmL4B8eXIx3L4isPbu58Wtcz/y2MfnJABcOKVbgFwPpeWdyUaMa9fRjs7sJH8QnhV/Mbxr2RuxuTw/idqNnh2zyg3i90A7Ei9KAB+s9JSy9ywKHjqqtgyPcBaN2GbLVDE2n69F6y1Q/mw/4gcvVLPXCHEC7uvcWooypuP7r/l76g65Z7BHjmTt3nmwSLfXtR4uN1jS9Tiu7Elvundyg+HdtVsUHXKB+87uHrh1S74ZDAtw2qRlClI2pV1EyrrVv/mTF8rl+YDkqZCPFpeV1tzsf8vNRf7Vnj/l2MyFnfp62/h6IG94p2TX8jbMtzW7NIUUbjquABE60q3l7C7tQWz4nNx2yQAHSmPvwAGXT2TQsvVOwAAAABJRU5ErkJggg==",[[56.0841939487475,10.15254032807942],[56.04808781130989,10.21701557350373]],0.7,null,null,"OpenDryRich"]},{"method":"addRasterImage","args":["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAAZ0lEQVQ4jWP8//8/A7GgcdfS/z9+sjC0+4Yz4lLDQqxhc69P/e9ryMxw8jl+BzARa6AoJyODNA8rgyg3fgOJduH1R1wMF+6wMNS5JOP0LgMDAwMjKWFIDCDay6MGjho4auCogYPLQABmEBhgBKJwHgAAAABJRU5ErkJggg==",[[56.0841939487475,10.15254032807942],[56.04808781130989,10.21701557350373]],0.7,null,null,"OpenWetPoor"]},{"method":"addRasterImage","args":["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAADf0lEQVQ4jZWSS2hcZRTHf9+de+eReSRpXhMzjdM8GkwtFSlEFKvUYCO4CC58IVRoUaJUECkUF4I76bZqo5tqAxYfKI0GUYMobV01sbbVvKrEJDVlJvPMndxM5t57XIQOjk6k/cG3+p/z//6cc9TrX50Rv8+mO56nPxYkZGzDFYeZ7A0uJhy2hzQGImFK741hHD3EW+evc2zfQSV8L5adp0YfVABYo5J4bQQlIhw+PSrxWI4HekziEY06bxhdM3DFIWQ04vnlAvb4DPpjvWS6OrDdIrW+KDfWFmgPvbhpuD4qTP+MBrBiellaDnNpycvFhMOGu0bYU0+tqkVbnkauJdB7msAsUu+NggLLzvNr2qWMpiP37EN//tSX0ttewO+30TQXR6DkOpSwWbQWiEU78Xal4K69zK0vcv2vGQq2UHQsnuh4SZUNvQHW7Cx6JFjCcRVv9D9XFmeywyIBQVMwmZznvs5eyCxg6oqH24bUyOy74tWoYHxpmjuCCs3vtbFtT4W4aAol10IB86uCE6oHj0F6XQAoOoKvsoVPf2hlPi/oxwefVPyLiT8C7G5Ik7SEPQ0aIg6ZSIAL5/w8EgPHBdut7MlbBhEvm1uuxvHzH0gu5ycY3GDXnSYdEY2xqwGOPXTwPwEArqaHpeiAVk0EUEpobCwQCJSYnK3lStolnQlsVU5TYHMk6szcOzJ1rY43B55VABPJYWkLeig6LkHDT9FZ5/MZxZF7X1CPn/hGQj4HV6Cw4WHsyIFy2vGlkzKd1NB/moiSyPnLP8XDQXyeGhbMJLsDddhuAk1zGfroC3n6wDKPbvdjaD5+z69WJOyPDan+GGh/rtSQLBhlIVMssFpKMZVxMEspgkYd3Q0uTfUWli1EvM2EjG2EDaqin315oGLI55YdDM1larYRvyfF4I5m7m7QyO/M8vF3O3iqy8SWItMZl566KrPfassAh06PyoN9i9wf9aArxdic4pldXi6nLPa3DVXd9v8a3uTE5PtSFyrhUYo9DRrfzum82ne4quGWZ/NPRsa7+PrHOCJgliCX3fp8EJFbfq988pmsWB/Kqam3Zasa/VYS3qS12UQQmgMaw1dOyqXLrezsTFET3OC3qRaizebtGdZuW2PRVMQjCltcrK4Ue9s3iBgKj2cZXeP2DEUUZyfDHN1fQ1MgS1+LTYvbAlaOzu4ImeIKfwPPnrEwD3zGTAAAAABJRU5ErkJggg==",[[56.0841939487475,10.15254032807942],[56.04808781130989,10.21701557350373]],0.7,null,null,"OpenWetRich"]},{"method":"addLegend","args":[{"colors":["#3288BD , #8BC59D 13.3817841393167%, #C9E997 26.9481669240205%, #F1F9A9 40.5145497087243%, #FFF7B2 54.0809324934281%, #FEDB88 67.6473152781319%, #FD985F 81.2136980628357%, #E25952 94.7800808475396%, #D53E4F "],"labels":["50","100","150","200","250","300","350"],"na_color":null,"na_label":"NA","opacity":0.5,"position":"topright","type":"numeric","title":"Species richness","extra":{"p_1":0.1338178413931669,"p_n":0.9478008084753955},"layerId":null,"className":"info legend","group":null}]},{"method":"addLayersControl","args":[["ForestDryPoor","ForestDryRich","ForestWetPoor","ForestWetRich","OpenDryPoor","OpenDryRich","OpenWetPoor","OpenWetRich"],[],{"collapsed":true,"autoZIndex":true,"position":"topright"}]}],"limits":{"lat":[56.04808781130989,56.0841939487475],"lng":[10.15254032807942,10.21701557350373]}},"evals":[],"jsHooks":[]}</script>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

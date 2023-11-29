@@ -1,0 +1,49 @@
+---
+title: "Vilhelmsborg Diversity"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      error = FALSE,
+                      message = FALSE)
+library(terra)
+library(leaflet)
+library(leaflet.extras2)
+library(leaflet.extras)
+library(leaflet.providers)
+library(leafpop)
+library(dplyr)
+
+Habs_VilhelmsBorg <- terra::rast("Habs_VilhelmsBorg.tif")
+Habs_VilhelmsBorg[Habs_VilhelmsBorg == 0] <- NA
+
+
+```
+
+In the following document we will have several interactive interpretations of the potential future scenarios of Vilhelmsborg, in the first one in the next map, you can choose which potential habitat to use, and you will see the potential plant species richness
+
+```{r map1, echo = F}
+pal <- colorNumeric(c("#3288bd", "#99d594", "#e6f598", "#ffffbf", "#fee08b", "#fc8d59", 
+                               "#d53e4f"), values(Habs_VilhelmsBorg),
+                    na.color = "transparent")
+
+
+
+l <- leaflet() |>  
+  addProviderTiles("Esri.WorldImagery") 
+
+for(i in 1:nlyr(Habs_VilhelmsBorg)){
+  l <- l |> addRasterImage(Habs_VilhelmsBorg[[i]], colors = pal, opacity = 0.7, group = names(Habs_VilhelmsBorg[[i]]))
+}
+  
+  
+l |> 
+  leaflet::addLegend(pal = pal, values = values(Habs_VilhelmsBorg), title = "Species richness") |> 
+  addLayersControl(
+    baseGroups = names(Habs_VilhelmsBorg),
+    options = layersControlOptions(collapsed = T)
+  )
+```
+

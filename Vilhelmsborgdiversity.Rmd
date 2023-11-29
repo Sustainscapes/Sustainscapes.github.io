@@ -55,11 +55,11 @@ This can be seen in this next map
 
 ```{r}
 palFac <- colorFactor(c('#7fc97f','#beaed4','#fdc086','#ffff99'), levels(MaxHabitatRastHab)[[1]]$value,
-                               na.color = "transparent")
+                               na.color = "grey")
 
 pal <- colorNumeric(c("#3288bd", "#99d594", "#e6f598", "#ffffbf", "#fee08b", "#fc8d59", 
                                "#d53e4f"), values(MaxHabitatRast),
-                               na.color = "transparent")
+                               na.color = "grey")
 
 
 
@@ -79,5 +79,7 @@ l <- leaflet() |>
     baseGroups = c("Best habitat", "Maximum diversity"),
     options = layersControlOptions(collapsed = T)
   )
+
+l
 ```
 

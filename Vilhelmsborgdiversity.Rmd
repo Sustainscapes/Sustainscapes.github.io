@@ -10,16 +10,15 @@ knitr::opts_chunk$set(echo = FALSE,
                       message = FALSE)
 library(terra)
 library(leaflet)
-library(leaflet.extras2)
-library(leaflet.extras)
 library(leaflet.providers)
-library(leafpop)
 library(dplyr)
 
 Habs_VilhelmsBorg <- terra::rast("Habs_VilhelmsBorg.tif")
 Habs_VilhelmsBorg[Habs_VilhelmsBorg == 0] <- NA
 
+MaxHabitatRast <- terra::rast("MaxHabitatRast.tif")
 
+MaxHabitatRastHab <- terra::rast("MaxHabitatRastHab.tif")
 ```
 
 In the following document we will have several interactive interpretations of the potential future scenarios of Vilhelmsborg, in the first one in the next map, you can choose which potential habitat to use, and you will see the potential plant species richness
@@ -27,7 +26,7 @@ In the following document we will have several interactive interpretations of th
 ```{r map1, echo = F}
 pal <- colorNumeric(c("#3288bd", "#99d594", "#e6f598", "#ffffbf", "#fee08b", "#fc8d59", 
                                "#d53e4f"), values(Habs_VilhelmsBorg),
-                    na.color = "transparent")
+                    na.color = "grey")
 
 
 
@@ -43,6 +42,41 @@ l |>
   leaflet::addLegend(pal = pal, values = values(Habs_VilhelmsBorg), title = "Species richness") |> 
   addLayersControl(
     baseGroups = names(Habs_VilhelmsBorg),
+    options = layersControlOptions(collapsed = T)
+  )
+```
+
+## Maximum diversity
+
+Secondly we can create a map with the landuse desicion for each site than ensures the maximum diversity, and what would that maximum diversity be.
+
+This can be seen in this next map
+
+
+```{r}
+palFac <- colorFactor(c('#7fc97f','#beaed4','#fdc086','#ffff99'), levels(MaxHabitatRastHab)[[1]]$value,
+                               na.color = "transparent")
+
+pal <- colorNumeric(c("#3288bd", "#99d594", "#e6f598", "#ffffbf", "#fee08b", "#fc8d59", 
+                               "#d53e4f"), values(MaxHabitatRast),
+                               na.color = "transparent")
+
+
+
+l <- leaflet() |>  
+  addProviderTiles("Esri.WorldImagery") |> 
+  addRasterImage(MaxHabitatRastHab, colors = palFac, opacity = 0.7, group = "Best habitat") |> 
+  leaflet::addLegend(pal = palFac, 
+            values = levels(MaxHabitatRastHab)[[1]]$value,
+            title = "Land Cover",
+            labFormat  = labelFormat(
+              transform = function(x) {
+                levels(MaxHabitatRastHab)[[1]]$label[which(levels(MaxHabitatRastHab)[[1]]$value == x)]
+              }), group = "Best habitat") |> 
+  addRasterImage(MaxHabitatRast, colors = pal, opacity = 0.7, group = "Maximum diversity") |> 
+  leaflet::addLegend(pal = pal, values = values(Habs_VilhelmsBorg), title = "Species richness", group = "Maximum diversity") |> 
+  addLayersControl(
+    baseGroups = c("Best habitat", "Maximum diversity"),
     options = layersControlOptions(collapsed = T)
   )
 ```

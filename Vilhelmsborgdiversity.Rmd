@@ -71,7 +71,7 @@ l <- leaflet() |>
             title = "Land Cover",
             labFormat  = labelFormat(
               transform = function(x) {
-                levels(MaxHabitatRastHab)[[1]]$label[which(levels(MaxHabitatRastHab)[[1]]$value == x)]
+                levels(MaxHabitatRastHab)[[1]]$ForestDryPoor[which(levels(MaxHabitatRastHab)[[1]]$value == x)]
               }), group = "Best habitat") |> 
   addRasterImage(MaxHabitatRast, colors = pal, opacity = 0.7, group = "Maximum diversity") |> 
   leaflet::addLegend(pal = pal, values = values(Habs_VilhelmsBorg), title = "Species richness", group = "Maximum diversity") |> 

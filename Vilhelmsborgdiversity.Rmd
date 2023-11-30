@@ -17,8 +17,9 @@ Habs_VilhelmsBorg <- terra::rast("Habs_VilhelmsBorg.tif")
 Habs_VilhelmsBorg[Habs_VilhelmsBorg == 0] <- NA
 
 MaxHabitatRast <- terra::rast("MaxHabitatRast.tif")
-
+MaxHabitatRast[MaxHabitatRast == 0] <- NA
 MaxHabitatRastHab <- terra::rast("MaxHabitatRastHab.tif")
+MaxHabitatRastHab[MaxHabitatRastHab == 0] <- NA
 ```
 
 In the following document we will have several interactive interpretations of the potential future scenarios of Vilhelmsborg, in the first one in the next map, you can choose which potential habitat to use, and you will see the potential plant species richness
@@ -77,9 +78,65 @@ l <- leaflet() |>
   leaflet::addLegend(pal = pal, values = values(Habs_VilhelmsBorg), title = "Species richness", group = "Maximum diversity") |> 
   addLayersControl(
     baseGroups = c("Best habitat", "Maximum diversity"),
-    options = layersControlOptions(collapsed = T)
-  )
+    options = layersControlOptions(collapsed = F)
+  )  
 
 l
+```
+
+## Forest or open
+
+in this next map we used the maximum value for Forest and Open and see what is the highest value of Richness for each
+
+```{r}
+Test <- terra::as.data.frame(Habs_VilhelmsBorg,cells = T) |> 
+  tidyr::pivot_longer(-cell, names_to = "Habitat", values_to = "Richness") |>
+  mutate(Richness = ifelse(is.na(Richness), 0, Richness)) |> 
+  mutate(Habitat  = case_when(stringr::str_detect(Habitat, "Forest") ~ "Forests",
+                              stringr::str_detect(Habitat, "Open") ~ "Open")) |> group_split(Habitat) |>
+  purrr::map(~group_by(.x, cell)) |> 
+  purrr::map(~dplyr::slice_max(.x, order_by =Richness, n = 1, with_ties = F))
+
+
+Names <- Test |> 
+  purrr::map(~dplyr::pull(.x, Habitat)) |> 
+  purrr::map(unique) |> 
+  purrr::reduce(c)
+
+Temp <- Habs_VilhelmsBorg[[1]]
+values(Temp) <- NA
+
+SubHab <- list()
+
+for(i in 1:length(Test)){
+  SubHab[[i]] <- Temp
+  values(SubHab[[i]])[Test[[i]]$cell] <- Test[[i]]$Richness
+}
+
+SubHab <- SubHab |> purrr::reduce(c)
+names(SubHab) <- Names
+```
+
+```{r}
+pal <- colorNumeric(c("#3288bd", "#99d594", "#e6f598", "#ffffbf", "#fee08b", "#fc8d59", 
+                               "#d53e4f"), values(SubHab),
+                    na.color = "grey")
+
+
+
+l <- leaflet() |>  
+  addProviderTiles("Esri.WorldImagery") 
+
+for(i in 1:nlyr(SubHab)){
+  l <- l |> addRasterImage(SubHab[[i]], colors = pal, opacity = 0.7, group = names(SubHab[[i]]))
+}
+  
+  
+l |> 
+  leaflet::addLegend(pal = pal, values = values(SubHab), title = "Species richness") |> 
+  addLayersControl(
+    baseGroups = names(SubHab),
+    options = layersControlOptions(collapsed = T)
+  )
 ```
 

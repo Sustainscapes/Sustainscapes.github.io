@@ -1,0 +1,114 @@
+---
+title: "Use of the SpatioTemporalCont for calculating simple spatial and temporal continuity"
+author: "Derek Corcoran"
+date: "`r Sys.Date()`"
+output:
+  ioslides_presentation:
+    widescreen: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE,
+                      error = FALSE,
+                      message = FALSE)
+library(SpatioTemporalCont)
+library(terra)
+library(tidyterra)
+library(ggplot2)
+library(purrr)
+library(supercells)
+library(motif)
+```
+
+## Package SpatioTemporalCont
+
+::: {style="float: left; width: 30%;"}
+* Very simple package with a couple of functions
+* `calculate_prop` for spatial continuity
+* `calculate_tempcont` for temporal continuity
+* First example using basemap
+:::
+
+::: {style="float: right; width: 70%;"}
+```{r Basemap2, out.width="70%", echo = F, cache = T}
+data("Landuse_DK")
+Landuse <- unwrap(Landuse_DK)
+ggplot() + 
+  geom_spatraster(data = Landuse) +
+  scale_fill_wiki_d(na.translate = F, name = "Landuse")
+```
+:::
+
+# Spatial continuity
+
+## calculate_prop
+
+* It has 3 arguments:
+    - Rast: the spatRaster to use
+    - Radius: The radius to consider
+    - Vars: The variables to calculate
+* It generates a stack of rasters
+
+```{r test, eval = F}
+Landuse <- terra::unwrap(Landuse_DK)
+
+proportions <- calculate_prop(Rast = Landuse,
+                              Radius = 200,
+                              Vars = c("dry nature", "Forest"))
+```
+
+
+## calculate_prop Result
+
+```{r Proportions, echo = F, cache=TRUE}
+Landuse <- terra::unwrap(Landuse_DK)
+
+proportions <- calculate_prop(Rast = Landuse,
+                              Radius = 200,
+                              Vars = c("dry nature", "Forest"))
+
+ggplot() + 
+  geom_spatraster(data = proportions) +
+  facet_wrap(~lyr) +
+  scale_fill_wiki_c(name = "Landuse prop")
+```
+
+## Comparison for forest several radius
+
+```{r loopPlot, cache = T, out.width= "100%", echo=FALSE}
+Landuse <- terra::unwrap(Landuse_DK)
+Stack <- list()
+
+Radii <- round(seq(200, 3000, length.out = 6), -2)
+for(i in 1:length(Radii)){
+  Stack[[i]] <- calculate_prop(Rast = Landuse,
+                              Radius = Radii[i],
+                              Vars = c("Forest"))
+}
+Stack <- Stack |> 
+  purrr::reduce(c) 
+
+names(Stack) <- Radii
+
+ggplot() + 
+  geom_spatraster(data = Stack) +
+  facet_wrap(~lyr) +
+  scale_fill_wiki_c(name = "Landuse prop")
+```
+
+## Comparison with Supercells
+
+* Lets compare at 2400 radius
+
+```{r Compare}
+Forest <- calculate_prop(Rast = Landuse,
+                              Radius = 2400,
+                              Vars = c("Forest"))
+
+
+Forest_Motif <- lsp_signature(Landuse, type = "composition", window = 24, normalization = "pdf", ordered = FALSE)
+#comp_output = lsp_restructure(comp_output)
+Forest_Motif = lsp_add_terra(Forest_Motif)
+```
+

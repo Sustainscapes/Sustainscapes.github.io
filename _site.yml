@@ -10,6 +10,8 @@ navbar:
       - text: Courses
       - text: Reproducible research in R 
         href: Libro/_book/index.html
+      - text: Spatial Connectivity and its Modeling Consequences 
+        href: SpatialConnectivity.html
     - text: "Maps"
       icon: fa-gear
       menu:

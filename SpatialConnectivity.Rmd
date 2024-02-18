@@ -45,3 +45,36 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - 09:30-10:00: Following up on Parallel or Individual Working Sessions
 - 10:00-11:00: Next Steps for Working on Specific Projects
+
+# Workshop Introduction
+
+Welcome to the Spatial Connectivity and its Modeling Consequences Workshop! This workshop aims to explore the diverse facets of spatial connectivity in ecological studies and its modeling implications. Join us for an enriching experience where experts in the field will share their insights, present relevant packages, and engage in discussions to enhance your understanding of spatial connectivity.
+
+# Workshop Requirements
+
+## R Packages
+
+Before attending the workshop, please ensure that you have the following R packages installed:
+
+- `SpatioTemporalCont`: Derek Corcoran's package for generating continuity maps for spatial and temporal habitat and species suitability.
+
+- `RangeShiftR`: Greta Bocedi's package focusing on genetic connectivity.
+
+- Other relevant packages for theoretical concepts and analyses:
+  - `samc`
+  - `gDistance`
+  - `Circuitscape`
+  - `MetaLandSim`
+  - `lconnect`
+
+## Software Requirements
+
+- R: [Download R](https://cran.r-project.org/mirrors.html)
+
+- RStudio (optional but recommended): [Download RStudio](https://www.rstudio.com/products/rstudio/download/)
+
+Please make sure to install these packages and software tools prior to the workshop to ensure a smooth and productive learning experience. We look forward to your active participation and fruitful discussions during the workshop!
+
+Feel free to reach out if you have any questions or need assistance with the preparations.
+
+See you at the workshop!

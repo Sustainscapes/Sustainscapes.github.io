@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Tuesday, February 20th – building 1540 room K20
 
 - 13:00-13:15: Welcome and Round of Presentations
-- 13:15-13:45: Derek Corcoran – Package: SpatioTemporalCont – A Simple Way of Generating Continuity Maps for Spatial and Temporal Habitat and Species Suitability
+- 13:15-13:45: Derek Corcoran – Package: SpatioTemporalCont – A Simple Way of Generating Continuity Maps for Spatial and Temporal Habitat and Species Suitability [link](https://sustainscapes.github.io/SpatialContinuity/SpatioTemporalCont.html)
 - 13:45-14:15: Greta Bocedi – Short introduction: Connectivity in Ecology
 - 14:15-14:45: Jesper Bechsgaard – Short introduction: Connectivity and patch sizes in analyses of genetic diversity
 - 14:45-15:15: Identifying potential differences in concepts.

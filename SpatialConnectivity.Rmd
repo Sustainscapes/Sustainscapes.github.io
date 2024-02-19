@@ -56,9 +56,24 @@ Welcome to the Spatial Connectivity and its Modeling Consequences Workshop! This
 
 Before attending the workshop, please ensure that you have the following R packages installed:
 
-- `SpatioTemporalCont`: Derek Corcoran's package for generating continuity maps for spatial and temporal habitat and species suitability.
+- `SpatioTemporalCont`: Derek Corcoran's package for generating continuity maps for spatial and temporal habitat and species suitability. Using the following code:
 
-- `RangeShiftR`: Greta Bocedi's package focusing on genetic connectivity.
+```{r, eval=FALSE}
+# install.packages("devtools")
+devtools::install_github("derek-corcoran-barrios/SpatioTemporalCont")
+```
+
+
+- `RangeShiftR`: Greta Bocedi's package focusing on genetic connectivity. Follow intructions in the following (link)[https://rangeshifter.github.io/RangeshiftR-tutorials/installing.html]
+
+- `sdmTMB`: Implements spatial and spatiotemporal GLMMs 
+
+```{r, eval = F}
+install.packages("sdmTMB", dependencies = TRUE)
+```
+
+
+- `Terra`: r Package: For spatial wrangling and manipulation from CRAN
 
 - Other relevant packages for theoretical concepts and analyses:
   - `samc`
@@ -67,7 +82,7 @@ Before attending the workshop, please ensure that you have the following R packa
   - `MetaLandSim`
   - `lconnect`
 
-## Software Requirements
+## Soft145ware Requirements
 
 - R: [Download R](https://cran.r-project.org/mirrors.html)
 

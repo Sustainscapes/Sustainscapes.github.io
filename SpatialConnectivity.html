@@ -429,11 +429,24 @@ enhance your understanding of spatial connectivity.</p>
 <p>Before attending the workshop, please ensure that you have the
 following R packages installed:</p>
 <ul>
-<li><p><code>SpatioTemporalCont</code>: Derek Corcoran’s package for
+<li><code>SpatioTemporalCont</code>: Derek Corcoran’s package for
 generating continuity maps for spatial and temporal habitat and species
-suitability.</p></li>
+suitability. Using the following code:</li>
+</ul>
+<pre class="r"><code># install.packages(&quot;devtools&quot;)
+devtools::install_github(&quot;derek-corcoran-barrios/SpatioTemporalCont&quot;)</code></pre>
+<ul>
 <li><p><code>RangeShiftR</code>: Greta Bocedi’s package focusing on
-genetic connectivity.</p></li>
+genetic connectivity. Follow intructions in the following (link)[<a
+href="https://rangeshifter.github.io/RangeshiftR-tutorials/installing.html"
+class="uri">https://rangeshifter.github.io/RangeshiftR-tutorials/installing.html</a>]</p></li>
+<li><p><code>sdmTMB</code>: Implements spatial and spatiotemporal
+GLMMs</p></li>
+</ul>
+<pre class="r"><code>install.packages(&quot;sdmTMB&quot;, dependencies = TRUE)</code></pre>
+<ul>
+<li><p><code>Terra</code>: r Package: For spatial wrangling and
+manipulation from CRAN</p></li>
 <li><p>Other relevant packages for theoretical concepts and
 analyses:</p>
 <ul>
@@ -445,8 +458,8 @@ analyses:</p>
 </ul></li>
 </ul>
 </div>
-<div id="software-requirements" class="section level2">
-<h2>Software Requirements</h2>
+<div id="soft145ware-requirements" class="section level2">
+<h2>Soft145ware Requirements</h2>
 <ul>
 <li><p>R: <a href="https://cran.r-project.org/mirrors.html">Download
 R</a></p></li>

@@ -24,7 +24,7 @@ knitr::opts_chunk$set(echo = TRUE)
 - 08:30-09:00: Camila – Modelling the Potential and Actual Distribution of Suitable Habitats
 - 09:00-09:30: Oliver Baines/Signe Normand - Using Expert Knowledge to Approximate the Distribution of Suitable Habitats
 - 09:30-10:00: Similarities and differences modelling and expert-based approaches.
-- 10:00-11:30: Derek Corcoran - Spatial and Temporal Continuity at Different Ecological Levels
+- 10:00-11:30: Derek Corcoran - Spatial and Temporal Continuity at Different Ecological Levels [link](https://sustainscapes.github.io/SpatialContinuity/SpatioTemporalTheory.html)
   - Theoretical Concepts of Connectivity
   - Continuous Connectivity Approach using Circuit Theory (samc, gDistance, and Circuitscape Approach)
   - Graph-Theoretic Connectivity Analyses (MetaLandSim, and lconnect)

@@ -19,6 +19,8 @@ library(ggplot2)
 library(purrr)
 library(supercells)
 library(motif)
+library(patchwork)
+library(kableExtra)
 ```
 
 ## Package SpatioTemporalCont
@@ -101,14 +103,111 @@ ggplot() +
 
 * Lets compare at 2400 radius
 
-```{r Compare}
+```{r Compare, eval=FALSE}
 Forest <- calculate_prop(Rast = Landuse,
                               Radius = 2400,
                               Vars = c("Forest"))
 
 
 Forest_Motif <- lsp_signature(Landuse, type = "composition", window = 24, normalization = "pdf", ordered = FALSE)
-#comp_output = lsp_restructure(comp_output)
 Forest_Motif = lsp_add_terra(Forest_Motif)
+Forest_Motif <- Forest_Motif[[8]]
 ```
+
+## Results {.smaller} 
+
+* Lost resolution in Supercells (Resolution 2400 vs 100 mts)
+* SpatioTemporalCont has circular buffer, Supercells has 2400 meter window
+
+```{r PlotComp, echo=FALSE, cache=TRUE, out.width="60%"}
+Landuse <- terra::unwrap(Landuse_DK)
+Forest <- calculate_prop(Rast = Landuse,
+                              Radius = 2400,
+                              Vars = c("Forest"))
+
+
+Forest_Motif <- lsp_signature(Landuse, type = "composition", window = 24, normalization = "pdf", ordered = FALSE)
+Forest_Motif = lsp_add_terra(Forest_Motif)
+Forest_Motif <- Forest_Motif[[8]]
+data("Polygons")
+v <- vect(Polygons, "polygons", crs = terra::crs(Landuse))
+G1 <- ggplot() + geom_spatraster(data = crop(Forest, v)) + scale_fill_wiki_c(limits = c(0,1)) + ggtitle("SpatioTemporalCont")
+
+G2 <- ggplot() + geom_spatraster(data = crop(Forest_Motif, v)) + scale_fill_wiki_c(limits = c(0,1)) + ggtitle("Supercells")
+G1 + G2  +
+    plot_layout(guides = 'collect')
+```
+
+## For polygons only
+
+* summarise_polygons, three types "Inside", "Both" or "Outside"
+
+```{r geometries, echo=FALSE, cache=TRUE}
+data(Polygons)
+data("Landuse_DK")
+Landuse <- terra::unwrap(Landuse_DK)
+
+v <- vect(Polygons, "polygons", crs = terra::crs(Landuse))
+v_buff <- terra::buffer(v, 2500)
+
+v_erased <- purrr::map(1:nrow(v_buff), ~erase(v_buff[.x, ], v[.x, ])) |> 
+    purrr::reduce(rbind)
+
+v$type <- "Inside"
+v_buff$type <- "Both"
+v_erased$type <- "Outside"
+
+SmallLand <- Landuse |> terra::crop(v_buff)
+
+Pols <- list(v, v_buff, v_erased) |> 
+  purrr::reduce(rbind)
+ggplot() + geom_spatraster(data = SmallLand) + geom_spatvector(data = Pols, alpha = 0.8) + facet_wrap(~type) +
+  scale_fill_wiki_d(na.translate = F, name = "Landuse")
+```
+
+## Inside
+
+```{r Inside}
+data(Polygons)
+data("Landuse_DK")
+Landuse <- terra::unwrap(Landuse_DK)
+
+v <- vect(Polygons, "polygons", crs = terra::crs(Landuse))
+Inside <- summarise_polygons(Rast = Landuse, Polygons = v,
+                            Vars = c("Agriculture","Forest"))
+```
+
+```{r, echo = F}
+kbl(Inside) |> 
+  kableExtra::kable_paper() |> 
+  scroll_box(width = "500px", height = "200px")
+```
+
+## Both
+
+```{r Both}
+Both <- summarise_polygons(Rast = Landuse, Polygons = v,
+  Vars = c("Agriculture","Forest"), type = "Both", dist = 2000)
+```
+
+```{r tableBoth, echo = F}
+kbl(Both) |> 
+  kableExtra::kable_paper() |> 
+  scroll_box(width = "500px", height = "300px")
+```
+
+
+## Outside
+
+```{r Outside}
+Outside <- summarise_polygons(Rast = Landuse, Polygons = v,
+  Vars = c("Agriculture","Forest"), type = "Outside", dist = 2000)
+```
+
+```{r tableOutside, echo = F}
+kbl(Outside) |> 
+  kableExtra::kable_paper() |> 
+  scroll_box(width = "500px", height = "300px")
+```
+
 

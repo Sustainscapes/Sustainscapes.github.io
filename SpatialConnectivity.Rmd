@@ -10,41 +10,46 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-## Tuesday, February 20th – building 1540 room K20
+# Workshop Schedule
+
+## Tuesday, February 20th
 
 - 13:00-13:15: Welcome and Round of Presentations
-- 13:15-13:45: Derek Corcoran – Package: SpatioTemporalCont – A Simple Way of Generating Continuity Maps for Spatial and Temporal Habitat and Species Suitability [link](https://sustainscapes.github.io/SpatialContinuity/SpatioTemporalCont.html)
-- 13:45-14:15: Greta Bocedi – Short introduction: Connectivity in Ecology
-- 14:15-14:45: Jesper Bechsgaard – Short introduction: Connectivity and patch sizes in analyses of genetic diversity
+- 13:15-13:45: Derek Corcoran – [Package: SpatioTemporalCont](https://sustainscapes.github.io/SpatialContinuity/SpatioTemporalCont.html) – A Simple Way of Generating Continuity Maps for Spatial and Temporal Habitat and Species Suitability
+- 13:45: Greta Bocedi – Short introduction: Connectivity in Ecology
+- Coffee break
+- 14:15: Jesper Bechsgaard – Short on the aim of analyses of population genetic data: Connectivity and patch sizes in analyses of genetic diversity
 - 14:45-15:15: Identifying potential differences in concepts.
 - 15:15-16:00: Alignment of Expectations (only Greta, Jesper, Urs, Derek)
 
-## Wednesday, February 21st – building 1223 room 142
+## Wednesday, February 21st
 
-- 08:30-09:00: Camila – Modelling the Potential and Actual Distribution of Suitable Habitats
-- 09:00-09:30: Oliver Baines/Signe Normand - Using Expert Knowledge to Approximate the Distribution of Suitable Habitats
-- 09:30-10:00: Similarities and differences modelling and expert-based approaches.
-- 10:00-11:30: Derek Corcoran - Spatial and Temporal Continuity at Different Ecological Levels [link](https://sustainscapes.github.io/SpatialContinuity/SpatioTemporalTheory.html)
+- 09:00-09:20: Camila – Modelling the Potential and Actual Distribution of Suitable Habitats
+- 09:20 – 9:30: Oliver Baines/Signe Normand - Using Expert Knowledge to Approximate the Distribution of Suitable Habitats
+- 09:30 – 10:00: Similarities and differences in modelling and expert-based approaches.
+- Coffee break
+- 10:30: Derek Corcoran - [Spatial and Temporal Continuity at Different Ecological Levels](https://sustainscapes.github.io/SpatialContinuity/SpatioTemporalTheory.html)
   - Theoretical Concepts of Connectivity
   - Continuous Connectivity Approach using Circuit Theory (samc, gDistance, and Circuitscape Approach)
   - Graph-Theoretic Connectivity Analyses (MetaLandSim, and lconnect)
   - Using Network Flow to Study Connectivity Through Time
-- 11:30-12:00: Greta Bocedi - Genetic Connectivity in RangeShiftR
 - 12:00-13:00: Lunch break
 - 13:00-16:00: Parallel or Individual Work Sessions
-- 17:30: Common dinner – Aquatic Biology lunch room, building 1135
+- 18:00: Common dinner – Aquatic Biology lunchroom, building 1135
 
-## Thursday, February 22nd – building 1540 room K20
+## Thursday, February 22nd
 
+- 10:00-10:30: Greta Bocedi - Genetic Connectivity in RangeShiftR
 - 10:30-11:00: Following up on Parallel or Individual Working Sessions
-- 11:00-12:00: Using Spatiotemporal GLMMs through Gaussian Markov Random Fields and Meshes to Enhance Spatially Explicit Bayesian Modeling [link](https://sustainscapes.github.io/SpatialContinuity/SpatioTemporalGLMMs.html)
+- 11:00-12:00: [Using Spatiotemporal GLMMs through Gaussian Markov Random Fields and Meshes to Enhance Spatially Explicit Bayesian Modeling](https://sustainscapes.github.io/SpatialContinuity/SpatioTemporalGLMMs.html)
 - 12:00-13:00: Lunch break
 - 13:00-16:00: Parallel or Individual Work Sessions
 
-## Friday, February 23rd – building 1540 room K20
+## Friday, February 23rd
 
 - 09:30-10:00: Following up on Parallel or Individual Working Sessions
-- 10:00-11:00: Next Steps for Working on Specific Projects
+- 10:00-11:00: Next Steps for Working on Specific Projects.
+
 
 # Workshop Introduction
 
@@ -82,7 +87,7 @@ install.packages("sdmTMB", dependencies = TRUE)
   - `MetaLandSim`
   - `lconnect`
 
-## Soft145ware Requirements
+## Software Requirements
 
 - R: [Download R](https://cran.r-project.org/mirrors.html)
 

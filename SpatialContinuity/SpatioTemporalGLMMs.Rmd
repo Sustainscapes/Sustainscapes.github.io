@@ -22,6 +22,24 @@ library(sdmTMB)
 library(patchwork)
 library(kableExtra)
 library(DHARMa)
+library(readr)
 ```
+
+# Problem
+
+## Spatially explicit models
+
+* Spatially explicit models are often not spatially explicit
+* Example:
+
+```{r}
+Datos <- readr::read_csv("https://raw.githubusercontent.com/derek-corcoran-barrios/derek-corcoran-barrios.github.io/master/Presentaciones_Espacial/Bombus.csv")
+
+B_impatiens <- Datos[Datos$species == "Bombus impatiens",]
+## Miremos los datos
+Datos <- Datos %>% st_as_sf(coords = c(5, 6), crs = "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0")
+Mapa <- countriesHigh %>% st_as_sf() %>% st_crop(Datos)
+```
+
 
 ## Spatially explicit GLMM

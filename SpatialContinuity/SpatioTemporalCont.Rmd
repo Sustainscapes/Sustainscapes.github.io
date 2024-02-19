@@ -211,3 +211,37 @@ kbl(Outside) |>
 ```
 
 
+# Temporal continuity
+
+## calculate_tempcont
+
+```{r corine}
+data(corine)
+corine <- terra::unwrap(corine)
+```
+
+```{r corineplot, cache=TRUE, echo=FALSE}
+ggplot() + 
+  geom_spatraster(data = corine) +
+  facet_wrap(~lyr) +
+  scale_fill_wiki_d(na.translate = F, name = "Landuse") + 
+  theme(legend.position = "none")
+```
+
+
+## calculate_tempcont (Ordinal data)
+
+* Ordinal dataset
+
+```{r TempContOrd}
+TempContOrd <- calculate_tempcont(Rast = corine,
+                                 Vars = c("Coniferous forest" ,"Mixed forest"))
+```
+
+```{r ordplot, echo=FALSE}
+ggplot() + 
+  geom_spatraster(data = TempContOrd) +
+  scale_fill_wiki_c(name = "Ordinal continuity")
+```
+
+

@@ -1,0 +1,27 @@
+---
+title: Using Spatiotemporal GLMMs through Gaussian Markov Random Fields and Meshes to Enhance Spatially Explicit Bayesian Modeling
+author: "Derek Corcoran"
+date: "`r Sys.Date()`"
+output:
+  ioslides_presentation:
+    widescreen: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE,
+                      error = FALSE,
+                      message = FALSE)
+library(SpatioTemporalCont)
+library(terra)
+library(tidyterra)
+library(ggplot2)
+library(purrr)
+library(sdmTMB)
+library(sdmTMB)
+library(patchwork)
+library(kableExtra)
+library(DHARMa)
+```
+
+## Spatially explicit GLMM

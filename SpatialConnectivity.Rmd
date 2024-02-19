@@ -37,7 +37,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ## Thursday, February 22nd – building 1540 room K20
 
 - 10:30-11:00: Following up on Parallel or Individual Working Sessions
-- 11:00-12:00: Using Spatiotemporal GLMMs through Gaussian Markov Random Fields and Meshes to Enhance Spatially Explicit Bayesian Modeling
+- 11:00-12:00: Using Spatiotemporal GLMMs through Gaussian Markov Random Fields and Meshes to Enhance Spatially Explicit Bayesian Modeling [link](https://sustainscapes.github.io/SpatialContinuity/SpatioTemporalGLMMs.html)
 - 12:00-13:00: Lunch break
 - 13:00-16:00: Parallel or Individual Work Sessions
 

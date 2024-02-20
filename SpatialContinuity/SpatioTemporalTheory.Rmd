@@ -11,7 +11,8 @@ output:
 knitr::opts_chunk$set(echo = TRUE, 
                       warning = FALSE,
                       error = FALSE,
-                      message = FALSE)
+                      message = FALSE,
+                      tidy = 'formatR')
 library(SpatioTemporalCont)
 library(terra)
 library(tidyterra)
@@ -57,7 +58,7 @@ Rasters:
 * **hli**: Heat Load Index
 * **nlcd**: USGS Landcover (categorical map)
 
-## Conductance in gDistance  {.smaller}
+## Conductance in gDistance {.smaller}
 
 Ranked by experts ordinal 1) cti, 2) gsp, 3) ffp, 4) err27  
 
@@ -87,19 +88,127 @@ tr.cost1 <- gdistance::transition(raster::raster(cost1), transitionFunction=mean
 tr.cost1 <- gdistance::geoCorrection(tr.cost1,type = "c",multpl=FALSE)
 ```
 
-## Least cost path vs geographic path
+## Geographic path  {.smaller}
 
-```{r}
-raster::plot(raster::raster(tr.cost1), xlab="x coordinate (m)", 
-             ylab="y coordinate (m)", legend.lab="Conductance")
-points(sites)
-
-Neighbours <- spdep::tri2nb(sf::st_as_sfc(sites), row.names = sites$SiteName)
-
-plot(Neighbours, sf::st_coordinates(sites)
-, col="darkgrey", add=TRUE)
+```{r geographic}
+Neighbours <- terra::delaunay(vect(sites), as.lines = T)
 ```
 
+```{r plot, echo=FALSE}
+Transcost <- terra::rast(raster::raster(tr.cost1), crs = terra::crs(terra::vect(sites)))
+
+TerraSites <- terra::vect(sites)
+
+Neighbours <- terra::delaunay(vect(sites), as.lines = T)
+
+ggplot() + geom_spatraster(data = Transcost) + scale_fill_wiki_c(name = "conductance")  + geom_spatvector(data = Neighbours, color = "darkgrey") + geom_spatvector(data = TerraSites, aes(size  = AREA_m2/10000)) + scale_size(name = "wetland area [Ha]")
+```
+
+## Add least cost {.smaller}
+
+```{r LeastCostLines}
+Lines <- list()
+
+for(i in 1:nrow(Neighbours)){
+    Temp <- as.matrix(as.data.frame(terra::intersect(terra::vect(sites), Neighbours[i,]),geom = "XY")[c("x", "y")])
+    Lines[[i]] <- terra::vect(sf::st_as_sf(gdistance::shortestPath(tr.cost1, origin = Temp[1,], goal = Temp[2,], output = "SpatialLines")))
+    terra::crs(Lines[[i]]) <- terra::crs(Neighbours)
+}
+
+Lines <- Lines |> purrr::reduce(rbind)
+```
+
+## Add least cost (Plot)
+
+```{r leastCost, echo=FALSE}
+ggplot() + geom_spatraster(data = Transcost) + scale_fill_wiki_c(name = "conductance")  + geom_spatvector(data = Neighbours, color = "darkgrey") + geom_spatvector(data = Lines, color = "red") + geom_spatvector(data = TerraSites, aes(size  = AREA_m2/10000)) + scale_size(name = "wetland area [Ha]")
+```
+
+## Distance Correlation
+
+```{r Cor, echo = F, cache=TRUE}
+DF <- data.frame(euclidean = terra::perim(Neighbours), LeastCost = terra::perim(Lines))
+
+plotly::ggplotly(ggplot(DF, aes(x = euclidean, y = LeastCost)) + geom_point() + geom_abline(intercept = 0, slope = 1, col = "red", lty = 2) + theme_bw())
+```
+
+## Actual cost
+
+```{r}
+Temp <- as.matrix(as.data.frame(terra::vect(sites),geom = "XY")[c("x", "y")])
+
+DF1 <- GeNetIt::dmatrix.df(as.matrix(gdistance::costDistance(tr.cost1, Temp))) |> dplyr::rename(least_cost = distance)
+
+DF2 <- GeNetIt::dmatrix.df(as.matrix(gdistance::commuteDistance(tr.cost1, Temp)))  |> dplyr::rename(commute_time = distance)
+
+DF3 <- GeNetIt::dmatrix.df(as.matrix(distance(terra::vect(sites)))) |> dplyr::rename(euclidean_dist = distance)
+
+
+DF4 <- read.csv("data/gdist.csv", header=TRUE) |> 
+  dplyr::rename(from = FROM, to = TO, genetic_dist = GDIST) |> 
+  dplyr::select(from, to, genetic_dist)
+
+DF <- list(DF1, DF2, DF3, DF4) |> purrr::reduce(full_join)
+```
+
+## Comparison
+
+```{r, echo=FALSE, cache = T}
+ggplot(DF, aes(x = commute_time, y = least_cost)) + geom_point()
+```
+
+## Comparison 2
+
+```{r, echo = F, cache=TRUE}
+DF |> tidyr::pivot_longer(least_cost:euclidean_dist, names_to = "dist_type", values_to = "dist") |> ggplot(aes(x = genetic_dist, y = dist)) + geom_point() + geom_smooth() + facet_wrap(~dist_type, scales = "free")
+```
+
+# Exercise
+
+## Check connectivity in Denmark {.smaller}
+
+```{r, eval =F}
+data("Landuse_DK")
+Landuse <- terra::unwrap(Landuse_DK)
+## Make sourcers to be dry nature
+DryNature <- Landuse
+
+DryNature <- terra::ifel(DryNature == "dry nature", 1, NA)
+
+Patches <- terra::aggregate(DryNature, by = "Landuse") |> 
+  as.polygons() |> 
+  disagg()
+
+Patches$Area_ha <- terra::expanse(Patches, unit = "ha")
+
+Centroids <- terra::centroids(Patches)
+
+Centroids_DF <- as.data.frame(Centroids, geom = "XY")
+```
+
+## Generate new landuse types {.smaller}
+
+```{r, eval = F}
+CLS1 <- levels(Landuse)[[1]]
+
+NewCls <- data.frame(ID = c(0, 1), Type = c("Non-nature", "Nature"))
+
+Nature <- as.numeric(Landuse)
+
+Nature <- terra::ifel(Nature %in% c(7,8,11), 1, 0)
+
+Nature <- mask(Nature, Landuse)
+
+levels(Nature) <- NewCls
+```
+
+## Exercise
+
+* Choose on of the new maps (`DryNature`, `Nature`)
+* Choose one of the Landuses in `Landuse`, and check for different radiuses and generate habitat continuities using `SpatioTemporalCont::calculate_prop`
+* Calculate commuteDistance and costDistance to compare with euclidean distance with the different options
+
+# Lets work for 15 mins
 
 # Graph based connectivity measures
 
@@ -119,5 +228,8 @@ plot(Neighbours, sf::st_coordinates(sites)
 :::
 
 ::: {style="float: right; width: 50%;"}
+**Cons**
+
 * Generating the dataset as a network might not be as easy
+* Networks are less intuitive
 :::

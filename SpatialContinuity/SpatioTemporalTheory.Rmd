@@ -22,6 +22,7 @@ library(sdmTMB)
 library(patchwork)
 library(kableExtra)
 library(DHARMa)
+library(GeNetIt)
 ```
 
 # Connectivity
@@ -32,6 +33,73 @@ library(DHARMa)
 * It diminishes genetic diversity
 
 # Continuous connectivity measures
+
+## Geographic vs continuous connectivity
+
+```{r geographiclayers}
+RasterMaps <- terra::rast(system.file("extdata/covariates.tif", package="GeNetIt"))
+data(ralu.site, package="GeNetIt")
+sites <- ralu.site
+```
+
+```{r rasterplot, echo =FALSE}
+ggplot() + geom_spatraster(data = RasterMaps["err27"]) + geom_spatvector(data = terra::vect(sites), aes(size  = AREA_m2/10000))+ scale_fill_terrain_c(name = "Elevation-Relief Ratio") + scale_size(name = "wetland area [Ha]")
+```
+
+## Variables
+
+Rasters:
+
+* **cti**: Compound Topographic Index (“wetness”)
+* **err27**: Elevation Relief Ratio
+* **ffp**: Frost Free Period
+* **gsp**: Growing Season Precipitation
+* **hli**: Heat Load Index
+* **nlcd**: USGS Landcover (categorical map)
+
+## Conductance in gDistance  {.smaller}
+
+Ranked by experts ordinal 1) cti, 2) gsp, 3) ffp, 4) err27  
+
+* *err27*: The elevation relief ratio identifies significant topographic features, higher ERR27 indicate greater topographic change ~ increased resistance. has to be inverted
+* *ffp* frost free preriod, the higher the value the more conductivity
+* *gsp* Growing Season Precipitation, it has to be more than 196 mm for key species to be present
+* *cti* Compound Topographic Index, the higher the more conductivity
+
+```{r costlayer}
+err.cost <- (1/RasterMaps[["err27"]])
+ffp.cost <- (RasterMaps[["ffp"]]/5)
+gsp.cost <- (RasterMaps[["gsp"]]-196)/15
+cti.cost <- RasterMaps[["cti"]]/5
+cost1 <- (gsp.cost + cti.cost + err.cost + ffp.cost)
+```
+
+## conductance and sampling points
+
+```{r, echo = F}
+ggplot() + geom_spatraster(data = cost1) + geom_spatvector(data = terra::vect(sites), aes(size  = AREA_m2/10000))+ scale_fill_wiki_c(name = "conductance") + scale_size(name = "wetland area [Ha]")
+```
+
+## Generating transition matrices
+
+```{r transitionmatrix}
+tr.cost1 <- gdistance::transition(raster::raster(cost1), transitionFunction=mean, directions=8)
+tr.cost1 <- gdistance::geoCorrection(tr.cost1,type = "c",multpl=FALSE)
+```
+
+## Least cost path vs geographic path
+
+```{r}
+raster::plot(raster::raster(tr.cost1), xlab="x coordinate (m)", 
+             ylab="y coordinate (m)", legend.lab="Conductance")
+points(sites)
+
+Neighbours <- spdep::tri2nb(sf::st_as_sfc(sites), row.names = sites$SiteName)
+
+plot(Neighbours, sf::st_coordinates(sites)
+, col="darkgrey", add=TRUE)
+```
+
 
 # Graph based connectivity measures
 

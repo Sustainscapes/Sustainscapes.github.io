@@ -23,3 +23,33 @@ library(patchwork)
 library(kableExtra)
 library(DHARMa)
 ```
+
+# Connectivity
+
+## Why Connectivity
+
+* Fragmentation is one of the main drivers of biodiversity loss
+* It diminishes genetic diversity
+
+# Continuous connectivity measures
+
+# Graph based connectivity measures
+
+## How does it work
+
+* We generate a network of patches
+* Each patch has attributes (Size, Diversity, Land use, etc)
+* Each edge has attributes (Distance, conductivity/resistance)
+
+## Pros and cons
+
+::: {style="float: left; width: 50%;"}
+**Pros**
+
+* Computationally eficient
+* Robust mathematical framework 
+:::
+
+::: {style="float: right; width: 50%;"}
+* Generating the dataset as a network might not be as easy
+:::

@@ -335,3 +335,8 @@ knitr::include_graphics("Images/NF2.png")
 knitr::include_graphics("Images/Dist.gif")
 ```
 
+## Geographic representation
+
+```{r, out.width="60%"}
+knitr::include_graphics("Images/NetworkFlow.gif")
+```

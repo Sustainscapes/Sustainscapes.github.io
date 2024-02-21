@@ -144,7 +144,7 @@ DF2 <- GeNetIt::dmatrix.df(as.matrix(gdistance::commuteDistance(tr.cost1, Temp))
 DF3 <- GeNetIt::dmatrix.df(as.matrix(distance(terra::vect(sites)))) |> dplyr::rename(euclidean_dist = distance)
 
 
-DF4 <- read.csv("data/gdist.csv", header=TRUE) |> 
+DF4 <- read.csv("https://raw.githubusercontent.com/Sustainscapes/Sustainscapes.github.io/master/SpatialContinuity/data/gdist.csv", header=TRUE) |> 
   dplyr::rename(from = FROM, to = TO, genetic_dist = GDIST) |> 
   dplyr::select(from, to, genetic_dist)
 
@@ -167,7 +167,7 @@ DF |> tidyr::pivot_longer(least_cost:euclidean_dist, names_to = "dist_type", val
 
 ## Check connectivity in Denmark {.smaller}
 
-```{r, eval =F}
+```{r toconnect, eval =T}
 data("Landuse_DK")
 Landuse <- terra::unwrap(Landuse_DK)
 ## Make sourcers to be dry nature
@@ -233,3 +233,37 @@ levels(Nature) <- NewCls
 * Generating the dataset as a network might not be as easy
 * Networks are less intuitive
 :::
+
+## How to build your network
+
+```{r }
+library(sfnetworks)
+Patches$ID <- 1:nrow(Patches)
+Centroids$ID <- 1:nrow(Centroids)
+Centroids_SF <- sf::st_as_sf(Centroids)
+# Patches connected to 2000 meters
+joins <- nearby(Patches, distance = 2000) |> as.data.frame() 
+
+
+Edges <- purrr::map(1:nrow(joins), ~as.lines(rbind(Centroids[Centroids$ID == joins$from[.x],], Centroids[Centroids$ID == joins$to[.x],]))) |>
+      purrr::reduce(rbind)
+
+Edges$from <- joins$from
+Edges$to <- joins$to
+
+net <- sfnetworks::sfnetwork(nodes = Centroids_SF,
+                      edges = sf::st_as_sf(Edges))
+```
+
+## Plot edges
+
+```{r}
+ggplot() + geom_spatvector(data = Edges)
+```
+
+## Plot Network
+
+```{r}
+autoplot(net, graticule = TRUE, axes = TRUE) + ggtitle("Edges: 2000")
+```
+

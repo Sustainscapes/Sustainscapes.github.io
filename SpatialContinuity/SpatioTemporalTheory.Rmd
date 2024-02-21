@@ -25,6 +25,14 @@ library(patchwork)
 library(kableExtra)
 library(DHARMa)
 library(GeNetIt)
+library(tidyr)
+library(dplyr)
+library(sf)
+library(raster)
+library(gdistance)
+library(stringr)
+library(tidygraph)
+library(scales)
 ```
 
 # Connectivity
@@ -316,8 +324,149 @@ patchwork::wrap_plots(Graphs, nrow = 2)
 
 * Changes in suitability through time
 
-```{r, echo = F}
-knitr::include_graphics("Images/NF1.png")
+```{r firstplot, echo = F}
+#knitr::include_graphics("Images/NF1.png")
+library(dispRsal)
+Problem_To_Graph <- function(habitat_layers, cost_layer, Dist){
+  Masklayer <- cost_layer
+  values(Masklayer) <- ifelse(is.na(values(Masklayer)), NA, 1)
+  Stack <-habitat_layers * Masklayer
+  accCost2 <- function(x, fromCoords) {
+    
+    fromCells <- cellFromXY(x, fromCoords)
+    tr <- transitionMatrix(x)
+    tr <- rbind(tr, rep(0, nrow(tr)))
+    tr <- cbind(tr, rep(0, nrow(tr)))
+    startNode <- nrow(tr)
+    adjP <- cbind(rep(startNode, times = length(fromCells)), fromCells)
+    tr[adjP] <- Inf
+    adjacencyGraph <- graph.adjacency(tr, mode = "directed", weighted = TRUE)
+    E(adjacencyGraph)$weight <- 1/E(adjacencyGraph)$weight
+    return(shortest.paths(adjacencyGraph, v = startNode, mode = "out")[-startNode])
+  }
+  Suitability <- list()
+  for (i in 1:nlayers(Stack)){
+    temp <- data.frame(Suitability = values(Stack[[i]]), ID = 1:length(values(Stack[[i]])), Time = i-1)
+    Suitability[[i]] <- temp[complete.cases(temp),]
+  }
+  Suitabilities <- do.call("rbind", Suitability)
+  
+  s <- Suitabilities %>% group_by(ID) %>% summarise(SUMA = sum(Suitability)) %>% filter(SUMA > 0)
+  Suitabilities <- Suitabilities[Suitabilities$ID %in% s$ID,]
+  Raster <- sum(Stack)
+  
+  Raster[values(Raster) > 0] = 1
+  Raster[values(Raster) == 0] = NA
+  
+  h16  <- transition(Raster, transitionFunction=function(x){1},16,symm=FALSE)
+  
+  h16   <- geoCorrection(h16, scl=FALSE)
+  
+  ID <-c(1:ncell(Raster))[!is.na(values(Raster))]
+  
+  B <- xyFromCell(Raster, cell = ID)
+  
+  connections <- list()
+  #For each pair of cells in B
+  for (i in 1:nrow(B)){
+    #Create a temporal raster for each row with the distance from cell xy to all other cells
+    temp <- accCost2(h16,B[i,])
+    index <- which(temp < Dist)
+    connections[[i]] <- cbind(ID[i], index, temp[index])
+  }
+  #Get everything together as a large data frame
+  connections <- do.call("rbind", connections)
+  connections <- as.data.frame(connections)
+  colnames(connections) <- c("from", "to", "dist")
+  Cons <- list()
+  
+  for(i in 1:(nlayers(Stack)-1)){
+    Cons[[i]] <- data.frame(Cell_From = connections$from, Cell_To = connections$to, Time_From = NA, Time_to = NA, Capacity = NA)
+    Cons[[i]]$Time_From <- i-1
+    Cons[[i]]$Time_to <- i
+    for(j in 1:nrow(connections)){
+      if((dplyr::filter(Suitabilities, ID == connections$from[j] & Time == i-1) %>% pull(Suitability)) == 1 & (dplyr::filter(Suitabilities, ID == connections$to[j] & Time == i) %>% pull(Suitability)) == 1){
+        Cons[[i]]$Capacity[j] <- 1
+      }
+    }
+  }
+  
+  Cons <- bind_rows(Cons) %>% dplyr::filter(Capacity == 1)
+  
+  Cost <- data.frame(ID = unique(c(c(Cons$Cell_To), c(Cons$Cell_From))), cost = values(PhilCost)[unique(c(c(Cons$Cell_To), c(Cons$Cell_From)))])
+  
+  Cost <- data.frame(ID = unique(c(c(Cons$Cell_To), c(Cons$Cell_From))), cost = values(PhilCost)[unique(c(c(Cons$Cell_To), c(Cons$Cell_From)))])
+  
+  Cons$Cost <- NA
+  
+  for(i in 1:nrow(Cons)){
+    temp <- Cost %>% dplyr::filter(ID %in% unique(c(Cons$Cell_From[i], Cons$Cell_To[i])))
+    if(nrow(temp) == 1){
+      Cons$Cost[i] <- temp$cost*2
+    }
+    if(nrow(temp) == 2){
+      Cons$Cost[i] <- temp %>% summarise(cost = sum(cost)) %>% pull(cost)
+    }
+  }
+  ForSource <- Cons %>% dplyr::filter(Time_From == min(Time_From)) %>% mutate(Cell_To = Cell_From, Cell_From = 0, Time_From = -1, Time_to = 0, Capacity = 1, Cost = 0)
+  
+  ForSink <- Cons %>% dplyr::filter(Time_to == max(Time_to)) %>% mutate(Cell_From = Cell_To, Cell_To = length(values(Stack[[1]][[1]])) + 1, Time_From = max(Time_to), Time_to = max(Time_to) + 1, Capacity = 1, Cost = 0)
+  
+  Cons <- bind_rows(ForSource, Cons, ForSink) %>% distinct()
+  
+  Cons$ID <- 1:nrow(Cons)
+  
+  Cons <- Cons %>% mutate(Cell_Time_From = paste(Cell_From, Time_From, sep = "_"), Cell_Time_To = paste(Cell_To, Time_to, sep = "_"))
+  
+  Cell_Time_Name <- unique(c(Cons$Cell_Time_From, Cons$Cell_Time_To))
+  
+  Cell_Time_ID_DF <- data.frame(Cell_Time_ID = 1:length(Cell_Time_Name), Cell_Time_Name = Cell_Time_Name)
+  
+  for(i in 1:nrow(Cell_Time_ID_DF)){
+    Cons$Cell_Time_From[Cons$Cell_Time_From == Cell_Time_ID_DF$Cell_Time_Name[i]] <- Cell_Time_ID_DF$Cell_Time_ID[i]
+  }
+  
+  for(i in 1:nrow(Cell_Time_ID_DF)){
+    Cons$Cell_Time_To[Cons$Cell_Time_To == Cell_Time_ID_DF$Cell_Time_Name[i]] <- Cell_Time_ID_DF$Cell_Time_ID[i]
+  }
+  
+  Cell_Time_ID_DF <- Cell_Time_ID_DF %>% mutate(Cell = (str_split(Cell_Time_Name,"_", simplify = T))[,1], Time = (str_split(Cell_Time_Name,"_", simplify = T))[,2])
+  
+  Cons <- Cons[,c(8,9,1:7)]
+  library(ggraph)
+  graph <- graph_from_data_frame(Cons)
+  
+  graph <- set_vertex_attr(graph = graph, name = "Node_Name", value = Cell_Time_ID_DF$Cell)
+  
+  graph <- set_vertex_attr(graph = graph, name = "Cell_Time", value = Cell_Time_ID_DF$Cell_Time_Name)
+  
+  coords <- data.frame(x = as.numeric(Cell_Time_ID_DF$Time), y = as.numeric(Cell_Time_ID_DF$Cell)) 
+  
+  coords2 <- coords %>% filter(!(y %in% c(max(y), min(y))))
+  
+  coords <- coords %>% mutate(y = case_when(!(y %in% c(max(y), min(y))) ~ y, y == min(y) ~ mean(y), y == max(y) ~ mean(y)))
+  
+  coords3 <-  data.frame(y =  sort(unique(coords2$y)), newy = NA)
+  coords3$newy <- seq(from = min(coords3$y), to = max(coords3$y), length.out = nrow(coords3))
+  coords <- full_join(coords, coords3) %>% mutate(y = case_when(is.na(newy) ~ y, !is.na(newy) ~newy)) %>% dplyr::select(x,y)
+  
+  g <- ggraph(graph, coords) + geom_edge_link() +  geom_node_point(size = 8, colour = 'steelblue') + geom_node_text(label = Cell_Time_ID_DF$Cell) + scale_y_reverse()
+  return(list(g = g, graph = as_tbl_graph(graph), coords = coords))
+}
+
+data("Phillips")
+PhillipsDF <- Phillips %>%
+  as("SpatialPixelsDataFrame") %>%
+  as.data.frame() %>% pivot_longer(starts_with("T"), names_to = "Time", values_to = "Suitability") %>% mutate(Suitability = case_when(Suitability == 1 ~ "Suitable", Suitability == 0 ~ "Unsuitable"))
+
+PhillipsSF <-  rasterToPolygons(Phillips) %>% st_as_sf()
+PhillipsSF$ID <- 1:nrow(PhillipsSF)
+a <- suppressMessages(Problem_To_Graph(habitat_layers = Phillips, cost_layer = PhilCost, Dist = 111000))
+
+b <- a$graph %>% activate(edges) %>% as.data.frame() %>% bind_cols(data.frame(flow = c(1,0,1,1,0,0,0,1,1,0,0,1)))
+a$graph <- suppressMessages(a$graph %>% activate(edges) %>% full_join(b))
+
+ggplot() + geom_sf(data = PhillipsSF, size = 0.1) + geom_sf_label(data = PhillipsSF, aes(label = ID)) + geom_tile(data = PhillipsDF, aes(x = x, y = y, fill = Suitability), alpha = 0.6) + geom_sf_label(data = PhillipsSF, aes(label = ID)) + facet_wrap(~Time) + theme_bw() + theme(panel.spacing = unit(6, "lines")) + ylab("") + xlab("")  + theme(axis.text.x = element_blank(), axis.text.y = element_blank(),axis.ticks = element_blank()) + scale_fill_manual(values = c(muted("red"), muted("blue")))
 ```
 
 ## Networks through time
@@ -325,7 +474,14 @@ knitr::include_graphics("Images/NF1.png")
 * As a network
 
 ```{r, echo = F}
-knitr::include_graphics("Images/NF2.png")
+#knitr::include_graphics("Images/NF2.png")
+UniCost <- PhilCost
+
+values(UniCost) <- rep(1, ncell(PhilCost))
+
+Y <- suppressMessages(Problem_To_Graph(habitat_layers = Phillips, cost_layer = UniCost, Dist = 111000))
+
+Y$g
 ```
 
 
@@ -337,6 +493,6 @@ knitr::include_graphics("Images/Dist.gif")
 
 ## Geographic representation
 
-```{r, out.width="60%"}
+```{r, out.width="60%", echo = F}
 knitr::include_graphics("Images/NetworkFlow.gif")
 ```

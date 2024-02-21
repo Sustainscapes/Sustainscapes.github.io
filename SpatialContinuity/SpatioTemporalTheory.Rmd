@@ -12,7 +12,8 @@ knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE,
                       error = FALSE,
                       message = FALSE,
-                      tidy = 'formatR')
+                      tidy = 'formatR',
+                      cache = T)
 library(SpatioTemporalCont)
 library(terra)
 library(tidyterra)
@@ -167,7 +168,7 @@ DF |> tidyr::pivot_longer(least_cost:euclidean_dist, names_to = "dist_type", val
 
 ## Check connectivity in Denmark {.smaller}
 
-```{r toconnect, eval =T}
+```{r toconnect, eval =TRUE, cache=F}
 data("Landuse_DK")
 Landuse <- terra::unwrap(Landuse_DK)
 ## Make sourcers to be dry nature
@@ -234,9 +235,9 @@ levels(Nature) <- NewCls
 * Networks are less intuitive
 :::
 
-## How to build your network
+## How to build your network {.smaller}
 
-```{r }
+```{r firstpatches, cache=F}
 library(sfnetworks)
 Patches$ID <- 1:nrow(Patches)
 Centroids$ID <- 1:nrow(Centroids)
@@ -257,13 +258,51 @@ net <- sfnetworks::sfnetwork(nodes = Centroids_SF,
 
 ## Plot edges
 
-```{r}
+```{r, cache=TRUE, echo=FALSE}
 ggplot() + geom_spatvector(data = Edges)
 ```
 
 ## Plot Network
 
-```{r}
+```{r, cache=TRUE, echo=FALSE}
 autoplot(net, graticule = TRUE, axes = TRUE) + ggtitle("Edges: 2000")
 ```
 
+## Several distances
+
+```{r newedges, echo=FALSE, cache=TRUE}
+library(patchwork)
+Graphs <- list()
+
+Distances <- c(2000, 5000, 10000, 50000)
+for(i in 1:length(Distances)){
+  Patches$ID <- 1:nrow(Patches)
+Centroids$ID <- 1:nrow(Centroids)
+Centroids_SF <- sf::st_as_sf(Centroids)
+# Patches connected to 2000 meters
+joins <- nearby(Patches, distance = Distances[i]) |> as.data.frame() 
+
+
+Edges <- purrr::map(1:nrow(joins), ~as.lines(rbind(Centroids[Centroids$ID == joins$from[.x],], Centroids[Centroids$ID == joins$to[.x],]))) |>
+      purrr::reduce(rbind)
+
+Edges$from <- joins$from
+Edges$to <- joins$to
+
+net <- sfnetworks::sfnetwork(nodes = Centroids_SF,
+                      edges = sf::st_as_sf(Edges))
+
+saveRDS(net, paste("net", Distances[i], ".rds"))
+
+Graphs[[i]] <- autoplot(net) + labs(title = paste("Distance", Distances[i], "meters"), subtitle = paste(nrow(Edges), "edges"))
+}
+
+```
+
+```{r Patchwork, cache = T, echo=FALSE}
+patchwork::wrap_plots(Graphs, nrow = 2)
+```
+
+# Network flow 
+
+## Networks through time

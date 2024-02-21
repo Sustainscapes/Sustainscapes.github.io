@@ -34,6 +34,10 @@ library(GeNetIt)
 * Fragmentation is one of the main drivers of biodiversity loss
 * It diminishes genetic diversity
 
+```{r, echo = F}
+knitr::include_graphics("Images/FragmentationSpp.png")
+```
+
 # Continuous connectivity measures
 
 ## Geographic vs continuous connectivity
@@ -168,7 +172,7 @@ DF |> tidyr::pivot_longer(least_cost:euclidean_dist, names_to = "dist_type", val
 
 ## Check connectivity in Denmark {.smaller}
 
-```{r toconnect, eval =TRUE, cache=F}
+```{r toconnect, eval =TRUE, cache=T}
 data("Landuse_DK")
 Landuse <- terra::unwrap(Landuse_DK)
 ## Make sourcers to be dry nature
@@ -237,7 +241,7 @@ levels(Nature) <- NewCls
 
 ## How to build your network {.smaller}
 
-```{r firstpatches, cache=F}
+```{r firstpatches, cache=T}
 library(sfnetworks)
 Patches$ID <- 1:nrow(Patches)
 Centroids$ID <- 1:nrow(Centroids)
@@ -270,11 +274,11 @@ autoplot(net, graticule = TRUE, axes = TRUE) + ggtitle("Edges: 2000")
 
 ## Several distances
 
-```{r newedges, echo=FALSE, cache=TRUE}
+```{r newedges, echo=FALSE, cache=TRUE, eval=FALSE}
 library(patchwork)
 Graphs <- list()
 
-Distances <- c(2000, 5000, 10000, 50000)
+Distances <- c(2000, 5000, 10000)
 for(i in 1:length(Distances)){
   Patches$ID <- 1:nrow(Patches)
 Centroids$ID <- 1:nrow(Centroids)
@@ -292,17 +296,42 @@ Edges$to <- joins$to
 net <- sfnetworks::sfnetwork(nodes = Centroids_SF,
                       edges = sf::st_as_sf(Edges))
 
-saveRDS(net, paste("net", Distances[i], ".rds"))
+saveRDS(net, paste0("net", Distances[i], ".rds"))
 
 Graphs[[i]] <- autoplot(net) + labs(title = paste("Distance", Distances[i], "meters"), subtitle = paste(nrow(Edges), "edges"))
+
+saveRDS(Graphs, paste0("Graphs", Distances[i], ".rds"))
 }
 
 ```
 
 ```{r Patchwork, cache = T, echo=FALSE}
+Graphs <- readRDS("Graphs5000.rds")
 patchwork::wrap_plots(Graphs, nrow = 2)
 ```
 
 # Network flow 
 
 ## Networks through time
+
+* Changes in suitability through time
+
+```{r, echo = F}
+knitr::include_graphics("Images/NF1.png")
+```
+
+## Networks through time
+
+* As a network
+
+```{r, echo = F}
+knitr::include_graphics("Images/NF2.png")
+```
+
+
+## Changing the dispersal
+
+```{r, echo=FALSE}
+knitr::include_graphics("Images/Dist.gif")
+```
+

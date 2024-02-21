@@ -40,7 +40,12 @@ library(readr)
 
 ```{r mesh}
 data("pcod")
-mesh <- make_mesh(pcod, c("X", "Y"), cutoff = 10)
+bnd <- INLA::inla.nonconvex.hull(cbind(pcod$X, pcod$Y), convex = -0.1)
+mesh_inla <- INLA::inla.mesh.2d(
+  boundary = bnd,
+  max.edge = c(25, 50)
+)
+mesh <- make_mesh(pcod, c("X", "Y"), mesh = mesh_inla)
 plot(mesh)
 ```
 
@@ -219,4 +224,3 @@ Sel <- MuMIn::model.sel(list(m, m1, m2,m3)) |>
 ```{r tableModSel, echo=FALSE, cache = F}
 kbl(Sel, digits = 2) |> kableExtra::kable_paper()  |> scroll_box()
 ```
-

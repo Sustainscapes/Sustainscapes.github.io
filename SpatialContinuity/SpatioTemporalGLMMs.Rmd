@@ -11,14 +11,16 @@ output:
 knitr::opts_chunk$set(echo = TRUE, 
                       warning = FALSE,
                       error = FALSE,
-                      message = FALSE)
+                      message = FALSE,
+                      cache = T,
+                      tidy = 'formatR')
 library(SpatioTemporalCont)
 library(terra)
 library(tidyterra)
 library(ggplot2)
 library(purrr)
 library(sdmTMB)
-library(sdmTMB)
+library(sdmTMBextra)
 library(patchwork)
 library(kableExtra)
 library(DHARMa)
@@ -30,17 +32,191 @@ library(readr)
 ## Spatially explicit models
 
 * Spatially explicit models are often not spatially explicit
-* Example:
-
-```{r}
-Datos <- readr::read_csv("https://raw.githubusercontent.com/derek-corcoran-barrios/derek-corcoran-barrios.github.io/master/Presentaciones_Espacial/Bombus.csv")
-
-B_impatiens <- Datos[Datos$species == "Bombus impatiens",]
-## Miremos los datos
-B_impatiens_shp <- terra::vect(B_impatiens)
-
-Climate <- geodata::worldclim_country(country = "United States", var = "bio", res = 0.5, path = getwd())
-```
+* We often just transform it to tabular data
+* We have to go out of our wa 
 
 
 ## Spatially explicit GLMM
+
+```{r mesh}
+data("pcod")
+mesh <- make_mesh(pcod, c("X", "Y"), cutoff = 10)
+plot(mesh)
+```
+
+## First model
+
+```{r}
+m <- sdmTMB(
+  data = pcod,
+  formula = present ~ depth_scaled + + I(depth_scaled^2),
+  mesh = mesh, # can be omitted for a non-spatial model
+  family = binomial(link = "logit"),
+  spatial = "off"
+)
+```
+
+
+## Spatial residuals
+
+```{r SpatialResiduals}
+coords <- pcod[,c("X", "Y")]
+coords$Resid <- residuals(m)
+```
+
+
+```{r SpatialResidualsplot, echo=FALSE}
+G1 <- ggplot(data = coords, aes(X, Y)) + geom_point(aes(color = Resid))  + scale_color_gradient2(name = "residuals", limits = c(-4,4)) + labs(title = "Spatial off")  +
+  coord_fixed() + theme(legend.position = "none")
+
+G1
+```
+
+## Spatial on
+
+```{r}
+m1 <- sdmTMB(
+  data = pcod,
+  formula = present ~ depth_scaled + + I(depth_scaled^2),
+  mesh = mesh,
+  family = binomial(link = "logit"),
+  spatial = "on"
+)
+```
+
+
+## Spatial residuals
+
+```{r SpatialResiduals2}
+coords$ResidSpatial <- residuals(m1)
+```
+
+
+```{r SpatialResidualsplot2, echo=FALSE}
+LongCoords <- coords |> 
+  tidyr::pivot_longer(Resid:ResidSpatial, values_to = "Residual") |> 
+  dplyr::mutate(Spatial = ifelse(name  == "Resid", "Spatial: off", "Spatial: on"))
+
+G2 <- ggplot(data = LongCoords, aes(X, Y)) + geom_point(aes(color = Residual))  + scale_color_gradient2() +
+  coord_fixed() + facet_wrap(~Spatial)
+
+plotly::ggplotly(G2)
+```
+
+
+## Lets look at the parameters
+
+```{r tidies}
+t <- tidy(m,  conf.int = T) |> 
+  mutate(Spatial = "off")
+t1 <-tidy(m1,  conf.int = T) |> 
+  mutate(Spatial = "on")
+
+tidies <- dplyr::bind_rows(t, t1)
+```
+
+```{r tableTidies1, echo=FALSE}
+kbl(tidies) |> kableExtra::kable_paper()  |> scroll_box()
+```
+
+## Add Spatiotemporal random fields
+
+```{r spatiotemporal}
+m2 <- sdmTMB(
+  data = pcod,
+  formula = present ~ depth_scaled + I(depth_scaled^2),
+  mesh = mesh,
+  family = binomial(link = "logit"),
+  spatial = "on",
+  time = "year",
+  # first-order autoregressive 
+  spatiotemporal = "AR1",
+  # Show that there are missing years
+  extra_time = c(2006, 2008, 2010, 2012, 2014, 2016)
+)
+```
+
+## Check for issues {.smaller}
+
+```{r sanity1, message=TRUE, warning=T, error=TRUE}
+sanity(m2)
+```
+
+## Calculate response
+
+
+```{r prediction}
+NewDf <- data.frame(depth_scaled = seq(from = min(pcod$depth_scaled), to = max(pcod$depth_scaled), length.out = 100), year = 2015)
+
+p <- predict(m2, newdata = NewDf, se_fit = TRUE, re_form = NA, type = "response")
+
+p <- p |> mutate(prob = 1 / (1 + exp(-est)), upper = 1 / (1 + exp(-(est + 1.96*est_se))), lower = 1 / (1 + exp(-(est - 1.96*est_se))))
+```
+
+## Plot response
+
+
+```{r plotResponse, echo = F}
+ggplot(p, aes(x = depth_scaled, y = prob)) + geom_ribbon(aes(ymax = upper, ymin = lower), fill = "red", alpha = 0.5) + geom_path() + theme_bw()
+```
+
+## Time varying response
+
+
+```{r timevaryingMod}
+m3 <- sdmTMB(
+    data = pcod,
+    formula = present ~ 0 + as.factor(year),
+    time_varying = ~ 0 + depth_scaled + I(depth_scaled^2),
+    mesh = mesh,
+    family = binomial(link = "logit"),
+    spatial = "on",
+    time = "year",
+    # first-order autoregressive 
+    spatiotemporal = "AR1",
+    # Show that there are missing years
+    extra_time = c(2006, 2008, 2010, 2012, 2014, 2016)
+)
+```
+
+
+## Prediction time varying
+
+
+```{r predictionVarying}
+NewDf <- expand.grid(depth_scaled = seq(from = min(pcod$depth_scaled), to = max(pcod$depth_scaled), length.out = 50), year = unique(pcod$year))
+
+p <- predict(m3, newdata = NewDf, se_fit = TRUE, re_form = NA, type = "response")
+
+p <- p |> mutate(prob = 1 / (1 + exp(-est)), upper = 1 / (1 + exp(-(est + 1.96*est_se))), lower = 1 / (1 + exp(-(est - 1.96*est_se))))
+```
+
+
+## Plot time varying response
+
+```{r plotResponseVarying, echo = F}
+ggplot(p, aes(x = depth_scaled, y = prob)) + geom_ribbon(aes(ymax = upper, ymin = lower), fill = "red", alpha = 0.5) + geom_path() + theme_bw() + facet_wrap(~year)
+
+```
+
+## Quick model comparison
+
+```{r ModelSel, eval =F}
+Sel <- MuMIn::model.sel(list(m, m1, m2,m3)) |> 
+  as.data.frame() |> 
+  dplyr::select("spatial", "time", "spatiotemporal", 
+"time_varying", "df", "AICc", "delta", "weight")
+```
+
+```{r ModelSel2, eval =T, include=FALSE}
+Sel <- MuMIn::model.sel(list(m, m1, m2,m3)) |> 
+  as.data.frame() |> 
+  dplyr::select("spatial", "time", "spatiotemporal", 
+"time_varying", "df", "AICc", "delta", "weight") |> 
+  dplyr::mutate(time_varying = as.character(time_varying),
+                time_varying = ifelse(time_varying == "", "No", "Yes"))
+```
+```{r tableModSel, echo=FALSE, cache = F}
+kbl(Sel, digits = 2) |> kableExtra::kable_paper()  |> scroll_box()
+```
+

@@ -34,6 +34,7 @@ library(janitor)
 library(SpatioTemporalCont)
 # For download links
 library(downloadthis)
+library(sdmTMB)
 ```
 
 
@@ -252,15 +253,16 @@ ggplot(euc_dist, aes(x = distance, y = Fst)) + geom_smooth(alpha = 0.5) + geom_p
 
 First we will take a look at a first option of a mesh
 
-```{r makeMesh, cache = T, eval=FALSE}
+```{r makeMesh, cache = T}
 Meshcoords <- terra::geom(clean_data_sf) |> as.data.frame()
 
 bnd <- INLA::inla.nonconvex.hull(cbind(Meshcoords$x, Meshcoords$y), convex = -0.1)
 mesh_inla <- fmesher::fm_mesh_2d(
   boundary = bnd,
-  max.edge = c(2500, 5000)
+  max.edge = c(8000, 50000)
 )
 mesh <- make_mesh(Meshcoords, c("x", "y"), mesh = mesh_inla)
+
 plot(mesh)
 ```
 

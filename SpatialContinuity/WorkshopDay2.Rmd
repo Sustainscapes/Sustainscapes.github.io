@@ -31,13 +31,21 @@ library(kableExtra)
 library(janitor)
 # For getting habitat proportion
 library(SpatioTemporalCont)
+# For download links
+library(downloadthis)
 ```
 
 
 
 # Grassland continuity in sampled areas
 
-Fist step is to read in coordinates of sampled sites, the dataset actually has 3 different datasets in it so it will have to be wrangled
+Fist step is to read in coordinates of sampled sites, the dataset actually has 3 different datasets in it so it will have to be wrangled, you can download the excel sheet in the following link
+
+```{r download1, echo =FALSE}
+downloadthis::download_file(path = "https://github.com/Sustainscapes/Sustainscapes.github.io/raw/master/SpatialContinuity/ExampleData/All%20Fields%20GPS%20coordinates.xlsx",
+                            output_name = "Coordinates")
+```
+
 
 ```{r readcoordinatedata}
 coordinates <- read_excel("ExampleData/All Fields GPS coordinates.xlsx", 
@@ -66,6 +74,20 @@ coordinates <- list(Coordinates_a, Coordinates_b, Coordinates_c) |>
   dplyr::mutate(lat = as.numeric(lat), lon = as.numeric(lon))
 
 coordinates <- coordinates[complete.cases(coordinates),]
+```
+
+the final dataset can be downloaded here
+
+```{r , echo=FALSE}
+coordinates %>%
+  download_this(
+    output_name = "final coodrinates",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
 ```
 
 

@@ -98,3 +98,7 @@ Please make sure to install these packages and software tools prior to the works
 Feel free to reach out if you have any questions or need assistance with the preparations.
 
 See you at the workshop!
+
+## Example work of day 2
+
+Here is the [worked example](https://sustainscapes.github.io/SpatialContinuity/WorkshopDay2.html)

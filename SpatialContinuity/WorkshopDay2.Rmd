@@ -266,3 +266,17 @@ mesh <- make_mesh(Meshcoords, c("x", "y"), mesh = mesh_inla)
 plot(mesh)
 ```
 
+
+
+```{r, echo = F}
+mesh_sf <- terra::vect(fmesher::fm_as_sfc(mesh_inla))
+terra::crs(mesh_sf) <- terra::crs(Landuse)
+ggplot() +
+  geom_spatraster(data = Landuse) +
+  geom_spatvector(data = clean_data_sf, aes(size = pi, color = pi), alpha = 0.5) +
+  geom_spatvector(data = mesh_sf, alpha = 0) +
+  theme_bw() +
+  scale_fill_wiki_d(na.translate = FALSE) + 
+  scale_color_viridis_b()
+```
+

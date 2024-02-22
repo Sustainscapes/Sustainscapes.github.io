@@ -9,7 +9,8 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE,
                       warning = FALSE,
-                      error = FALSE)
+                      error = FALSE,
+                      tidy = 'formatR')
 ```
 
 # Packages used
@@ -55,10 +56,14 @@ Coordinates_a <- coordinates[,1:3] |>
   janitor::clean_names()   
 colnames(Coordinates_a) <- stringr::str_sub(colnames(Coordinates_a), end = -3)
 
+Coordinates_a$type <- "Grassland"
+
 Coordinates_b <- coordinates[,5:7] |> 
   janitor::clean_names()
 
 colnames(Coordinates_b) <- stringr::str_sub(colnames(Coordinates_b), end = -3)
+
+Coordinates_b$type <- "Conservation agriculture"
 
 Coordinates_c <- coordinates[,9:11] |> 
   janitor::clean_names()
@@ -67,11 +72,19 @@ colnames(Coordinates_c)[1] <- stringr::str_sub(colnames(Coordinates_c)[1], end =
 
 colnames(Coordinates_c)[2:3] <- stringr::str_sub(colnames(Coordinates_c)[2:3], end = -4)
 
+Coordinates_c$type <- "Conventional agriculture"
 
 coordinates <- list(Coordinates_a, Coordinates_b, Coordinates_c) |> 
   purrr::reduce(dplyr::bind_rows) |> 
   tidyr::separate(coordinates_latitude_longitude, into = c("lat", "lon"), sep = ",") |> 
-  dplyr::mutate(lat = as.numeric(lat), lon = as.numeric(lon))
+  dplyr::mutate(lat = as.numeric(lat), lon = as.numeric(lon)) |>
+  dplyr::mutate(location_code = stringr::str_replace_all(location_code, "Ø", "oe")) |>
+  dplyr::mutate(location_code = stringr::str_replace_all(location_code, "Å", "aa")) |>
+  dplyr::mutate(location_code = stringr::str_replace_all(location_code, "Æ", "ae")) |> 
+  dplyr::mutate(location_code = janitor::make_clean_names(location_code, allow_dupes = T)) |> 
+  dplyr::mutate(location_code = stringr::str_remove_all(location_code, "ca_"),
+                location_code = stringr::str_remove_all(location_code, "k_"),
+                location_code = stringr::str_remove_all(location_code, "_"))
 
 coordinates <- coordinates[complete.cases(coordinates),]
 ```
@@ -128,5 +141,126 @@ GrasslandProp <- SpatioTemporalCont::summarise_polygons(Rast = Landuse, Polygons
 kable(GrasslandProp) |> 
   kable_paper() |> 
       scroll_box(width = "500px", height = "200px")
+```
+
+You can download the proportion table here
+
+```{r, echo = F}
+GrasslandProp %>%
+  download_this(
+    output_name = "GrasslandProp",
+    output_extension = ".csv",
+    button_label = "Download data as csv",
+    button_type = "default",
+    has_icon = TRUE,
+    icon = "fa fa-save"
+  )
+```
+
+## Importing genetic diversity
+
+We will import the data diversity, you can download the raw file here
+
+```{r download2, echo=FALSE}
+downloadthis::download_file(path = "https://github.com/Sustainscapes/Sustainscapes.github.io/raw/master/SpatialContinuity/ExampleData/test_data_genetic_diversity_workshop2024.txt",
+                            output_name = "test_data_genetic_diversity_workshop2024") 
+```
+
+
+```{r importDataDiversity}
+test_data_genetic_diversity_workshop2024 <- read_table("ExampleData/test_data_genetic_diversity_workshop2024.txt") |> 
+  dplyr::mutate(Site = janitor::make_clean_names(Site, allow_dupes = T),
+                Site = stringr::str_remove_all(Site, "_"),
+                Site = stringr::str_replace_all(Site, "lss", "les")) |> 
+  dplyr::select(Site, pi) |> 
+  dplyr::rename(location_code =Site)  |> 
+  dplyr::full_join(coordinates)
+  
+```
+
+Now we have joined most of the sites, and we will now filter to only sites with genetic diversity values, that are grasslands and have coordinates
+
+```{r cleaning}
+clean_data <- test_data_genetic_diversity_workshop2024 |> 
+  dplyr::filter(!is.na(pi), type == "Grassland", !is.na(lat))
+```
+
+Lets look at genetic diversity in the map
+
+```{r cleandatasf}
+clean_data_sf <- terra::vect(clean_data, geom = c("lon", "lat"),
+                              crs = "epsg:4326") |> 
+  terra::project(terra::crs(Landuse))
+```
+
+```{r DiversityMap, cache=TRUE, echo=FALSE}
+ggplot() +
+  geom_spatraster(data = Landuse) +
+  geom_spatvector(data = clean_data_sf, aes(size = pi, color = pi), alpha = 0.5) +
+  theme_bw() +
+  scale_fill_wiki_d(na.translate = FALSE) + 
+  scale_color_viridis_b()
+```
+
+## Genetic distance
+
+First we generate a table of ids for the site
+
+```{r}
+SiteID <- data.frame(location_code = c("aaRJ","BIJ", "DoeJ", "DSJ","FUR", "GEJ", "GUS", "HHJ", "JEJ", "JHJ", "KoeJ", "LVJ", "MSJ", "NOJ", "SBJ", "SKJ", "ULJ","UTJ", "VAJ"), ID = 1:19) |> 
+  dplyr::mutate(location_code = stringr::str_to_lower(location_code)) |> dplyr::left_join(clean_data)
+```
+
+We also build a spatial version of this to get the spatial distance
+
+```{r spatialID}
+SiteID_sf  <- terra::vect(SiteID, geom = c("lon", "lat"),
+                              crs = "epsg:4326") |> 
+  terra::project(terra::crs(Landuse))
+```
+
+
+Now lets combine this with the actual Fst data
+
+```{r}
+Fst <- read_table("ExampleData/EntNic_fst_data_old.tsv", 
+    col_names = FALSE) |> 
+  tidyr::separate(X1, into = c("from", "to")) |> 
+  dplyr::rename(Fst = X2) |> 
+  dplyr::mutate_all(as.numeric) |> 
+  dplyr::group_by(from, to) |> 
+  dplyr::summarise(Fst = mean(Fst))
+```
+
+And now add the euclidean distance
+
+```{r}
+euc_dist <- distance(SiteID_sf) |>
+  as.matrix() |> 
+  GeNetIt::dmatrix.df() |> 
+  right_join(Fst)
+  
+```
+
+An now we can plot the distances among them
+
+```{r distanceplot, echo = F}
+ggplot(euc_dist, aes(x = distance, y = Fst)) + geom_smooth(alpha = 0.5) + geom_point() 
+```
+
+## Buidling the mesh
+
+First we will take a look at a first option of a mesh
+
+```{r makeMesh, cache = T, eval=FALSE}
+Meshcoords <- terra::geom(clean_data_sf) |> as.data.frame()
+
+bnd <- INLA::inla.nonconvex.hull(cbind(Meshcoords$x, Meshcoords$y), convex = -0.1)
+mesh_inla <- fmesher::fm_mesh_2d(
+  boundary = bnd,
+  max.edge = c(2500, 5000)
+)
+mesh <- make_mesh(Meshcoords, c("x", "y"), mesh = mesh_inla)
+plot(mesh)
 ```
 

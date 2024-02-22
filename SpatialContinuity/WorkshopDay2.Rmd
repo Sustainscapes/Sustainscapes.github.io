@@ -1,0 +1,110 @@
+---
+title: "Afternoon work"
+author: "Derek Corcoran"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE,
+                      error = FALSE)
+```
+
+# Packages used
+
+Load packages to be used
+
+```{r loadpackages}
+# For data wrangling
+library(tidyverse)
+# for spatial data
+library(terra)
+# for spatial plots
+library(tidyterra)
+# for reading excel files
+library(readxl)
+# for nice tables
+library(kableExtra)
+# For improving naming
+library(janitor)
+# For getting habitat proportion
+library(SpatioTemporalCont)
+```
+
+
+
+# Grassland continuity in sampled areas
+
+Fist step is to read in coordinates of sampled sites, the dataset actually has 3 different datasets in it so it will have to be wrangled
+
+```{r readcoordinatedata}
+coordinates <- read_excel("ExampleData/All Fields GPS coordinates.xlsx", 
+    skip = 1)
+
+Coordinates_a <- coordinates[,1:3] |> 
+  janitor::clean_names()   
+colnames(Coordinates_a) <- stringr::str_sub(colnames(Coordinates_a), end = -3)
+
+Coordinates_b <- coordinates[,5:7] |> 
+  janitor::clean_names()
+
+colnames(Coordinates_b) <- stringr::str_sub(colnames(Coordinates_b), end = -3)
+
+Coordinates_c <- coordinates[,9:11] |> 
+  janitor::clean_names()
+
+colnames(Coordinates_c)[1] <- stringr::str_sub(colnames(Coordinates_c)[1], end = -3)
+
+colnames(Coordinates_c)[2:3] <- stringr::str_sub(colnames(Coordinates_c)[2:3], end = -4)
+
+
+coordinates <- list(Coordinates_a, Coordinates_b, Coordinates_c) |> 
+  purrr::reduce(dplyr::bind_rows) |> 
+  tidyr::separate(coordinates_latitude_longitude, into = c("lat", "lon"), sep = ",") |> 
+  dplyr::mutate(lat = as.numeric(lat), lon = as.numeric(lon))
+
+coordinates <- coordinates[complete.cases(coordinates),]
+```
+
+
+## Getting habitat proportion with given locations
+
+First we will read in the spatRaster used for the habitat proportion calculation, the full resolution map can be downloaded in this [link](https://envs.au.dk/en/research-areas/society-environment-and-resources/land-use-and-gis/basemap/basemap04-geotiff-for-download)
+
+```{r readinBasemap}
+data("Landuse_DK")
+Landuse <- terra::unwrap(Landuse_DK)
+```
+
+## Extract proportion for the points
+
+```{r}
+coordinates_sf <- terra::vect(coordinates, geom = c("lon", "lat"),
+                              crs = "epsg:4326") |> 
+  terra::project(terra::crs(Landuse))
+```
+
+The landuse and points can be seen in the following figure
+
+```{r Landusemap, cache=TRUE, echo=FALSE}
+ggplot() +
+  geom_spatraster(data = Landuse) +
+  geom_spatvector(data = coordinates_sf) +
+  theme_bw() +
+  scale_fill_wiki_d(na.translate = FALSE)
+```
+
+## Extract proportion of grasland from points
+
+```{r}
+GrasslandProp <- SpatioTemporalCont::summarise_polygons(Rast = Landuse, Polygons = coordinates_sf, Vars = "dry nature", dist = 2000, type = "Both")
+```
+
+```{r, echo=FALSE}
+kable(GrasslandProp) |> 
+  kable_paper() |> 
+      scroll_box(width = "500px", height = "200px")
+```
+

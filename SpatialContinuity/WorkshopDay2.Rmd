@@ -10,7 +10,8 @@ knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE,
                       warning = FALSE,
                       error = FALSE,
-                      tidy = 'formatR')
+                      tidy = 'formatR',
+                      cache = TRUE)
 ```
 
 # Packages used
@@ -40,6 +41,8 @@ library(downloadthis)
 # For the models
 library(sdmTMB)
 library(sdmTMBextra)
+# For distance estimations
+library(gdistance)
 ```
 
 
@@ -223,6 +226,8 @@ We also build a spatial version of this to get the spatial distance
 SiteID_sf  <- terra::vect(SiteID, geom = c("lon", "lat"),
                               crs = "epsg:4326") |> 
   terra::project(terra::crs(Landuse))
+
+CoordSites <- terra::geom(SiteID_sf)[,c(3,4)]
 ```
 
 
@@ -253,6 +258,130 @@ An now we can plot the distances among them
 ```{r distanceplot, echo = F}
 ggplot(euc_dist, aes(x = distance, y = Fst)) + geom_smooth(alpha = 0.5) + geom_point() 
 ```
+
+### Building transition distances
+
+We will build transistion distances based on 2500 meters and 500 meters for grasslands.
+
+```{r Buildconductivity}
+Grassland500 <- SpatioTemporalCont::calculate_prop(Rast = Landuse,
+                                                   Radius = 500,
+                                                   Vars = "dry nature")
+
+Grassland500 <- Grassland500 + 0.001
+Grassland500[is.na(Grassland500)] <- 0.001
+
+Grassland500 <- terra::aggregate(Grassland500, fact = 5)
+
+Grassland2500 <- SpatioTemporalCont::calculate_prop(Rast = Landuse,
+                                                   Radius = 2500,
+                                                   Vars = "dry nature")
+
+Grassland2500 <- Grassland2500 + 0.001
+Grassland2500[is.na(Grassland2500)] <- 0.001
+
+Grassland2500 <- terra::aggregate(Grassland2500, fact = 5)
+```
+
+We can plot both together
+
+```{r plotofproportions, echo = F}
+
+Proportions <- c(Grassland500, Grassland2500)
+names(Proportions) <- c("Radius 500", "Radius 2500")
+
+ggplot() + geom_spatraster(data = Proportions) + scale_fill_viridis_c() + theme_bw() + facet_wrap(~lyr)
+```
+
+To build the conductivity layers we use gdistance
+
+```{r transitionlayers500, cache = T}
+tr.cost500 <- gdistance::transition(raster::raster(Grassland500), transitionFunction=mean, directions=4)
+tr.cost500 <- gdistance::geoCorrection(tr.cost500,type = "c",multpl=FALSE)
+
+
+saveRDS(tr.cost500, "tr.cost500.rds")
+```
+
+
+```{r transitionlayers2500, cache = T}
+tr.cost2500 <- gdistance::transition(raster::raster(Grassland2500), transitionFunction=mean, directions=4)
+tr.cost2500 <- gdistance::geoCorrection(tr.cost2500,type = "c",multpl=FALSE)
+
+saveRDS(tr.cost2500, "tr.cost2500.rds")
+```
+
+Check some fast graphical outputs first with euclidean distance
+
+
+```{r geographic, cache = T}
+Neighbours <- terra::delaunay(clean_data_sf, as.lines = T)
+terra::writeVector(Neighbours, "Neighbours.shp", overwrite = T)
+```
+
+and then with shortest paths
+
+```{r shortestpaths}
+Lines500 <- list()
+
+for(i in 1:nrow(Neighbours)){
+    Temp <- as.matrix(as.data.frame(terra::intersect(clean_data_sf, Neighbours[i,]),geom = "XY")[c("x", "y")])
+    Lines500[[i]] <- terra::vect(sf::st_as_sf(gdistance::shortestPath(tr.cost500, origin = Temp[1,], goal = Temp[2,], output = "SpatialLines")))
+    terra::crs(Lines500[[i]]) <- terra::crs(Neighbours)
+}
+
+Lines2500 <- list()
+
+for(i in 1:nrow(Neighbours)){
+    Temp <- as.matrix(as.data.frame(terra::intersect(clean_data_sf, Neighbours[i,]),geom = "XY")[c("x", "y")])
+    Lines2500[[i]] <- terra::vect(sf::st_as_sf(gdistance::shortestPath(tr.cost2500, origin = Temp[1,], goal = Temp[2,], output = "SpatialLines")))
+    terra::crs(Lines2500[[i]]) <- terra::crs(Neighbours)
+}
+
+Lines500 <- Lines500 |> purrr::reduce(rbind)
+terra::writeVector(Lines500, "Lines500.shp", overwrite = T)
+
+Lines2500 <- Lines2500 |> purrr::reduce(rbind)
+terra::writeVector(Lines2500, "Lines2500.shp", overwrite = T)
+
+
+
+```
+
+Now we plot the shortest path, vs euclidean
+
+```{r plotPaths}
+Landuse <- terra::unwrap(Landuse_DK)
+Lines500 <- terra::vect("Lines500.shp")
+Lines2500 <- terra::vect("Lines2500.shp")
+Neighbours <- terra::vect("Neighbours.shp")
+
+
+ggplot() +
+  geom_spatraster(data = Landuse) +
+  geom_spatvector(data = Neighbours) +
+  geom_spatvector(data = Lines500, color = "red") +
+  geom_spatvector(data = Lines2500, color = "blue")
+```
+
+```{r}
+DF500 <- GeNetIt::dmatrix.df(as.matrix(gdistance::costDistance(tr.cost500, CoordSites))) |> dplyr::rename(least_cost500 = distance)
+
+DF2500 <- GeNetIt::dmatrix.df(as.matrix(gdistance::costDistance(tr.cost2500, CoordSites))) |> dplyr::rename(least_cost2500 = distance)
+
+all_dist <- euc_dist |> dplyr::left_join(DF500) |> dplyr::left_join(DF2500) 
+```
+
+
+Now we can show the plot of the different distances
+
+```{r corrplot}
+ToPlot <- all_dist |> 
+  tidyr::pivot_longer(cols = c("distance", "least_cost500", "least_cost2500"), names_to = "distance_type", values_to = "distance") 
+
+ggplot(ToPlot, aes(x = Fst, y = distance)) + geom_point() + facet_wrap(~distance_type, scales = "free_y")
+```
+
 
 ## Buidling the mesh
 

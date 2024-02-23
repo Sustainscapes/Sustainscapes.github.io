@@ -22,6 +22,9 @@ Load packages to be used
 library(tidyverse)
 # for spatial data
 library(terra)
+library(sf)
+# To download spatial data
+library(geodata)
 # for spatial plots
 library(tidyterra)
 # for reading excel files
@@ -34,7 +37,9 @@ library(janitor)
 library(SpatioTemporalCont)
 # For download links
 library(downloadthis)
+# For the models
 library(sdmTMB)
+library(sdmTMBextra)
 ```
 
 
@@ -261,14 +266,12 @@ mesh_inla <- fmesher::fm_mesh_2d(
   boundary = bnd,
   max.edge = c(8000, 50000)
 )
-mesh <- make_mesh(Meshcoords, c("x", "y"), mesh = mesh_inla)
-
-plot(mesh)
+mesh <- sdmTMB::make_mesh(Meshcoords, c("x", "y"), mesh = mesh_inla)
 ```
 
 
 
-```{r, echo = F}
+```{r PLOTMESH, echo = F}
 mesh_sf <- terra::vect(fmesher::fm_as_sfc(mesh_inla))
 terra::crs(mesh_sf) <- terra::crs(Landuse)
 ggplot() +
@@ -278,5 +281,37 @@ ggplot() +
   theme_bw() +
   scale_fill_wiki_d(na.translate = FALSE) + 
   scale_color_viridis_b()
+```
+
+We should add a barrier, since we have the sea, for that we will download a polygon of Denmark, reproject it and transform it in to an sf object
+
+```{r download Denmark}
+DK <- geodata::gadm("Denmark", level = 0, path = getwd()) |> 
+  terra::project(Landuse) |> 
+  sf::st_as_sf()
+```
+
+And now we add it to the mesh
+
+```{r barrier}
+bspde <- sdmTMBextra::add_barrier_mesh(
+  mesh, DK, range_fraction = 0.1, plot = FALSE
+)
+```
+
+```{r meshbarriers, echo=FALSE}
+mesh_df_land <- bspde$mesh_sf[bspde$normal_triangles, ] |> terra::vect()
+mesh_df_water <- bspde$mesh_sf[bspde$barrier_triangles, ] |> terra::vect()
+
+mesh_sf <- terra::vect(fmesher::fm_as_sfc(mesh_inla))
+terra::crs(mesh_sf) <- terra::crs(Landuse)
+ggplot() +
+  geom_spatraster(data = Landuse) +
+  geom_spatvector(data = mesh_sf, alpha = 0) +
+  theme_bw() +
+  scale_fill_wiki_d(na.translate = FALSE) +
+  geom_spatvector(data = mesh_df_water, size = 1, colour = "blue") +
+  geom_spatvector(data = mesh_df_land, size = 1, colour = "green") +
+  geom_spatvector(data = clean_data_sf, color = "red")
 ```
 

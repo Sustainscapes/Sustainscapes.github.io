@@ -102,3 +102,7 @@ See you at the workshop!
 ## Example work of day 2
 
 Here is the [worked example](https://sustainscapes.github.io/SpatialContinuity/WorkshopDay2.html)
+
+## Butterfly model day 3
+
+Here is the [worked example](https://sustainscapes.github.io/SpatialContinuity/ButterflyModel.html)

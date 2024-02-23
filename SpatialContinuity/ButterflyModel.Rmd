@@ -1,0 +1,167 @@
+---
+title: "Butterfly SDM modeling"
+author: "Derek Corcoran"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
+                      error = FALSE,
+                      message = FALSE,
+                      cache = TRUE)
+```
+
+
+```{r loadpackages}
+library(tidyverse)
+library(terra)
+library(geodata)
+library(tidyterra)
+library(sdmTMB)
+library(sdmTMBextra)
+library(SpatioTemporalCont)
+```
+
+## Load in data
+
+First load year by year data for butterflies
+
+```{r loadindata}
+Files <- list.files(path = "Butterfly/", full.names = T)
+Files <- Files[stringr::str_detect(Files, "regional")]
+
+Years <- readr::parse_number(Files)
+
+Data <- Files |> 
+  purrr::map(~read_delim(.x, 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE)) |> 
+  purrr::map2(.y = Years, ~dplyr::mutate(.x, years = .y))
+
+for(i in 1:length(Data)){
+  ## get the colnames
+  TempColnames <- colnames(Data[[i]])
+  ## Extract the indexes of only the ones that have the "bio" string
+  Indexes <- (1:length(TempColnames))[str_detect(TempColnames, "bio")]
+  ToChange <- TempColnames[Indexes]
+  colnames(Data[[i]])[Indexes] <-  stringr::str_extract(ToChange, "bio(\\d+)")
+  
+  TempColnames <- colnames(Data[[i]])[20:28]
+  
+  TempColnames <- str_sub(TempColnames, start = 45)
+  TempColnames <- str_extract(TempColnames, "^(.*?)\\.reg")
+  TempColnames <- gsub("\\.reg\\d*$", "", TempColnames)
+  TempColnames <- tm::removeNumbers(TempColnames)
+  colnames(Data[[i]])[20:28] <- TempColnames
+}
+
+Data <- Data |> purrr::reduce(dplyr::bind_rows)
+
+Data <- Data[!is.na(Data$Woodland),]
+
+Data_SF <- terra::vect(Data, geom = c("X", "Y"), crs = "epsg:4326")
+```
+
+Get some danish data to project and plot
+
+```{r}
+data("Landuse_DK")
+Landuse <- unwrap(Landuse_DK)
+
+Data_SF <- terra::project(Data_SF, terra::crs(Landuse))
+
+coords <- as.data.frame(Data_SF, geom = "XY")[,c("x","y")]
+
+Data <- Data |> dplyr::bind_cols(coords)
+```
+
+
+## Buidling the mesh
+
+First we will take a look at a first option of a mesh
+
+```{r makeMesh, cache = T}
+
+bnd <- INLA::inla.nonconvex.hull(cbind(Data$x, Data$y), convex = -0.1)
+mesh_inla <- fmesher::fm_mesh_2d(
+  boundary = bnd,
+  max.edge = c(8000, 50000)
+)
+mesh <- sdmTMB::make_mesh(Data, c("x", "y"), mesh = mesh_inla)
+```
+
+
+
+```{r PLOTMESH, echo = F}
+Data_SF <- Data_SF[Data_SF$pa_reg == 1,]
+mesh_sf <- terra::vect(fmesher::fm_as_sfc(mesh_inla))
+terra::crs(mesh_sf) <- terra::crs(Landuse)
+ggplot() +
+  geom_spatraster(data = Landuse) +
+  geom_spatvector(data = Data_SF, aes(color = as.factor(pa_reg)), alpha = 0.5) +
+  geom_spatvector(data = mesh_sf, alpha = 0) +
+  theme_bw() +
+  scale_fill_wiki_d(na.translate = FALSE) + 
+  scale_color_viridis_d()
+```
+
+We should add a barrier, since we have the sea, for that we will download a polygon of Denmark, reproject it and transform it in to an sf object
+
+```{r download Denmark}
+DK <- geodata::gadm("Denmark", level = 0, path = getwd()) |> 
+  terra::project(Landuse) |> 
+  sf::st_as_sf()
+```
+
+And now we add it to the mesh
+
+```{r barrier}
+bspde <- sdmTMBextra::add_barrier_mesh(
+  mesh, DK, range_fraction = 0.1, plot = FALSE
+)
+```
+
+```{r meshbarriers, echo=FALSE}
+mesh_df_land <- bspde$mesh_sf[bspde$normal_triangles, ] |> terra::vect()
+mesh_df_water <- bspde$mesh_sf[bspde$barrier_triangles, ] |> terra::vect()
+
+mesh_sf <- terra::vect(fmesher::fm_as_sfc(mesh_inla))
+terra::crs(mesh_sf) <- terra::crs(Landuse)
+ggplot() +
+  geom_spatraster(data = Landuse) +
+  geom_spatvector(data = mesh_sf, alpha = 0) +
+  theme_bw() +
+  scale_fill_wiki_d(na.translate = FALSE) +
+  geom_spatvector(data = mesh_df_water, size = 1, colour = "blue") +
+  geom_spatvector(data = mesh_df_land, size = 1, colour = "green")
+```
+
+## Make the first model
+
+
+```{r firstModel, eval = F}
+m1 <- sdmTMB(
+  data = Data,
+  formula = pa_reg ~ Cropland + I(Cropland^2) + bio1 + I(bio1^2),
+  mesh = bspde,
+  family = binomial(link = "logit"),
+  spatial = "on",
+  time = "years",
+  # first-order autoregressive 
+  spatiotemporal = "AR1"
+)
+```
+
+Lets check the results
+
+```{r, eval = F}
+tidy(m1,  conf.int = T)
+```
+
+And sanity test
+
+```{r, eval = F}
+sanity(m1)
+```
+

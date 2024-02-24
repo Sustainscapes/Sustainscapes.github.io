@@ -43,6 +43,8 @@ library(sdmTMB)
 library(sdmTMBextra)
 # For distance estimations
 library(gdistance)
+# For plots
+library(ggplot2)
 ```
 
 
@@ -266,21 +268,25 @@ We will build transistion distances based on 2500 meters and 500 meters for gras
 ```{r Buildconductivity}
 Grassland500 <- SpatioTemporalCont::calculate_prop(Rast = Landuse,
                                                    Radius = 500,
-                                                   Vars = "dry nature")
+                                                   Vars = c("dry nature", "Forest", "wet nature", "Agriculture"))
+
+Grassland500 <- Grassland500["dry nature"]*2 + Grassland500["wet nature"] +  Grassland500["Forest"]*0.8 + Grassland500["Agriculture"]*0.2 
 
 Grassland500 <- Grassland500 + 0.001
 Grassland500[is.na(Grassland500)] <- 0.001
 
-Grassland500 <- terra::aggregate(Grassland500, fact = 5)
+Grassland500 <- terra::aggregate(Grassland500, fact = 5, cores = 4)
 
 Grassland2500 <- SpatioTemporalCont::calculate_prop(Rast = Landuse,
                                                    Radius = 2500,
-                                                   Vars = "dry nature")
+                                                   Vars = c("dry nature", "Forest", "wet nature", "Agriculture"))
+
+Grassland2500 <- Grassland2500["dry nature"]*2 + Grassland2500["wet nature"] +  Grassland2500["Forest"]*0.8 + Grassland2500["Agriculture"]*0.2 
 
 Grassland2500 <- Grassland2500 + 0.001
 Grassland2500[is.na(Grassland2500)] <- 0.001
 
-Grassland2500 <- terra::aggregate(Grassland2500, fact = 5)
+Grassland2500 <- terra::aggregate(Grassland2500, fact = 5, cores = 4)
 ```
 
 We can plot both together
@@ -290,7 +296,7 @@ We can plot both together
 Proportions <- c(Grassland500, Grassland2500)
 names(Proportions) <- c("Radius 500", "Radius 2500")
 
-ggplot() + geom_spatraster(data = Proportions) + scale_fill_viridis_c() + theme_bw() + facet_wrap(~lyr)
+ggplot() + geom_spatraster(data = Proportions) + scale_fill_wiki_c() + theme_bw() + facet_wrap(~lyr)
 ```
 
 To build the conductivity layers we use gdistance
@@ -365,21 +371,31 @@ ggplot() +
 ```
 
 ```{r}
-DF500 <- GeNetIt::dmatrix.df(as.matrix(gdistance::costDistance(tr.cost500, CoordSites))) |> dplyr::rename(least_cost500 = distance)
+Landuse <- terra::unwrap(Landuse_DK)
+euc_dist$least_cost500 <- NA
+euc_dist$least_cost2500 <- NA
 
-DF2500 <- GeNetIt::dmatrix.df(as.matrix(gdistance::costDistance(tr.cost2500, CoordSites))) |> dplyr::rename(least_cost2500 = distance)
+for(i in 1:nrow(euc_dist)){
+  Temp <- terra::vect(sf::st_as_sf(gdistance::shortestPath(tr.cost500, origin = CoordSites[euc_dist$from[i],], goal = CoordSites[euc_dist$to[i],], output = "SpatialLines")))
+  terra::crs(Temp) <- terra::crs(Landuse)
+  euc_dist$least_cost500[i] <- terra::perim(Temp)
+  
+  Temp <- terra::vect(sf::st_as_sf(gdistance::shortestPath(tr.cost2500, origin = CoordSites[euc_dist$from[i],], goal = CoordSites[euc_dist$to[i],], output = "SpatialLines")))
+  terra::crs(Temp) <- terra::crs(Landuse)
+  euc_dist$least_cost2500[i] <- terra::perim(Temp)
+}
 
-all_dist <- euc_dist |> dplyr::left_join(DF500) |> dplyr::left_join(DF2500) 
+all_dist <- euc_dist
 ```
 
 
 Now we can show the plot of the different distances
 
-```{r corrplot}
+```{r corrplot, cache=FALSE, echo=FALSE}
 ToPlot <- all_dist |> 
   tidyr::pivot_longer(cols = c("distance", "least_cost500", "least_cost2500"), names_to = "distance_type", values_to = "distance") 
 
-ggplot(ToPlot, aes(x = Fst, y = distance)) + geom_point() + facet_wrap(~distance_type, scales = "free_y")
+ggplot(ToPlot, aes(x = Fst, y = distance)) + geom_point()+ geom_smooth(method = "lm") + facet_wrap(~distance_type, scales = "free_y") + theme_bw()
 ```
 
 

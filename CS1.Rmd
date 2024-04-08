@@ -96,16 +96,23 @@ leaflet(width = 0, height = 0)
           georaster,
           opacity: 0.75,
           resolution: 128, // 128 seems to be a good compromise
-          pixelValuesToColorFn: function(pixelValues){
-            var pixelValue = pixelValues[0]; 
+           pixelValuesToColorFn: function(pixelValues) {
+            var pixelValue = pixelValues[0];
             // Define the color scale range
             var colorScale = d3.scaleSequential(d3.interpolateViridis)
-                               .domain([1, 62]); // Adjust the domain to cover the range of your pixel values
+                               .domain([1, 62]);
 
-            // Return color based on pixel value
-            return colorScale(pixelValue);
+            // Check if pixel value is within the scale range
+            if (pixelValue >= 1 && pixelValue <= 62) {
+                // Return color based on pixel value
+                return colorScale(pixelValue);
+            } else {
+                // Return transparent color for values outside the scale
+                return 'rgba(0, 0, 0, 0)'; // Fully transparent color
+            }
         }
-    });       
+    });
+
     random_rast_dk.addTo(map);
 });
 

@@ -351,10 +351,11 @@ $(document).ready(function () {
 
 <p><link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" /></p>
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://unpkg.com/georaster"></script>
 <script src="https://unpkg.com/georaster-layer-for-leaflet/dist/georaster-layer-for-leaflet.min.js"></script>
-<div id="htmlwidget-04841dbcf16d4ef52b29" style="width:0px;height:0px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-04841dbcf16d4ef52b29">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-32b4e297a010ef4f104b" style="width:0px;height:0px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-32b4e297a010ef4f104b">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}}},"evals":[],"jsHooks":[]}</script>
 <style>
         /* Overall map style */
         #map {position: absolute; top: 0; bottom: 0; left: 0; right: 0;}
@@ -427,41 +428,25 @@ $(document).ready(function () {
           resolution: 128, // 128 seems to be a good compromise
           pixelValuesToColorFn: function(pixelValues){
             var pixelValue = pixelValues[0]; 
-            // Define quantile ranges and corresponding labels
-            var quantiles = [1, 8, 11, 13, 15, 18, 22, 29, 62];
-            var labels = ["Very Low", "Low", "Medium-Low", "Medium", "Medium-High", "High", "Very High", "Extremely High"];
-            // Determine category based on quantiles
-            var category = labels.reduce((acc, label, index) => {
-                if (pixelValue <= quantiles[index + 1]) {
-                    acc = label;
-                }
-                return acc;
-            }, "");
-            // Map category to colors
-            var colorArray = ['#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5'];
-            // Assign color based on category
-            var colorIndex = labels.indexOf(category);
-            if (colorIndex !== -1) {
-                return colorArray[colorIndex];
-            } else {
-                return undefined;
-            }   
-          }
-      });       
-      random_rast_dk.addTo(map);
-  });
-  
-  var legend = L.control({ position: "bottomright" });
+            // Define the color scale range
+            var colorScale = d3.scaleSequential(d3.interpolateViridis)
+                               .domain([1, 62]); // Adjust the domain to cover the range of your pixel values
+
+            // Return color based on pixel value
+            return colorScale(pixelValue);
+        }
+    });       
+    random_rast_dk.addTo(map);
+});
+
+// Define legend
+var legend = L.control({ position: "bottomright" });
 legend.onAdd = function(map) {
     var div = L.DomUtil.create("div", "legend");
     
     div.innerHTML += "<h4>Projected landuse</h4>";
-    // Add legend entries
-    var labels = ["Very Low", "Low", "Medium-Low", "Medium", "Medium-High", "High", "Very High", "Extremely High"];
-    var colorArray = ['#8dd3c7','#ffffb3','#bebada','#fb8072','#80b1d3','#fdb462','#b3de69','#fccde5'];
-    for (var i = 0; i < labels.length; i++) {
-        div.innerHTML += '<i class="legend-icon" style="background: ' + colorArray[i] + '"></i><span class="legend-text">' + labels[i] + '</span><br>';
-    }
+    div.innerHTML += '<div class="legend-gradient" id="legend-gradient"></div>';
+    div.innerHTML += '<span class="legend-min">1</span><span class="legend-max">62</span>'; // Adjust the min and max values
 
     return div;
 };

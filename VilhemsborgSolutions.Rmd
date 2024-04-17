@@ -1,0 +1,62 @@
+---
+title: "Vilhemsborg solutions"
+author: "Derek Corcoran"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, error = FALSE, message = FALSE)
+
+library(terra)
+
+Files <- list.files(path = "/home/au687614/Documents/Targets_vilhelmsborg_community/", pattern = "\\.tif$", full.names = T)
+
+Files <- Files[stringr::str_detect(Files, "Solution")]
+
+Names <- Files |> stringr::str_remove_all("\\.tif") |> 
+  stringr::str_remove_all("./Solution_")
+
+
+Sols <- terra::rast(Files)
+names(Sols) <- Names
+
+
+Names <- c("Survey Scenario 3", "Survey Scenario 2", "Survey Scenario 1", "Database Scenario 3", "Database Scenario 2", "Database Scenario 1")
+Sols <- terra::project(Sols, y = "epsg:4326")
+
+
+library(leaflet)
+
+Sols <- as.numeric(Sols)
+Pal <- colorBin(palette = c('#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf'), domain = values((Sols)[[1]]), na.color = "transparent")
+factor_labels <- c("ForestDryPoor", "ForestDryRich", "ForestWetPoor", "ForestWetRich", 
+                   "OpenDryPoor", "OpenDryRich", "OpenWetPoor", "OpenWetRich") 
+
+
+L <- leaflet(height = 300) |> addProviderTiles("Esri.WorldImagery") |> 
+addRasterImage(Sols[[6]], color = Pal, group = Names[6]) |>  
+  addRasterImage(Sols[[5]], color = Pal, group = Names[5]) |> 
+  addRasterImage(Sols[[4]], color = Pal, group = Names[4]) |>
+  addRasterImage(Sols[[3]], color = Pal, group = Names[3]) |> 
+  addRasterImage(Sols[[2]], color = Pal, group = Names[2]) |>
+  addRasterImage(Sols[[1]], color = Pal, group = Names[1]) |>
+  addLegend(
+    "bottomright",
+    title = "Land Use",
+    colors = c('#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf'),
+    labels = factor_labels,
+    opacity = 1
+  ) |> addLayersControl(
+    overlayGroups = rev(Names),
+    options = layersControlOptions(collapsed = T)
+  )
+
+L
+```
+
+
+```{r Map}
+L
+```
+

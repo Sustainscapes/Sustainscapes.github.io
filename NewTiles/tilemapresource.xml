@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <TileMap version="1.0.0" tilemapservice="http://tms.osgeo.org/1.0.0">
+      <Title>ReGrBu2_rescaled.tif</Title>
+      <Abstract></Abstract>
+      <SRS>EPSG:3857</SRS>
+      <BoundingBox minx="8.00830949937517" miny="54.43550000478894" maxx="15.59782859402412" maxy="57.76906570139769"/>
+      <Origin x="8.00830949937517" y="54.43550000478894"/>
+      <TileFormat width="500" height="500" mime-type="image/png" extension="png"/>
+      <TileSets profile="mercator">
+        <TileSet href="7" units-per-pixel="1222.99245234375007" order="7"/>
+        <TileSet href="8" units-per-pixel="611.49622617187504" order="8"/>
+        <TileSet href="9" units-per-pixel="305.74811308593752" order="9"/>
+      </TileSets>
+    </TileMap>
+    

@@ -1,0 +1,55 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(leaflet)
+library(leafem)
+library(htmltools)
+library(htmlwidgets)
+library(viridisLite)
+```
+
+
+```{r}
+
+Pal <- leaflet::colorNumeric(palette = viridis(100), domain = 1:62)
+
+
+leaflet(width = "100%", height = 480) %>%
+  setView(lng = 12, lat = 56.25, zoom = 7) %>%
+  addProviderTiles("CartoDB.DarkMatter") %>%
+  addLegend(
+    position = "bottomright",
+    title = "Projected landuse",
+    values = 1:62,
+    pal =Pal,
+    opacity = 0.8
+  ) %>%
+  htmlwidgets::onRender("
+    function(el, x) {
+      var map = this;
+
+      var random_rast_dk_url = 'https://s3.eu-central-1.amazonaws.com/sustainscapes.data/CS1Int.tif';
+
+      parseGeoraster(random_rast_dk_url).then(georaster => {
+        var random_rast_dk = new GeoRasterLayer({
+          georaster: georaster,
+          opacity: 0.75,
+          resolution: 128,
+          pixelValuesToColorFn: function(pixelValues) {
+            var pixelValue = pixelValues[0];
+            var colorScale = d3.scaleSequential(d3.interpolateViridis)
+                               .domain([1, 62]);
+            return colorScale(pixelValue);
+          }
+        });
+
+        random_rast_dk.addTo(map);
+      });
+    }
+  ")
+
+```
+

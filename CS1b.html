@@ -11,7 +11,7 @@
 
 
 
-<title>CS1.knit</title>
+<title>CS1b.knit</title>
 
 <script src="site_libs/header-attrs-2.25/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -40,6 +40,8 @@
 <script src="site_libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
 <link href="site_libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
 <script src="site_libs/leaflet-binding-2.2.1/leaflet.js"></script>
+<script src="site_libs/leaflet-providers-2.0.0/leaflet-providers_2.0.0.js"></script>
+<script src="site_libs/leaflet-providers-plugin-2.2.1/leaflet-providers-plugin.js"></script>
 <link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
 <link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
@@ -349,121 +351,44 @@ $(document).ready(function () {
 </div>
 
 
-<p><link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin="" /></p>
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA==" crossorigin=""></script>
-<script src="https://d3js.org/d3.v7.min.js"></script>
-<script src="https://unpkg.com/georaster"></script>
-<script src="https://unpkg.com/georaster-layer-for-leaflet/dist/georaster-layer-for-leaflet.min.js"></script>
-<div id="htmlwidget-006a80277406d2cb198f" style="width:0px;height:0px;" class="leaflet html-widget"></div>
-<script type="application/json" data-for="htmlwidget-006a80277406d2cb198f">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}}},"evals":[],"jsHooks":[]}</script>
-<style>
-        /* Overall map style */
-        #map {position: absolute; top: 0; bottom: 0; left: 0; right: 0;}
+<pre class="r"><code>Pal &lt;- leaflet::colorNumeric(palette = viridis(100), domain = 1:62)
 
-        .legend {
-            padding: 6px 8px;
-            font: 14px Arial, Helvetica, sans-serif;
-            background: white;
-            background: rgba(255, 255, 255, 0.8);
-            /*box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);*/
-            /*border-radius: 5px;*/
-            line-height: 24px;
-            color: #555;
-        }
 
-        .legend h4 {
-            text-align: left;
-            font-size: 16px;
-            margin: 2px 12px 8px;
-            color: #777;
-        }
+leaflet(width = &quot;100%&quot;, height = 480) %&gt;%
+  setView(lng = 12, lat = 56.25, zoom = 7) %&gt;%
+  addProviderTiles(&quot;CartoDB.DarkMatter&quot;) %&gt;%
+  addLegend(
+    position = &quot;bottomright&quot;,
+    title = &quot;Projected landuse&quot;,
+    values = 1:62,
+    pal =Pal,
+    opacity = 0.8
+  ) %&gt;%
+  htmlwidgets::onRender(&quot;
+    function(el, x) {
+      var map = this;
 
-        .legend span {
-            position: relative;
-            margin: 0 0px 0 8px;
-            bottom: 3px;
-        }
+      var random_rast_dk_url = &#39;https://s3.eu-central-1.amazonaws.com/sustainscapes.data/CS1Int.tif&#39;;
 
-        .legend i {
-            width: 18px;
-            height: 18px;
-            float: left;
-            margin: 0 8px 0 14px;
-            opacity: 1;
-        }
-
-        .legend i.icon {
-            background-size: 18px;
-            background-color: rgba(255, 255, 255, 1);
-        }
-    </style>
-<div id="map" style="width: 100%; height: 480px; position: relative;">
-
-</div>
-<script>
-  // Load base tiles ----
-
-  // OpenStreetMap Tiles
-    // Dark Matter Tiles
-  var DarkMatter = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://carto.com/attributions">CARTO</a>'
-  });
-
-  // Initiate leaflet ----
-  // This needs to be done before loading the Georasters
-  var map = L.map('map', { 
-      center: [56.25, 12], // Centered on Denmark
-      zoom: 7, // Worked well
-      layers: [DarkMatter] // Default layers
-  });
-
-  // Set URL to cog
-  var random_rast_dk_url = "https://s3.eu-central-1.amazonaws.com/sustainscapes.data/CS1Int.tif"
-
-  // Load georaster layer and add to map
-  parseGeoraster(random_rast_dk_url).then(georaster => {
-      var random_rast_dk = new GeoRasterLayer({
-          georaster,
+      parseGeoraster(random_rast_dk_url).then(georaster =&gt; {
+        var random_rast_dk = new GeoRasterLayer({
+          georaster: georaster,
           opacity: 0.75,
-          resolution: 128, // 128 seems to be a good compromise
-           pixelValuesToColorFn: function(pixelValues) {
+          resolution: 128,
+          pixelValuesToColorFn: function(pixelValues) {
             var pixelValue = pixelValues[0];
-            // Define the color scale range
             var colorScale = d3.scaleSequential(d3.interpolateViridis)
                                .domain([1, 62]);
+            return colorScale(pixelValue);
+          }
+        });
 
-            // Check if pixel value is within the scale range
-            if (pixelValue >= 1 && pixelValue <= 62) {
-                // Return color based on pixel value
-                return colorScale(pixelValue);
-            } else {
-                // Return transparent color for values outside the scale
-                return 'rgba(0, 0, 0, 0)'; // Fully transparent color
-            }
-        }
-    });
-
-    random_rast_dk.addTo(map);
-});
-
-// Define legend
-var legend = L.control({ position: "bottomright" });
-legend.onAdd = function(map) {
-    var div = L.DomUtil.create("div", "legend");
-    
-    div.innerHTML += "<h4>Projected landuse</h4>";
-    div.innerHTML += '<div class="legend-gradient" id="legend-gradient"></div>';
-    div.innerHTML += '<span class="legend-min">1</span><span class="legend-max">62</span>'; // Adjust the min and max values
-
-    return div;
-};
-
-// Add legend
-legend.addTo(map);
-
-
-
-</script>
+        random_rast_dk.addTo(map);
+      });
+    }
+  &quot;)</code></pre>
+<div id="htmlwidget-67f3e83ff82e8dcd0203" style="width:100%;height:480px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-67f3e83ff82e8dcd0203">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"setView":[[56.25,12],7,[]],"calls":[{"method":"addProviderTiles","args":["CartoDB.DarkMatter",null,null,{"errorTileUrl":"","noWrap":false,"detectRetina":false}]},{"method":"addLegend","args":[{"colors":["#440154 , #453480 14.7540983606557%, #33638D 31.1475409836066%, #238A8D 47.5409836065574%, #2CB17E 63.9344262295082%, #7CD250 80.327868852459%, #E9E51A 96.7213114754098%, #FDE725 "],"labels":["10","20","30","40","50","60"],"na_color":null,"na_label":"NA","opacity":0.8,"position":"bottomright","type":"numeric","title":"Projected landuse","extra":{"p_1":0.1475409836065574,"p_n":0.9672131147540983},"layerId":null,"className":"info legend","group":null}]}]},"evals":[],"jsHooks":{"render":[{"code":"function(el, x, data) {\n  return (\n    function(el, x) {\n      var map = this;\n\n      var random_rast_dk_url = 'https://s3.eu-central-1.amazonaws.com/sustainscapes.data/CS1Int.tif';\n\n      parseGeoraster(random_rast_dk_url).then(georaster => {\n        var random_rast_dk = new GeoRasterLayer({\n          georaster: georaster,\n          opacity: 0.75,\n          resolution: 128,\n          pixelValuesToColorFn: function(pixelValues) {\n            var pixelValue = pixelValues[0];\n            var colorScale = d3.scaleSequential(d3.interpolateViridis)\n                               .domain([1, 62]);\n            return colorScale(pixelValue);\n          }\n        });\n\n        random_rast_dk.addTo(map);\n      });\n    }\n  ).call(this.getMap(), el, x, data);\n}","data":null}]}}</script>
 
 
 

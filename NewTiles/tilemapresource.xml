@@ -7,9 +7,11 @@
       <Origin x="8.00830949937517" y="54.43550000478894"/>
       <TileFormat width="500" height="500" mime-type="image/png" extension="png"/>
       <TileSets profile="mercator">
-        <TileSet href="7" units-per-pixel="1222.99245234375007" order="7"/>
-        <TileSet href="8" units-per-pixel="611.49622617187504" order="8"/>
-        <TileSet href="9" units-per-pixel="305.74811308593752" order="9"/>
+        <TileSet href="https://sustainscapes.github.io/NewTiles/leaflet.html/NewTiles/7" units-per-pixel="1222.99245234375007" order="7"/>
+        <TileSet href="https://sustainscapes.github.io/NewTiles/leaflet.html/NewTiles/8" units-per-pixel="611.49622617187504" order="8"/>
+        <TileSet href="https://sustainscapes.github.io/NewTiles/leaflet.html/NewTiles/9" units-per-pixel="305.74811308593752" order="9"/>
+        <TileSet href="https://sustainscapes.github.io/NewTiles/leaflet.html/NewTiles/10" units-per-pixel="152.87405654296876" order="10"/>
+        <TileSet href="https://sustainscapes.github.io/NewTiles/leaflet.html/NewTiles/11" units-per-pixel="76.43702827148438" order="11"/>
       </TileSets>
     </TileMap>
     

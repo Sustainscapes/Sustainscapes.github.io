@@ -25,7 +25,8 @@ leaflet(width = 0, height = 0)
 
 <style>
     /* Overall map style */
-    #map {position: absolute; top: 0; bottom: 0; left: 0; right: 0;}
+    #map {position: absolute; top: 0; bottom: 0; left: 0; right: 0;width: 100%; height: 100%;}
+    
 
     .legend {
         padding: 6px 8px;
@@ -63,6 +64,8 @@ leaflet(width = 0, height = 0)
         background-size: 18px;
         background-color: rgba(255, 255, 255, 1);
     }
+    
+
 </style>
 <div id="map" style="width: 100%; height: 480px; position: relative;"></div>
 <script>
@@ -87,7 +90,7 @@ var map = L.map('map', {
   center: [56.25, 12], // Centered on Denmark
   zoom: 9, // Worked well
   minZoom: 7,
-  layers: [DarkMatter, lyr] // Default layers
+  layers: [osm, lyr] // Default layers
 });
 
         var basemaps = {"OpenStreetMap": osm, "CartoDB Positron": cartodb, "Dark matter": DarkMatter}
@@ -101,7 +104,7 @@ var map = L.map('map', {
             return this._div;
         };
         title.update = function(props) {
-            this._div.innerHTML = "ReGrBu2_rescaled.tif";
+            this._div.innerHTML = "";
         };
         title.addTo(map);
 

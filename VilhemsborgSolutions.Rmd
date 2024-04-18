@@ -18,7 +18,8 @@ Names <- Files |> stringr::str_remove_all("\\.tif") |>
   stringr::str_remove_all("./Solution_")
 
 
-Sols <- terra::rast(Files)
+Sols <- terra::rast(Files) |> 
+  terra::disagg(fact = 10)
 names(Sols) <- Names
 
 

@@ -90,6 +90,7 @@ var map = L.map('map', {
   center: [56.25, 12], // Centered on Denmark
   zoom: 9, // Worked well
   minZoom: 7,
+  maxZoom: 15,
   layers: [osm, lyr] // Default layers
 });
 
@@ -131,12 +132,13 @@ var legend = L.control({ position: "bottomright" });
 legend.onAdd = function(map) {
   var div = L.DomUtil.create("div", "legend");
   div.innerHTML += "<h4>Legend</h4>";
-  div.innerHTML += '<i class="legend-icon" style="background: #a6611a"></i><span class="legend-text">Potential forest</span><br>';
-  div.innerHTML += '<i class="legend-icon" style="background: #dfc27d"></i><span class="legend-text">Non forest existing nature</span><br>';
-  div.innerHTML += '<i class="legend-icon" style="background: #006d2c"></i><span class="legend-text">Forest</span><br>';
-  div.innerHTML += '<i class="legend-icon" style="background: #74a9cf"></i><span class="legend-text">Higher value potential forest (Low-tier)</span><br>';
-  div.innerHTML += '<i class="legend-icon" style="background: #2b8cbe"></i><span class="legend-text">Higher value potential forest (Mid-tier)</span><br>';
-  div.innerHTML += '<i class="legend-icon" style="background: #045a8d"></i><span class="legend-text">Higher value potential forest (High-tier)</span><br>';
+  div.innerHTML += '<i class="legend-icon" style="background: #a6611a"></i><span class="legend-text">Potentielle områder for rejsning af små nye skove (>5 ha) </span><br>';
+  div.innerHTML += '<i class="legend-icon" style="background: #dfc27d"></i><span class="legend-text">Eksisterende naturområder, som ikke er skov</span><br>';
+  div.innerHTML += '<i class="legend-icon" style="background: #006d2c"></i><span class="legend-text">Eksisterende skovområder</span><br>';
+div.innerHTML += '<i class="legend-icon" style="background: #74a9cf"></i><span class="legend-text">Beliggenhed i større skovområder (>200 ha inkl. naturområder) (Lavt niveau)</span><br>';
+div.innerHTML += '<i class="legend-icon" style="background: #2b8cbe"></i><span class="legend-text">Beliggenhed i større skovområder (>200 ha inkl. naturområder) (Mellemlavt niveau)</span><br>';
+div.innerHTML += '<i class="legend-icon" style="background: #045a8d"></i><span class="legend-text">Beliggenhed i større skovområder (>200 ha inkl. naturområder) (Højt niveau)</span><br>';
+
 
   return div;
 };

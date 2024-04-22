@@ -19,6 +19,9 @@ library(leafem)
 
 <script src="https://unpkg.com/georaster-layer-for-leaflet/dist/georaster-layer-for-leaflet.min.js"></script>
 
+<script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js" integrity="sha512-KDbRdPMbP+KqOQLcI3lW9fFg/e+CCo4q1eT9CEIz7Xxn1sxFA8zXCBu+yyA3WpXwmEybzWkYeB3LD7pA/C2N8A==" crossorigin=""></script>
+
+
 ```{r, warning = FALSE, echo = F}
 leaflet(width = 0, height = 0)
 ```
@@ -145,4 +148,22 @@ div.innerHTML += '<i class="legend-icon" style="background: #045a8d"></i><span c
 
 // Add legend
 legend.addTo(map);
+
+// Add locate control button
+L.control.locate({
+    position: 'topleft', // set the position of the control
+    drawCircle: true, // controls whether a circle is drawn that shows the uncertainty about the location
+    follow: true, // follow the user's location
+    setView: true, // automatically sets the map view to the user's location
+    keepCurrentZoomLevel: false, // keep the current map zoom level when displaying the user's location
+    strings: {
+        title: "Show me where I am", // title of the locate control
+        popup: "You are within {distance} {unit} from this point", // text to appear if user's location is found
+        outsideMapBoundsMsg: "You seem located outside the boundaries of the map" // default message for when user is outside map bounds
+    },
+    locateOptions: {
+        maxZoom: 16 // maximum zoom level when showing the user's location
+    }
+}).addTo(map);
+
 </script>

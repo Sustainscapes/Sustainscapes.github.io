@@ -1,0 +1,52 @@
+---
+title: "Class 1 Reproducible research"
+author: "Derek Corcoran"
+date: "`r format(Sys.time(), '%d/%m, %Y')`"
+output:
+  ioslides_presentation:
+    widescreen: true
+    incremental: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Colored Equation
+
+$$
+\color{Red}{\widetilde{\beta_{1}}}\color{blue}{X_{1}}
+$$
+
+## Definitions
+
+* $\text{L}$ represents the set of Landuses.
+* $\text{C}$ represents the set of Cells.
+* $\text{S}$ represents Richness.
+* $\text{PD}$ represents PhyloDiversity.
+* $\text{R}$ represents Rarity.
+* $\text{CC}$ represents CanChange.
+* $\text{SCB}$ represents SpatialContiguityBonus.
+* $\text{EN}$ represents Existingnature.
+
+## Biodivesity
+
+$$\color{Red}{\text{Biodiversity} = \sum_{l}^L \sum_{c}^C \text{LD}_{l,c} \times \frac{\text{S}_{l,c} + \text{PD}_{l,c} + \text{R}_{l,c}}{3} \times \text{CC}_{c}}$$
+
+## Contiguity to new nature
+
+$$
+\color{Blue}{\text{Contiguity to new} = \text{SCB} \times \sum_{(i,j)}^E \sum_{l}^L \sum_{c}^C \text{LD}_{l,i} \times \text{LD}_{l,j} \times \text{CC}_{i} \times \text{CC}_{j} }
+$$
+
+## Contiguity to existing nature
+
+$$
+\color{Green}{\text{Contiguity to existing} = \text{SCB} \times \sum_{(i,j)}^E \sum_{l}^L \sum_{c}^C \text{LD}_{l,i} \times \text{EN}_{l,j} \times \text{CC}_{i}}
+$$
+
+## Nice equation?
+
+$$
+\text{maximize CI:} \color{Red}{\text{Biodiversity}} + \text{SCB} \times \left( \color{Blue}{\text{Cont}_n} +  \color{Green}{\text{Cont}_{ex}} \right) 
+$$

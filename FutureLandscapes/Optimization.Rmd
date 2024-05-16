@@ -9,8 +9,21 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE,
+                      warning = FALSE,
+                      error = FALSE,
+                      message = FALSE)
 ```
+
+```{r LoadPackages}
+library(terra)
+library(leaflet)
+library(leafsync)
+library(tidyterra)
+library(ggplot2)
+library(geodata)
+```
+
 
 ## Colored Equation
 
@@ -48,5 +61,22 @@ $$
 ## Nice equation?
 
 $$
-\text{maximize CI:} \color{Red}{\text{Biodiversity}} + \text{SCB} \times \left( \color{Blue}{\text{Cont}_n} +  \color{Green}{\text{Cont}_{ex}} \right) 
+\text{maximize CI} = \color{Red}{\text{Biodiversity}} + \text{SCB} \times \left( \color{Blue}{\text{Cont}_n} +  \color{Green}{\text{Cont}_{ex}} \right) 
 $$
+
+## Before after
+
+```{r before_after}
+
+beforeafter <- terra::rast("Before_After.tif")
+
+Communes <- geodata::gadm("Denmark", level = 2, path = getwd())
+Communes <- Communes[Communes$NAME_2 %in% c("Århus", "Skanderborg", "Syddjurs"),]
+
+Communes <- Communes |> terra::project(terra::crs(beforeafter))
+
+ggplot() + geom_spatvector(data = Communes) + geom_spatraster(data = beforeafter) + scale_fill_manual(values =  c("white","#01665e", "#35978f", "#80cdc1", "#c7eae5", "#f6e8c3", "#dfc27d", 
+"#bf812d", "#8c510a"), na.value = "#00000000") + facet_wrap(~lyr) + theme_dark()
+
+```
+

@@ -47,7 +47,6 @@ $\begin{align*} \text{Maximize} & = \text{Biodiversity} + \text{Resilience} + \t
 
 ## Definitions
 
-* $\text{SCB}$ represents SpatialContiguityBonus.
 * $\text{EN}$ represents Existingnature.
 
 ## Biodiversity
@@ -92,15 +91,68 @@ Richness + PD + Rarity
 
 ## Contiguity to new nature
 
+<div style="display:flex; flex-direction:column;">
+
+<div style="flex:1; padding-bottom:20px;">
+
 $$
 \color{Blue}{\text{Contiguity to new} = \text{SCB} \times \sum_{(i,j)}^E \sum_{l}^L \sum_{c}^C \text{LD}_{l,i} \times \text{LD}_{l,j} \times \text{CC}_{i} \times \text{CC}_{j} }
 $$
+
+</div>
+
+<div style="display:flex; flex-direction:row;">
+  
+<div style="flex:1; padding-right:20px;">
+
+```{r}
+AarhusSols <- terra::rast("AarhusSols.tif")
+
+DF <- levels(AarhusSols[[1]])
+AarhusSols <- as.numeric(AarhusSols[[c(1,3)]])
+r <- rast()
+ext(r) <- c(558630.889592757, 571691.729617464, 6226102.68696538, 6237719.7345256)
+
+SmallAarhus <- AarhusSols |> terra::crop(r)
+
+for(i in 1:nlyr(SmallAarhus)){
+  levels(SmallAarhus[[i]]) <- DF
+}
+
+names(SmallAarhus) <-names(AarhusSols)
+
+ggplot() + geom_spatraster(data = SmallAarhus) + facet_wrap(~lyr) + scale_fill_manual(values =  c("#01665e", "#35978f", "#80cdc1", "#c7eae5", "#f6e8c3", "#dfc27d", 
+                                                                                                  "#bf812d", "#8c510a"), na.value = "#00000000") 
+```
+
+</div>
+<div style="flex:1; font-size: 80%;">
+
+* $\text{SCB}$ represents SpatialContiguityBonus.
+* $E_{i,j}$ Is an edge joining Cells i, and j
+
+</div>
+</div>
+</div>
 
 ## Contiguity to existing nature
 
 $$
 \color{Green}{\text{Contiguity to existing} = \text{SCB} \times \sum_{(i,j)}^E \sum_{l}^L \sum_{c}^C \text{LD}_{l,i} \times \text{EN}_{l,j} \times \text{CC}_{i}}
 $$
+
+```{r Current}
+beforeafter <- terra::rast("Before_After.tif")[[1]]
+
+Communes <- geodata::gadm("Denmark", level = 2, path = getwd())
+Communes <- Communes[Communes$NAME_2 %in% c("Århus", "Skanderborg", "Syddjurs"),]
+
+Communes <- Communes |> terra::project(terra::crs(beforeafter))
+
+ggplot() + geom_spatvector(data = Communes) + geom_spatraster(data = beforeafter) + scale_fill_manual(name = "Landuse",values =  c("white","#01665e", "#35978f", "#80cdc1", "#c7eae5", "#f6e8c3", "#dfc27d", 
+"#bf812d", "#8c510a"), na.value = "#00000000") + theme_dark() + ggtitle("Current nature")
+```
+
 
 ## Optimization function
 
@@ -241,17 +293,25 @@ L2 <- leaflet(height = 300) |> addProviderTiles("CartoDB.DarkMatter") |>
 leafsync::sync(L1, L2, ncol = 2, sync = "all")
 ```
 
+# Latest problem iteration
 
-## Before after
+## Solving for three communes
 
-```{r before_after}
-
+```{r Comunes}
 beforeafter <- terra::rast("Before_After.tif")
 
 Communes <- geodata::gadm("Denmark", level = 2, path = getwd())
 Communes <- Communes[Communes$NAME_2 %in% c("Århus", "Skanderborg", "Syddjurs"),]
 
 Communes <- Communes |> terra::project(terra::crs(beforeafter))
+
+ggplot() + geom_spatvector(data = Communes, aes(fill = NAME_2))  + scale_fill_discrete(name= "Commune")  + theme_dark()
+```
+
+
+## Before after
+
+```{r before_after}
 
 ggplot() + geom_spatvector(data = Communes) + geom_spatraster(data = beforeafter) + scale_fill_manual(values =  c("white","#01665e", "#35978f", "#80cdc1", "#c7eae5", "#f6e8c3", "#dfc27d", 
 "#bf812d", "#8c510a"), na.value = "#00000000") + facet_wrap(~lyr) + theme_dark()

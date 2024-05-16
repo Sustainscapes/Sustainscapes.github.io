@@ -25,12 +25,6 @@ library(geodata)
 ```
 
 
-## Colored Equation
-
-$$
-\color{Red}{\widetilde{\beta_{1}}}\color{blue}{X_{1}}
-$$
-
 ## Definitions
 
 * $\text{L}$ represents the set of Landuses.

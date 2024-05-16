@@ -1,5 +1,5 @@
 ---
-title: "Class 1 Reproducible research"
+title: "Navigating towards 30% protected nature in Denmark"
 author: "Derek Corcoran"
 date: "`r format(Sys.time(), '%d/%m, %Y')`"
 output:
@@ -25,23 +25,70 @@ library(ggplot2)
 library(geodata)
 library(htmltools)
 library(dplyr)
+library(patchwork)
 ```
 
+## How to plan for futute landscapes {.smaller}
+
+$\begin{align*} \text{Maximize} & = \text{Biodiversity} + \text{Resilience} + \text{Carbon} - \text{Yield}\end{align*}$
+
+> -   Biodiversity
+>     -   Community composition and rarity
+>     -   Phylogenetic Diversity
+>     -   Functional diversity*
+> -   Resilience
+>     -   Contiguity (Area)
+>     -   Network stability (Trophic and/or mutualistic)*
+>     -   Ecosystem Functioning*
+> -   Ecosystem services
+>     -   Above and bellowground carbon potential*
+> -   Yield
+>     -   Current and potential **food** production*
 
 ## Definitions
 
+* $\text{SCB}$ represents SpatialContiguityBonus.
+* $\text{EN}$ represents Existingnature.
+
+## Biodiversity
+
+<div style="display:flex; flex-direction:column;">
+
+<div style="flex:1; padding-bottom:20px;">
+  
+$$\color{Red}{\text{Biodiversity} = \sum_{l}^L \sum_{c}^C \text{LD}_{l,c} \times \frac{\text{S}_{l,c} + \text{PD}_{l,c} + \text{R}_{l,c}}{3} \times \text{CC}_{c}}$$
+
+</div>
+
+<div style="display:flex; flex-direction:row;">
+  
+<div style="flex:1; padding-right:20px;">
+  
+```{r Biodiversityplot, fig.width=6, fig.height=4}
+Biodiversity <- terra::rast("Biodiversity.tif")
+
+Richness <- ggplot() + geom_spatraster(data = Biodiversity[[3]]) + theme_bw() + scale_fill_wiki_c(direction = -1, name = "S") + theme(legend.position = "bottom")+ ggtitle("Open Wet Rich")
+
+PD <- ggplot() + geom_spatraster(data = Biodiversity[[1]]) + theme_bw() + scale_fill_wiki_c(direction = -1, name = "PD") + theme(legend.position = "bottom") + ggtitle("Open Wet Rich")
+
+Rarity <- ggplot() + geom_spatraster(data = Biodiversity[[1]]) + theme_bw() + scale_fill_wiki_c(direction = -1, name = "R") + theme(legend.position = "bottom") + ggtitle("Open Wet Rich")
+
+Richness + PD + Rarity
+```
+</div>
+<div style="flex:1; font-size: 80%;">
+
 * $\text{L}$ represents the set of Landuses.
 * $\text{C}$ represents the set of Cells.
+* $\text{LD}_{l,c}$ represents if a cell $c$ is selecte to change to landuse $l$.
 * $\text{S}$ represents Richness.
 * $\text{PD}$ represents PhyloDiversity.
 * $\text{R}$ represents Rarity.
 * $\text{CC}$ represents CanChange.
-* $\text{SCB}$ represents SpatialContiguityBonus.
-* $\text{EN}$ represents Existingnature.
 
-## Biodivesity
-
-$$\color{Red}{\text{Biodiversity} = \sum_{l}^L \sum_{c}^C \text{LD}_{l,c} \times \frac{\text{S}_{l,c} + \text{PD}_{l,c} + \text{R}_{l,c}}{3} \times \text{CC}_{c}}$$
+</div>
+</div>
+</div>
 
 ## Contiguity to new nature
 

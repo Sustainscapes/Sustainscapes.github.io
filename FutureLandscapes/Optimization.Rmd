@@ -346,6 +346,13 @@ knitr::include_url("https://derek-corcoran-barrios.github.io/COG/TestCOG2.html")
 
 $$\text{Carbon} = \sum_{l}^L \sum_{c}^C\text{AGC}_{c,l} + \text{BGC}_{c,l}$$
 
+```{r Carbon}
+Carbon <- terra::rast("Carbon.tif")
+
+ggplot() + geom_spatraster(data = Carbon) + scale_fill_wiki_c(name = "Bellow ground Carbon", direction = -1) + theme_dark()
+```
+
+
 ## Yield
 
 $$\text{Yield} = \sum_{c}^C\text{Yield}_{c}$$

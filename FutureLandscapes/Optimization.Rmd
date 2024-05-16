@@ -308,6 +308,21 @@ Communes <- Communes |> terra::project(terra::crs(beforeafter))
 ggplot() + geom_spatvector(data = Communes, aes(fill = NAME_2))  + scale_fill_discrete(name= "Commune")  + theme_dark()
 ```
 
+## Current landuse
+
+```{r Now}
+
+ggplot() + geom_spatvector(data = Communes) + geom_spatraster(data = beforeafter[[1]]) + scale_fill_manual(name = "Current", values =  c("white","#01665e", "#35978f", "#80cdc1", "#c7eae5", "#f6e8c3", "#dfc27d", 
+"#bf812d", "#8c510a"), na.value = "#00000000") + theme_dark()
+
+```
+
+## Problem
+
+* Transform 5,691 cells from agriculture to nature
+* At least 2,405 have to turn to Forest (FWR, FWP, FDR or FDP)
+* At least 962 have to become Wet Nature (FWR, FWP, OWR, OWP)
+* There has to be at least 284 cells of each Nature type
 
 ## Before after
 
@@ -318,3 +333,19 @@ ggplot() + geom_spatvector(data = Communes) + geom_spatraster(data = beforeafter
 
 ```
 
+## It can be done for the whole country
+
+```{r Country}
+knitr::include_url("https://derek-corcoran-barrios.github.io/COG/TestCOG2.html")
+```
+
+
+# Future directions
+
+## Carbon
+
+$$\text{Carbon} = \sum_{l}^L \sum_{c}^C\text{AGC}_{c,l} + \text{BGC}_{c,l}$$
+
+## Yield
+
+$$\text{Yield} = \sum_{c}^C\text{Yield}_{c}$$

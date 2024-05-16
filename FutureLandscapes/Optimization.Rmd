@@ -6,6 +6,7 @@ output:
   ioslides_presentation:
     widescreen: true
     incremental: true
+    logo: SustainScapes_Colour.png
 ---
 
 ```{r setup, include=FALSE}
@@ -22,6 +23,8 @@ library(leafsync)
 library(tidyterra)
 library(ggplot2)
 library(geodata)
+library(htmltools)
+library(dplyr)
 ```
 
 
@@ -52,11 +55,145 @@ $$
 \color{Green}{\text{Contiguity to existing} = \text{SCB} \times \sum_{(i,j)}^E \sum_{l}^L \sum_{c}^C \text{LD}_{l,i} \times \text{EN}_{l,j} \times \text{CC}_{i}}
 $$
 
-## Nice equation?
+## Optimization function
 
 $$
-\text{maximize CI} = \color{Red}{\text{Biodiversity}} + \text{SCB} \times \left( \color{Blue}{\text{Cont}_n} +  \color{Green}{\text{Cont}_{ex}} \right) 
+\text{maximize CI} = \color{Red}{\text{Biodiversity}} + \color{Purple}{\text{SCB}} \times \left( \color{Blue}{\text{Cont}_n} +  \color{Green}{\text{Cont}_{ex}} \right) 
 $$
+
+* Spatial Contiguity Bonus (SCB) is a dial
+
+<center>
+```{r}
+knitr::include_graphics("Eleven.jpeg")
+```
+</center>
+
+## Example Landuse (Global contribution)
+
+
+
+
+```{r}
+library(readr)
+Optimal <- read_table("OptimalAarhus.txt", 
+    col_names = FALSE) |> 
+  mutate_if(is.numeric, ~round(.x, digits = 2))
+
+colnames(Optimal) <- c("Biodiversity", "Contiguity","ContiguityBonus")
+
+OptimalLong <- Optimal |>
+  tidyr::pivot_longer(Biodiversity:Contiguity, names_to = "Part", values_to = "Contribution")
+
+
+G <- ggplot(OptimalLong, aes(x = ContiguityBonus, y = Contribution, group = Part)) + geom_path(aes(color = Part)) + theme_bw()
+G <- plotly::ggplotly(G)
+
+contiguity_index <- which(sapply(G$x$data, function(trace) trace$name == "Contiguity"))
+
+G$x$data[[contiguity_index]]$visible <- "legendonly"
+
+biodiversity_index <- which(sapply(G$x$data, function(trace) trace$name == "Biodiversity"))
+
+# Get the range of the "Biodiversity" trace
+x_range <- range(G$x$data[[biodiversity_index]]$x)
+y_range <- range(G$x$data[[biodiversity_index]]$y)
+
+# Set initial axis range based on "Biodiversity" trace
+G$x$layout$xaxis$range <- x_range
+G$x$layout$yaxis$range <- y_range
+```
+
+$$
+\text{maximize CI} = \color{Red}{\text{Biodiversity}} + \color{Purple}{\text{SCB}} \times \left( \color{Blue}{\text{Cont}_n} \right) 
+$$
+
+```{r}
+AarhusSols <- terra::rast("AarhusSols.tif")
+AarhusSols <- as.numeric(AarhusSols[[1:4]])
+Pal <- colorBin(palette = c("#01665e", "#35978f", "#80cdc1", "#c7eae5", "#f6e8c3", "#dfc27d", "#bf812d", "#8c510a"), domain = values((AarhusSols)[[1]]), na.color = "transparent")
+factor_labels <- c("ForestDryPoor", "ForestDryRich", "ForestWetPoor", "ForestWetRich", 
+                   "OpenDryPoor", "OpenDryRich", "OpenWetPoor", "OpenWetRich") 
+
+L <- leaflet(height = 300) |> addProviderTiles("CartoDB.DarkMatter") |> addRasterImage(AarhusSols[[1]], color = Pal, group = "0") |>
+  addRasterImage(AarhusSols[[2]], color = Pal, group = "0.05") |> addRasterImage(AarhusSols[[3]], color = Pal, group = "0.1") |>  addRasterImage(AarhusSols[[4]], color = Pal, group = "0.15") |>
+  addLegend(
+  "bottomright",
+  title = "Land Use",
+  colors = c("#01665e", "#35978f", "#80cdc1", "#c7eae5", "#f6e8c3", "#dfc27d", "#bf812d", "#8c510a"),
+  labels = factor_labels,
+  opacity = 1
+) |> addLayersControl(
+    baseGroups = c("0", "0.05", "0.1", "0.15"),
+    options = layersControlOptions(collapsed = T)
+  )
+```
+
+
+```{r}
+htmltools::div(
+  style = "display: flex; justify-content: space-between;",
+  G,
+  L
+)
+```
+
+## Local contribution
+
+```{r LocalContribution}
+# Load the raster data for the first map
+AarhusSols <- terra::rast("AarhusSols.tif")
+AarhusSols <- as.numeric(AarhusSols[[1:4]])
+Pal1 <- colorBin(palette = c("#01665e", "#35978f", "#80cdc1", "#c7eae5", "#f6e8c3", "#dfc27d", "#bf812d", "#8c510a"), domain = values((AarhusSols)[[1]]), na.color = "transparent")
+factor_labels1 <- c("ForestDryPoor", "ForestDryRich", "ForestWetPoor", "ForestWetRich", 
+                    "OpenDryPoor", "OpenDryRich", "OpenWetPoor", "OpenWetRich") 
+
+# Create the first leaflet map
+L1 <- leaflet(height = 300) |> addProviderTiles("CartoDB.DarkMatter") |> 
+  addRasterImage(AarhusSols[[1]], color = Pal1, group = "0") |>
+  addRasterImage(AarhusSols[[2]], color = Pal1, group = "0.05") |>
+  addRasterImage(AarhusSols[[3]], color = Pal1, group = "0.1") |>
+  addRasterImage(AarhusSols[[4]], color = Pal1, group = "0.15") |>
+  addLegend(
+    "bottomright",
+    title = "Land Use",
+    colors = c("#01665e", "#35978f", "#80cdc1", "#c7eae5", "#f6e8c3", "#dfc27d", "#bf812d", "#8c510a"),
+    labels = factor_labels1,
+    opacity = 1
+  ) |>
+  addLayersControl(
+    baseGroups = c("0", "0.05", "0.1", "0.15"),
+    options = layersControlOptions(collapsed = T)
+  )
+
+# Load the raster data for the second map
+AarhusLocals <- terra::rast("AarhusLocals.tif")
+AarhusLocals <- as.numeric(AarhusLocals[[1:4]])
+Pal2 <- colorBin(palette = c('#e41a1c','#377eb8','#4daf4a'), domain = c(1,2,3), na.color = "transparent")
+factor_labels2 <- c("Biodiversity", "Contiguity", "Equal") 
+
+# Create the second leaflet map
+L2 <- leaflet(height = 300) |> addProviderTiles("CartoDB.DarkMatter") |> 
+  addRasterImage(AarhusLocals[[1]], color = Pal2, group = "0") |>
+  addRasterImage(AarhusLocals[[2]], color = Pal2, group = "0.05") |>
+  addRasterImage(AarhusLocals[[3]], color = Pal2, group = "0.1") |>
+  addRasterImage(AarhusLocals[[4]], color = Pal2, group = "0.15") |>
+  addLegend(
+    "bottomright",
+    title = "Land Use",
+    colors = c('#e41a1c','#377eb8','#4daf4a'),
+    labels = factor_labels2,
+    opacity = 1
+  ) |>
+  addLayersControl(
+    baseGroups = c("0", "0.05", "0.1", "0.15"),
+    options = layersControlOptions(collapsed = T)
+  )
+
+# Combine the leaflet maps
+leafsync::sync(L1, L2, ncol = 2, sync = "all")
+```
+
 
 ## Before after
 

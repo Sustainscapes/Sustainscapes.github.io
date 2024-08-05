@@ -32,6 +32,8 @@ navbar:
       menu:
       - text: "AICc Permanova"
         href: AICcPerm
+      - text: "GeoStratR"
+        href: GeoStratR
       - text: "TroublemakeR"
         href: TroublemakeR
     - text: "Apps"

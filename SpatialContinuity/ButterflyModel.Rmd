@@ -140,10 +140,10 @@ ggplot() +
 ## Make the first model
 
 
-```{r firstModel, eval = F}
+```{r firstModel}
 m1 <- sdmTMB(
   data = Data,
-  formula = pa_reg ~ Cropland + I(Cropland^2) + bio1 + I(bio1^2),
+  formula = pa_reg ~ Cropland + bio1,
   mesh = bspde,
   family = binomial(link = "logit"),
   spatial = "on",
@@ -155,13 +155,13 @@ m1 <- sdmTMB(
 
 Lets check the results
 
-```{r, eval = F}
+```{r}
 tidy(m1,  conf.int = T)
 ```
 
 And sanity test
 
-```{r, eval = F}
+```{r}
 sanity(m1)
 ```
 
